@@ -51,9 +51,9 @@
 		<copy todir="${cache.manual}">
 			<fileset dir="${manual}" excludes="*~, *.js" />
 			<filterchain>
-					<replacetokens>
-						<token key="VERSION" value="${version}" />
-					</replacetokens>
+				<replacetokens>
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
 			</filterchain>
 		</copy>
 		<antcall target="manual-lyx" />
@@ -76,11 +76,11 @@
 		<copy todir="${cache.maven.pom}">
 			<fileset dir="maven" excludes="*~" />
 			<filterchain>
-					<replacetokens>
-						<token key="VERSION" value="${version}" />
-						<token key="ROOT" value="${root}" />
-						<token key="CACHE" value="${cache.maven.build}" />
-					</replacetokens>
+				<replacetokens>
+					<token key="VERSION" value="${version}" />
+					<token key="ROOT" value="${root}" />
+					<token key="CACHE" value="${cache.maven.build}" />
+				</replacetokens>
 			</filterchain>
 		</copy>
 		<exec executable="${maven}" dir="${cache.maven.pom}" failifexecutionfails="false">
