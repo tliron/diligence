@@ -1,0 +1,55 @@
+<%
+
+document.executeOnce('/diligence/feature/registration/')
+document.executeOnce('/diligence/service/authentication/')
+document.executeOnce('/diligence/service/html/')
+document.executeOnce('/prudence/resources/')
+document.executeOnce('/sincerity/xml/')
+document.executeOnce('/sincerity/objects/')
+
+var form = Diligence.Resources.getCurrentForm(conversation)
+var results = Diligence.Resources.getCurrentFormResults(conversation)
+var providers = Diligence.Authentication.getProviders()
+var siteName = Diligence.Registration.getSiteName()
+
+%>
+<div class="centerpiece">
+	<form id="login-form" method="POST">
+		<%= Diligence.HTML.build({_key: 'diligence.service.authentication.form.login.title', _tag: 'h2', _cast: {siteName: siteName}}) %>
+		<div class="field">
+			<%= form.htmlText('username', results) %>
+		</div>
+		<div class="field">
+			<%= form.htmlPassword('password', results) %>
+		</div>
+		<div class="buttons">
+			<%= Diligence.HTML.submit({_key: 'diligence.service.authentication.form.login.button.login'}) %>
+		</div>
+	</form>
+
+	<form>
+		<%= Diligence.HTML.build({_key: 'diligence.service.authentication.form.login.alternative.title', _tag: 'h2', _cast: {siteName: siteName}}) %>
+		<div class="status"><%= Diligence.HTML.a({_key: 'diligence.service.authentication.form.login.alternative.register', href: conversation.pathToBase + '/registration/'}) %></div>
+<%
+if (!Diligence.Objects.isEmpty(providers)) {
+%>		
+		<%= Diligence.HTML.div({_key: 'diligence.service.authentication.form.login.alternative.services', _classes: ['status', 'field']}) %>
+		<div class="icon-matrix field"><div>
+<%
+	var count = 0
+	for (var p in providers) {
+		var provider = providers[p]
+%>
+			<div><a href="<%= provider.getUri(conversation) %>"><img src="<%= provider.getIcon(conversation) %>" /><br /><%= provider.getName().escapeElements() %></a></div>
+<%
+		if (++count % 4 == 0) {
+%>
+			<div style="clear: left;"></div>
+<%
+		}
+	}
+}
+%>
+		</div></div>
+	</form>
+</div>

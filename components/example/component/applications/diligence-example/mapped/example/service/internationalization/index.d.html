@@ -1,0 +1,21 @@
+<%& '/site/header/' %>
+<% exampleHeader('Internationalization', 'Service'); %>
+
+<%
+document.executeOnce('/diligence/service/internationalization/')
+document.executeOnce('/sincerity/templates/')
+var textPack = Diligence.Internationalization.getCurrentPack(conversation)
+%>
+
+<p>
+	This following string is rendered from the text pack for locale <b><%= '{language}/{country}/{variant}'.cast(textPack.locale) %></b>.
+</p>
+<p dir="<%= textPack.getDirection('application.diligence-example.time') %>" class="note">
+	<%= textPack.get('application.diligence-example.time', {now: new Date()}) %>
+</p>
+<p>
+	The direction for the above key is: <b><%= textPack.getDirection('application.diligence-example.time') %></b>.
+</p>
+
+<% exampleFooter('Internationalization', 'Service'); %>
+<%& '/site/footer/' %>

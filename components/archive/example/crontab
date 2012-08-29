@@ -1,0 +1,6 @@
+*/1 * * * * /savory/eval/ document.executeOnce('/savory/service/authentication/'); Savory.Authentication.maintenance();
+*/1 * * * * /savory/eval/ document.executeOnce('/savory/service/notification/'); Savory.Notification.sendQueuedDigests('daily');
+*/1 * * * * /savory/eval/ document.executeOnce('/savory/service/notification/'); Savory.Notification.sendQueuedDigests('weekly');
+*/1 * * * * /savory/eval/ document.executeOnce('/savory/service/nonces/'); Savory.Nonces.maintenance();
+*/1 * * * * /savory/eval/ document.executeOnce('/savory/integration/backend/oauth/'); Savory.OAuth.maintenance();
+*/1 * * * * /savory/eval/ document.executeOnce('/savory/integration/backend/pay-pal/'); Savory.PayPal.maintenance();

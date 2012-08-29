@@ -1,0 +1,44 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+
+var permissions = conversation.locals.get('diligence.service.authorization.permissions')
+var textPack = conversation.locals.get('diligence.service.internationalization.text')
+var page = conversation.locals.get('diligence.feature.wiki.page') || Diligence.Wiki.getPage(pageName, conversation.query.get('revision'))
+
+function renderPart(part) {
+	var rendered = page.render(part)
+	if (rendered !== null) {
+%>
+<div class="page-<%= part %>">
+	<%= rendered %>
+<%
+		if (permissions && permissions.get('diligence.feature.pages.edit')) {
+%>
+	<p align="right">
+		<a href="?mode=edit&part=<%= part %>">Edit the <%= part %> part</a>
+	</p>
+<%
+		}
+%>
+</div>
+<%
+	}
+}
+
+renderPart('header')
+renderPart('main')
+renderPart('footer')
+
+%>

@@ -1,0 +1,61 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+document.executeOnce('/diligence/feature/registration/')
+var form = new Diligence.Registration.Form({conversation: conversation})
+
+if (conversation.query.get('mode') == 'json') {
+	form.handle({conversation: conversation})
+}
+else {
+
+conversation.locals.put('reCaptcha', true)
+conversation.locals.put('extJs', true)
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's Registration Feature</h1>
+<p>
+	This complement to the <a href="../../service/authentication/">authentication service</a> uses a two-step
+	process to allow new users to register to your application. As is common, it expects users to
+	have a personal email address, which will be used to both confirm the identity of the user
+	and to communicate with the user when they are not logged in.
+</p>
+<p>
+	The feature contains a /web/fragment/ HTML form with a CAPTCHA, which collects the user's
+	email, username, password and possibly some personal information. The form will be valid
+	only of the username is not already in use.
+</p>
+<p>
+	If the form is valid, the user is created but not yet activated. An email is sent to the
+	user with a unique, impossible-to-guess URL, which can be used only once. If they click on that
+	link, the user is activated. 
+</p>
+<p>
+	The feature allows for not-yet-activated users to be automatically deleted after a certain
+	time. This would release the username for others to use.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Registration">Diligence.Registration API documentation</a>
+	for more details.
+</p>
+<%
+form.handle({conversation: conversation, mode: 'include'})
+%>
+<p>
+	And here is an <a href="../../integration/sencha/forms/">Ext JS</a> version of it:
+</p>
+<%& '/diligence/feature/registration/sencha/' %>
+<%}}%>
+<%& '/site/page-template/' %>
+<% } %>

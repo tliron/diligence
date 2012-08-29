@@ -1,0 +1,15 @@
+<%& '/site/header/' %>
+<%
+
+document.executeOnce('/diligence/integration/backend/pay-pal/')
+
+var balance = Diligence.PayPal.getBalance()
+if (balance) {
+	for (var b in balance) {
+%>
+	<p>Current balance: <%= balance[b].currency %> <%= balance[b].amount %></p>
+<%
+	}
+}
+%>
+<%& '/site/footer/' %>

@@ -1,0 +1,220 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+conversation.locals.put('extJs', true)
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's Sencha Integration Library</h1>
+<h2>Ext Direct</h2>
+
+<p>
+	<a href="http://www.sencha.com/products/extjs/extdirect">Ext Direct</a>
+	is Ext JS's super straightforward RPC mechanism. It generates a client-side namespace for
+	you full of asynchronous methods, and all you have to do is call them. Operations are batched
+	for maximum efficiency, and errors are handled as elegantly as can be.
+</p>
+<p>
+	With Diligence, you get a seamless flow from client to server and back again, because you're
+	always in JavaScript: the client call and the server function definition match exactly.
+	If you close your eyes, you can even imagine that the client is calling the server function
+	directly.
+</p>
+<p class="note">
+	Ext Direct is convenient and elegant but, like all web RPC mechanisms, it works by tunneling
+	through HTTP, instead of working fully with it. That means that you don't get the advantages of
+	conditional HTTP: if you call the same Ext Direct method twice, you will generate an action
+	on the server. Logically, it's what you want happening with a method call: such calls are always
+	"non-idempotent." However, if your intention is to use Ext Direct in order to access data,
+	it is strongly recommended that you use REST instead: even a simple Ext.Ajax.request call (with
+	cache override disabled: "disableCaching: false") may scale better.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Sencha">Diligence.Sencha API documentation</a>
+	for more details.
+</p>
+
+
+<h3>Demo</h3>
+<p>
+	We've implemented a server-side stored shopping cart. Nothing is stored on the client here,
+	and it's accessed with a very convenient client-side API. The server uses a hashset to make
+	sure items cannot be added more than once.
+</p>
+<h4>Current Shopping Cart Contents</h4>
+<p id="shopping-cart">
+</p>
+<p>
+	New item: <input id="item" value="elephant" />
+	<button id="add-item" disabled="true">Add to shopping cart</button>
+	<button id="get-items" disabled="true">Refresh shopping cart</button>
+</p>
+<p>
+	Try using Firebug to see all the communication with the server. It's neat!
+</p>
+
+
+<h3>Behind the Scene</h3>
+<p>
+	The server side code:
+</p>
+<pre>
+var ShoppingCart = function() {
+	var Public = {
+		addItem: function(x) {
+			return items.add(x)
+		},
+		
+		getItems: function() {
+			return JVM.fromCollection(items)
+		}
+	}
+	
+	Sencha.exportMethods({
+		methods: Public,
+		clientParentNamespace: 'Diligence',
+		clientNamespace: 'ShoppingCart',
+		dependencies: '/about/integration/sencha/shopping-cart/'
+	})
+	
+	var items = JVM.newSet(true)
+	
+	return Public
+}()
+</pre>
+<p>
+	Note the use of Sencha.exportMethods(): we simply give it an object with our methods, and it handles the Ext Direct wiring.
+	The exports are registered into a simple MongoDB collection. The 'dependencies' field is important, because it tells Diligence
+	how to find our methods when the client wants to call them: they are document.executed. And, of course, these functions are
+	entirely normal and can be called on the server as is, with the same namespaces. A single API for servers <i>and</i>
+	clients. Hooray for Ext Direct!
+</p>
+<p>
+	Also note our use of a JVM thread-safe set: this implementation is fully concurrent.
+</p>
+<p>
+	The client side code:
+</p>
+<pre>
+function refresh() {
+	Diligence.ShoppingCart.getItems(function(provider, response) {
+		if (response.type == 'exception') {
+			Ext.Msg.alert('Shopping Cart', 'Exception: ' + response.message);
+		}
+		else {
+			var items = response.result;
+			Ext.fly('shopping-cart').update(items.join('; '));
+		}
+	});
+}
+
+function init() {
+	refresh();
+	
+	Ext.fly('add-item').set({disabled: null}, false).on('click', function() {
+		var item = Ext.fly('item').getValue();
+		if (!item) {
+			Ext.Msg.alert('Shopping Cart', 'Enter an item first!');
+			return;
+		}
+		Diligence.ShoppingCart.addItem(item, Ext.bind(function(provider, response) {
+			if (response.type == 'exception') {
+				Ext.Msg.alert('Shopping Cart', 'Exception: ' + response.message);
+			}
+			else {
+				if (response.result) {
+					Ext.Msg.alert('Shopping Cart', 'Added "' + this + '" to your cart!');
+					refresh();
+				}
+				else {
+					Ext.Msg.alert('Shopping Cart', 'You already have "' + this + '" in your cart!');
+				}
+			}
+		}, item));
+	});
+	
+	Ext.fly('get-items')set({disabled: null}, false).on('click', refresh);
+}
+
+Diligence.loadRemoteProvider({
+	namespace: 'Diligence',
+	success: init
+});
+</pre>
+<p>
+	Note that we use Diligence.loadRemoteProvider() to dynamically initialize our client-side namespace, although we
+	could also hard-code the description into our client file. Because we're loading it dyamically, we're
+	being careful to not actually use the namespace until we have it initialized, which will call our init().
+	Even the buttons that use this API will be disabled until the API is loaded.
+</p>
+<p>
+	Also note that (obviously) all function calls are asynchronous, and that we are careful to deal with
+	exceptions and failures. This is the one significant difference between server- and client-side calls to the
+	same methods. However, we agree with Ext JS's decision to enforce this: RPC is always asynchronous, and
+	you should code for that situation. You cannot afford to be lazy with the very real possibility of network
+	failure.
+</p>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	function refresh() {
+		Diligence.ShoppingCart.getItems(function(provider, response) {
+			if (response.type == 'exception') {
+				Ext.Msg.alert('Shopping Cart', 'Exception: ' + response.message);
+			}
+			else {
+				var items = response.result;
+				Ext.fly('shopping-cart').update(items.join('; '));
+			}
+		});
+	}
+
+	function init() {
+		refresh();
+		
+		Ext.fly('add-item').set({disabled: null}, false).on('click', function() {
+			var item = Ext.fly('item').getValue();
+			if (!item) {
+				Ext.Msg.alert('Shopping Cart', 'Enter an item first!');
+				return;
+			}
+			Diligence.ShoppingCart.addItem(item, Ext.bind(function(provider, response) {
+				if (response.type == 'exception') {
+					Ext.Msg.alert('Shopping Cart', 'Exception: ' + response.message);
+				}
+				else {
+					if (response.result) {
+						Ext.Msg.alert('Shopping Cart', 'Added "' + this + '" to your cart!');
+						refresh();
+					}
+					else {
+						Ext.Msg.alert('Shopping Cart', 'You already have "' + this + '" in your cart!');
+					}
+				}
+			}, item));
+		});
+		
+		Ext.fly('get-items').set({disabled: null}, false).on('click', refresh);
+	}
+	
+	Diligence.addDirectProvider({
+		namespace: 'Diligence',
+		baseUrl: '<%= conversation.pathToBase %>',
+		success: init
+	});
+});
+</script>
+<%}}%>
+
+<%}}%>
+<%& '/site/page-template/' %>

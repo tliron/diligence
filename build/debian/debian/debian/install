@@ -1,0 +1,10 @@
+sincerity            /usr/lib/diligence/
+sincerity.bat        /usr/lib/diligence/
+*.jar                /usr/lib/diligence/
+*.txt                /usr/lib/diligence/
+programs/*           /var/lib/diligence/programs/
+component/*          /var/lib/diligence/component/
+configuration/*      /etc/diligence/
+libraries/*          /var/lib/diligence/libraries/
+diligence.desktop    /usr/share/applications
+diligence.png        /usr/lib/diligence

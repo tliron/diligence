@@ -1,0 +1,55 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%& '/site/header/' %>
+<h1>Diligence's Authorization Service</h1>
+<p>
+	When used with the <a href="../authentication/">authentication service</a>, this service lets you secure your
+	site by allowing only authorized users to access certain resources or perform certain operations.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Authorization">Diligence.Authorization API documentation</a>
+	for more details.
+</p>
+
+<h2>Entities and Inheritence</h2>
+<p>
+	Permissions are associated with "entities," which could be either inidividual users (from the
+	<a href="../authentication/">authentication service</a>), or groups, which are here stores in a simple
+	MongoDB collection. 
+</p>
+<p>
+	Each entity can inherit permissions from any number of other entities, in order. The common
+	use case is for a user to "belong" to a few groups, and inherit their permissions. This
+	lets you centrally manage permissions for large groups of users, and easily change a user's
+	permission profile by changing their groups. Entities can inherit from other entities, and
+	so on.
+</p>
+<p>
+	Permissions will be overriden by the inheritor: for example, if you specifically grant a user
+	permission to edit a certain page, they will have this permission even if the group they
+	inherit from specifically forbids it. The order of inheritence also allows for overriding.
+</p>
+
+<h2>Cascading Permissions</h2>
+<p>
+	The common practice is to name permissions using a hierarchical dot notation, with each
+	level of depth corresponding to moving into a specific section, resource or operation in
+	your application. In some cases, it may make sense to treat a permission as if it covers
+	all sub-permissions in a hierarchy. Here we call this "cascading permissions." 
+</p>
+<p>
+	TODO	
+</p>
+
+<%& '/site/footer/' %>

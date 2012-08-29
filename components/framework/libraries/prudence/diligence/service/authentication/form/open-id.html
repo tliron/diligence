@@ -1,0 +1,23 @@
+<%
+
+document.executeOnce('/diligence/service/authentication/')
+document.executeOnce('/diligence/service/html/')
+document.executeOnce('/prudence/resources/')
+
+var form = Diligence.Resources.getCurrentForm(conversation)
+var results = Diligence.Resources.getCurrentFormResults(conversation)
+var provider = Diligence.Authentication.getProviderBySlug(conversation)
+var siteName = provider.getName()
+
+%>
+<div class="centerpiece">
+	<form id="login-form" method="POST">
+		<%= Diligence.HTML.build({_key: 'diligence.service.authentication.form.openId.title', _tag: 'h2', _cast: {siteName: siteName}}) %>
+		<div class="field">
+			<%= form.htmlText('username', results) %>
+		</div>
+		<div class="buttons">
+			<%= Diligence.HTML.submit({_key: 'diligence.service.authentication.form.openId.button.login'}) %>
+		</div>
+	</form>
+</div>

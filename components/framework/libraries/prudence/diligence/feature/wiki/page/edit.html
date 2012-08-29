@@ -1,0 +1,24 @@
+<%
+
+document.executeOnce('/diligence/feature/wiki/')
+document.executeOnce('/diligence/service/html/')
+
+var permissions = conversation.locals.get('diligence.service.authorization.permissions')
+var page = Diligence.Wiki.getPage(conversation)
+var part = conversation.query.get('part')
+
+if (page && part) {
+%>
+<form method="POST">
+	<div class="page">
+		<%= Diligence.HTML.textarea({content: page.getSource(part), name: 'source'}) %>
+	</div>
+	<input type="submit" value="Save" />
+	<a href=".">Cancel</a>
+</form>
+<%
+}
+%>
+<p>
+	See <a href="http://redcloth.org/hobix.com/textile/">manual</a>
+</p>

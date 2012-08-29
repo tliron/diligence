@@ -1,0 +1,75 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+document.executeOnce('/diligence/feature/registration/')
+document.executeOnce('/diligence/service/internationalization/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
+
+var textPack = Diligence.Internationalization.getCurrentPack(conversation)
+var siteName = Diligence.Registration.getSiteName()
+var form = form || new Diligence.Registration.Form({conversation: conversation})
+%>
+<p>
+	<button id="extjs-form">Register</button>
+</p>
+<%{{ 'page.scripts' %>
+<%
+document.executeOnce('/diligence/integration/frontend/sencha/')
+%>
+<script>
+var fields = <%= Diligence.JSON.to(Diligence.Sencha.getFormFields(conversation, form), true, true) %>;
+
+Ext.onReady(function() {
+	Ext.fly('extjs-form').on('click', function() {
+		Ext.create('Ext.window.Window', {
+			title:  '<%= textPack.get("diligence.feature.registration.form.title", {siteName: siteName}) %>',
+			items: {
+				xtype: 'form',
+				url: '?mode=json',
+				border: false,
+				bodyCls: 'x-border-layout-ct', // Uses the neutral background color
+				bodyPadding: 10,
+				defaults: {
+					width: 468, // The reCAPTCHA width is 318 (labelWidth + labelPad + 318 = width)
+					labelWidth: 145,
+					labelPad: 5
+				},
+				defaultType: 'textfield',
+				items: fields,
+				buttons: [{
+					text: 'Submit',
+					disabled: true,
+					formBind: true,
+					handler: function() {
+						var form = this.up('form').getForm();
+						if (form.isValid()) {
+							form.submit({
+								success: function(form, action) {
+									this.up('window').destroy();
+									Ext.Msg.alert('Success', '<%= textPack.get("diligence.feature.registration.form.success") %>');
+								},
+								failure: function(form, action) {
+									Ext.Msg.alert('Failure', 'Could not complete registration.');
+								},
+								scope: this
+							});
+						}
+					}
+				}]
+			}
+		}).show();
+	});
+});
+</script>
+<%}}%>

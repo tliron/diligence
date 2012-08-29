@@ -1,0 +1,44 @@
+/*
+ * This file is part of Diligence for Prudence
+ *
+ * Copyright 2011 Three Crickets LLC.
+ *
+ * The contents of this file are subject to the terms of the LGPL version 3.0:
+ * http: *www.opensource.org/licenses/lgpl-3.0.html
+ *
+ * Alternatively, you can obtain a royalty free commercial license with less
+ * limitations, transferable or non-transferable, directly from Three Crickets
+ * at http: *threecrickets.com/
+ */
+
+.x-log textarea, .x-output textarea, .CodeMirror {
+	line-height: 15px;
+	font-size: 12px;
+	font-family: monospace;
+	white-space: pre;
+	border: none !important;
+}
+
+.x-log textarea {
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+
+.x-help p, .x-help pre {
+	padding: 10px 10px 10px 10px;
+}
+.x-help h1 {
+	padding: 20px 10px 10px 10px;
+	font-size: large;
+	font-style: italic;
+}
+
+div#header {
+	width: 100%;
+	margin-top: 10px;
+	text-align: center;
+	font-weight: bold;
+	font-family: Georgia, Palatino, 'Times New Roman', serif;
+	font-size: 18px;
+}
+

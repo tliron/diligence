@@ -1,0 +1,87 @@
+<%& '/site/header/' %>
+<%
+
+document.executeOnce('/diligence/integration/backend/pay-pal/')
+document.executeOnce('/diligence/service/authentication/')
+
+var session = Diligence.Authentication.getCurrentSession(conversation)
+if (!session) {
+	Diligence.Authentication.redirect(conversation)
+	conversation.stop()
+}
+
+var order = {
+	description: 'Meerkats & More',
+	amount: {tax: 5},
+	items: [{
+		name: 'Meerkat',
+		amount: 10,
+		quantity: 30
+	}, {
+		name: 'Meerkat Food',
+		amount: 100,
+		quantity: 1
+	}],
+	address: {
+		name: 'Smiley McTooth',
+		address1: '3021 W. Wilson Ave. #3',
+		city: 'Chicago',
+		state: 'IL',
+		postalCode: '60625',
+		country: 'US',
+		phoneNumber: '7013332223'
+	}
+}
+
+%>
+<h1>Order: <%= order.description %></h1>
+<table border="1">
+	<tr><th>Item</th><th>Quantity</th><th>Price/Unit</th></tr>
+<%
+var total = 0
+for (var i in order.items) {
+	var item = order.items[i]
+	total += item.quantity * item.amount
+%>
+	<tr>
+		<td><%= item.name %></td>
+		<td align="right"><%= item.quantity %></td>
+		<td align="right">$<%= item.amount.toFixed(2) %></td>
+	</tr>
+<%
+}
+total += order.amount.tax
+%>
+	<tr>
+		<td>Tax</td>
+		<td align="right">&nbsp;</td>
+		<td align="right">$<%= order.amount.tax.toFixed(2) %></td>
+	</tr>
+	<tr>
+		<td>Total</td>
+		<td align="right">&nbsp;</td>
+		<td align="right">$<%= total.toFixed(2) %></td>
+	</tr>
+</table>
+
+<h2>Shipping Address</h2>
+<%= order.address.name %><br />
+<%= order.address.address1 %><br />
+<%= order.address.city %>, <%= order.address.state %><br />
+<%= order.address.country %> <%= order.address.postalCode %><br />
+Phone: <%= order.address.phoneNumber %><br />
+<p></p>
+
+<%
+
+session.setValue('order', order)
+
+%>
+
+<div>
+	<a href="<%= conversation.pathToBase %>/pay-pal/express-checkout/?from=<%= encodeURIComponent(conversation.reference) %>">
+		<img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;">
+	</a>
+</div>
+
+<%& '/site/footer/' %>

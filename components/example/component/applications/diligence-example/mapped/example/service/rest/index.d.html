@@ -1,0 +1,101 @@
+<%& '/site/header/' %>
+<% exampleHeader('REST', 'Service'); %>
+
+<%
+
+document.executeOnce('/prudence/resources/')
+document.executeOnce('/sincerity/json/')
+document.executeOnce('/sincerity/xml/')
+document.executeOnce('/sincerity/objects/')
+
+var params = {uri: 'mongo'}
+
+var id = '4e057e94e799a23b0f581d7d'
+var baseUri
+
+if (conversation.request.method.name == 'POST') {
+	Sincerity.Objects.merge(params, Prudence.Resources.getForm(conversation, {
+		internal: 'bool',
+		mediaType: 'string',
+		uri: 'string'
+	}))
+	baseUri = params.uri
+}
+
+params.uri = '{0}/users/{1}/'.cast(params.uri, id)
+var httpUri = conversation.reference.baseRef + params.uri
+
+if (params.internal) {
+	params.uri = '/' + params.uri
+	params.mediaType = 'application/java'
+}
+else {
+	params.uri = httpUri
+	params.mediaType = params.mediaType || 'application/json'
+}
+
+var user = Prudence.Resources.request(params)
+var output = params.mediaType == 'application/xml' ? user.toXml(2) : Sincerity.JSON.to(user, true)
+
+%>
+
+<p>
+	We've set up a RESTful URI-space for the "users" collection in MongoDB, and will here let you
+	access it, either internally (without serialization), or via HTTP (with serialization).
+	The relevant source code is in "routing.js" and "/libraries/resources.js".
+</p>
+<p>
+	We've also used the REST Service's in-memory and distributed resources to set up a URI-space
+	with similar data. You can switch between resources using the combo box. See the manual below
+	for a full explanation.
+</p>
+<p>
+	Note that unlike JSON, XML does not translate naturally to standard JavaScript data structures.
+	Normally, you'd want to traverse it using the Sincerity.XML API. For this example, though, we'll
+	just print out the XML document as is. (You'll likely always prefer to use JSON when available;
+	but we want to show you that Diligence fully supports XML, too.)
+</p>
+<p>
+	Here is a link to access the HTML view of the user document: <a href="<%= httpUri %>"><%= httpUri %></a>.
+	(It works because of HTTP content negotiation: your web browser prefers the "text/html" format,
+	which we support with a special view.)
+</p>
+<p>
+	Also be sure to check out the <a href="../../integration/sencha/grids/">Ext JS grids example</a>,
+	where the exact same resources are hooked up to a powerful, editable grid widget.
+</p>
+
+<pre>
+<%= output.escapeElements() %>
+</pre>
+
+<p>
+	Last fetched URI: <b><%= params.uri %></b>, media type: <b><%= params.mediaType %></b>
+</p>
+<form method="post">
+	<p>
+		Internal:
+		<input type="checkbox" name="internal" value="true" <%= params.internal ? 'checked="checked"' : '' %> />
+	</p>
+	<p>
+		Media type: (ignored if internal)
+		<select name="mediaType">
+			<option value="application/json" <%= params.mediaType == 'application/json' ? 'selected="true"' : '' %>>application/json</option>
+			<option value="application/xml" <%= params.mediaType == 'application/xml' ? 'selected="true"' : '' %>>application/xml</option>
+		</select>
+	</p>
+	<p>
+		Resource:
+		<select name="uri">
+			<option value="mongo" <%= baseUri == 'mongo' ? 'selected="true"' : '' %>>MongoDB</option>
+			<option value="memory" <%= baseUri == 'memory' ? 'selected="true"' : '' %>>in-memory</option>
+			<option value="distributed" <%= baseUri == 'distributed' ? 'selected="true"' : '' %>>distributed</option>
+		</select>
+	</p>
+	<p>
+		<input type="submit" value="Request" />
+	</p>
+</form>
+
+<% exampleFooter('REST', 'Service'); %>
+<%& '/site/footer/' %>

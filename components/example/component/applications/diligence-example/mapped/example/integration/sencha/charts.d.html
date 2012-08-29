@@ -1,0 +1,26 @@
+<%{{ head %>
+<%
+document.executeOnce('/diligence/integration/frontend/sencha/')
+Diligence.Sencha.extJsHead(conversation, 'ext-all-gray')
+%>
+<%}}%>
+<%& '/site/header/' %>
+<% exampleHeader('Sencha', 'Integration', 'Charts'); %>
+
+<p>
+	Charts!
+</p>
+<p>
+	To appreciate what's going on in this demo, we recommend
+	using <a href="http://getfirebug.com/">Firebug</a> to see all the communication with the server.	
+</p>
+
+<%{{ foot %>
+<script type="text/javascript">
+Ext.onReady(function() {
+});
+</script>
+<%}}%>
+
+<% exampleFooter('Sencha', 'Integration', 'Charts'); %>
+<%& '/site/footer/' %>

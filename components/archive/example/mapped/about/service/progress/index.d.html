@@ -1,0 +1,252 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%& '/site/header/' %>
+<%
+
+document.executeOnce('/diligence/service/progress/')
+
+if (conversation.request.method == 'POST') {
+	switch (String(conversation.form.get('type'))) {
+		case 'trivial':
+			var process = Diligence.Progress.startProcess({
+				description: 'Waiting for this fake process to expire...',
+				maxDuration: 20 * 1000,
+				redirect: conversation.reference
+			})
+			process.redirectWait(conversation)
+			break
+
+		case 'milestones':
+			var process = Diligence.Progress.startProcess({
+				description: 'Searching for your flights...',
+				maxDuration: 60 * 1000,
+				redirect: conversation.reference,
+				task: {
+					fn: function() {
+						document.executeOnce('/diligence/service/processing/')
+						var process = Diligence.Progress.getProcess()
+						if (process && process.isActive()) {
+							var task = process.getContext()['diligence.task']
+							var milestone = process.getLastMilestone()
+							switch (milestone.name) {
+								case 'started':
+									process.addMilestone({name: 'ours', description: 'Searching our flight database'})
+									java.lang.Thread.sleep(10000)
+									var found = false // searchOurDatabases(task.searchString)
+									if (found) {
+										process.addMilestone({name: 'done'})
+									}
+									else {
+										Tasks.task(task)
+									}
+									break
+									
+								case 'ours':
+									process.addMilestone({name: 'partners', description: 'Searching our partner databases'})
+									java.lang.Thread.sleep(10000)
+									var found = true // searchPartnerDatabases(task.searchString)
+									if (found) {
+										process.addMilestone({name: 'done'})
+									}
+									else {
+										process.addMilestone({name: 'failed'})
+									}
+									break
+							}
+						}
+					},
+					searchString: 'flight #1234',
+					distributed: true
+				}
+			})
+			process.redirectWait(conversation)
+			break
+	}
+}
+
+%>
+
+<h1>Diligence's Progress Service</h1>
+<p>
+	If you've read Prudence's <a href="http://threecrickets.com/prudence/scaling/">Scaling Tips</a> article, you know
+	that for potentially long-running tasks you want to release conversation threads as soon as possible, and notify
+	the user in some way as to when the task is finished. This service helps you do it.
+</p>
+<p>
+	For a use case example, consider an application that searches for flight information using
+	several off-site databases and services. The search can take many seconds, if not minutes!
+	Of course, you do not want to hold up a user thread and have the browser spin while the search is
+	going on, so you turn to Diligence's processing service.
+</p>
+<p>
+	It works like this: you create a "process," which is a MongoDB document, and you can asynchronously update "milestones" in it, including
+	marking it as done. Processes can be associated with a user, which allows you to use the <a href="../authorization/">authorization service</a>
+	to allow only that user access to the process' status, and also to allow the user to query all processes associated
+	with them. 
+</p>
+<p>
+	The service supports two ways of letting the user know the status of the process. The first is for short-term processes:
+	a /web/fragments/ drop-in that simply shows the current status of the process, and uses browser JavaScript to refresh
+	the page every few seconds. The user would see milestones along the way to completion, if there are any, and eventually
+	be redirected to another page when the process completes (or fails!).
+</p>
+<p>
+	For longer running processes, you cannot expect the user to wait in front of their web browsers. In these cases, the
+	processing service uses the <a href="../notification/">notification service</a> to notify the user about changes to the process.
+	Additionally, there is a /web/fragments/ drop-in that would allow the user to see the current state of the process on
+	the web, and another one that lets the user access all proccesses associated with them.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Progress">Diligence.Progress API documentation</a>
+	for more details.
+</p>
+
+
+<h2>Trivial Example</h2>
+<p>
+	This fake process will simply do nothing until its expiration:
+</p>
+<pre>
+document.executeOnce('/diligence/service/processing/')
+
+var process = Diligence.Progress.startProcess({
+	description: 'Waiting for this fake process to expire...',
+	maxDuration: 20 * 1000,
+	redirect: conversation.reference
+})
+
+process.redirectWait(conversation)
+</pre>
+<p>
+	That final redirectWait call will send the user to a "please wait" page which will show "Searching for your flights..." as the text, and
+	have a progress bar. The page will automatically refresh and show ongoing progress. After 20 seconds of this, it will redirect
+	back to this page. Note that you can specify different redirect URIs for success, error, timeouts, etc.
+</p>
+<form method="post">
+	<input type="hidden" name="type" value="trivial" />
+	<input type="submit" value="Click to start this process" />
+</form>
+
+
+<h2>Example with Milestones</h2>
+<p>
+	You can launch a task, via the Tasks.task API, at the same time as you start a process.
+	Conveniently, you can then access the process via the task context:
+</p>
+<pre>
+var searchString = 'flight #1234'
+	
+var process = Diligence.Progress.startProcess({
+	description: 'Searching for your flights...',
+	maxDuration: 60 * 1000,
+	redirect: '/flight/results/',
+	task: {
+		name: '/flight/search/',
+		searchString: searchString, // this is our custom field
+		distributed: true
+	}
+})
+</pre>
+<p>
+	Our "/tasks/flights/search.js" would look like this:
+</p>
+<pre>
+document.executeOnce('/diligence/service/processing/')
+
+var process = Diligence.Progress.getProcess()
+if (process && process.isActive()) {
+	var task = process.getContext()['diligence.task']
+	var milestone = process.getLastMilestone()
+	switch (milestone.name) {
+		case 'started':
+			process.addMilestone({name: 'ours', description: 'Searching our flight database'})
+			var found = searchOurDatabase(task.searchString)
+			if (found) {
+				process.addMilestone({name: 'done'})
+			}
+			else {
+				Tasks.task(task)
+			}
+			break
+			
+		case 'ours':
+			process.addMilestone({name: 'partners', description: 'Searching our partner databases'})
+			var found = searchPartnerDatabases(task.searchString)
+			if (found) {
+				process.addMilestone({name: 'done'})
+			}
+			else {
+				process.addMilestone({name: 'failed'})
+			}
+			break
+	}
+}
+</pre>
+<p>
+	Note that we've handled each milestone as a new execution of the task (the first milestone
+	is always "started").
+	This allows for better concurrency (the task is distributed, too, so each milestone might be executed on a different
+	instance in the cluster), and also makes sure that a milestone is not performed if the process
+	expires and is thus not longer active (isActive would return false).
+</p>
+<form method="post">
+	<input type="hidden" name="type" value="milestones" />
+	<input type="submit" value="Click to start this process" />
+</form>
+
+
+<h2>Reattempts</h2>
+<p>
+	A common use case for the processing service is in dealing with an unreliable action that might actually succeed after
+	a few attempts. You'd thus want to let the user wait until a certain maximum duration, and keep retrying every few
+	seconds in the background until the action succeeds.
+</p>
+<p>
+	The processing service automates much of this:
+</p>
+<pre>
+var ipAddressOfRemoteLocation = '1.2.3.4' 
+var process = Diligence.Progress.startProcess({
+	description: 'Attemping to connect you to remote location {0}...'.cast(ipAddressOfRemoteLocation),
+	maxDuration: 5 * 60 * 1000,
+	redirect: '/remote/connected/',
+	task: {
+		fn: '/remote/connect/',
+		maxAttempts: 50,
+		delay: 5000,
+		remoteLocation: ipAddressOfRemoteLocation // this is our custom field
+	}
+})
+</pre>
+<p>
+	Our "/tasks/remote/connect.js" would look something like this:
+</p>
+<pre>
+document.executeOnce('/diligence/service/processing/')
+
+var process = Diligence.Progress.getProcess()
+if (process) {
+	process.attempt(function(process, task) {
+		document.executeOnce('/mylibrary/connections/')
+		return connectRemote(task.remoteLocation)
+	})
+}
+</pre>
+<p>
+	The process.attempt call doest most of the work: it makes sure to call the task again if there's still time before
+	the process expires and the maximum number of attempts has not been exceeded, waiting the appropriate delay before
+	each attempt. Your function just has to make sure to return true if the attempt has succeeded. Easy!
+</p>
+
+<%& '/site/footer/' %>

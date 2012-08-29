@@ -1,0 +1,340 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%& '/site/header/' %>
+<%
+document.executeOnce('/diligence/foundation/html/')
+document.executeOnce('/prudence/logging/')
+document.executeOnce('/diligence/service/events/')
+
+var inThreadStore = new Diligence.Events.InThreadStore()
+var globalsStore = new Diligence.Events.MapStore(application.globals, 'myevents.')
+var persistentStore = new Diligence.Events.MongoDbCollectionStore()
+
+Diligence.Events.subscribe({
+	name: 'payments.successful',
+	stores: inThreadStore,
+	fn: function(name, context) {
+		Prudence.Logging.getLogger().info('User {0} has paid us {1}! (in-thread listener)', context.username, context.amount)
+	}
+})
+
+Diligence.Events.subscribe({
+	name: 'payments.successful',
+	id: 'sendThankYou',
+	stores: globalsStore,
+	fn: function(name, context) {
+		Prudence.Logging.getLogger().info('User {0} has paid us {1}! (stored listener)', context.username, context.amount)
+	}
+})
+
+Diligence.Events.subscribe({
+	name: 'payments.successful',
+	id: 'sendThankYou',
+	stores: persistentStore,
+	fn: function(name, context) {
+		Prudence.Logging.getLogger().info('User {0} has paid us {1}! (persistent listener)', context.username, context.amount)
+	}
+})
+
+switch (String(conversation.request.method)) {
+	case 'POST':
+		var type = String(conversation.form.get('type'))
+		switch (type) {
+			case 'in-thread':
+				Diligence.Events.fire({
+					name: 'payments.successful',
+					stores: inThreadStore,
+					context: {username: 'user123', id: '123', amount: '$123.45'}
+				})
+				break
+
+			case 'async':
+				Diligence.Events.fire({
+					name: 'payments.successful',
+					stores: inThreadStore,
+					async: true,
+					context: {username: 'user123', id: '123', amount: '$123.45'}
+				})
+				break
+
+			case 'stored':
+				Diligence.Events.fire({
+					name: 'payments.successful',
+					stores: globalsStore,
+					async: true,
+					distributed: true,
+					context: {username: 'user123', id: '123', amount: '$123.45'}
+				})
+				break
+
+			case 'persistent':
+				Diligence.Events.fire({
+					name: 'payments.successful',
+					stores: persistentStore,
+					async: true,
+					distributed: true,
+					context: {username: 'user123', id: '123', amount: '$123.45'}
+				})
+				break
+		}
+		break
+}
+
+%>
+
+<h1>Diligence's Events Service</h1>
+<p>
+	Every framework provides some generic way to send, listen to and fire one-way messages
+	called "events". By decoupling event producer code from event consumer code, you can better
+	organize your code architecture.
+</p>
+<p class="note">
+	...Or not. The problem with events is that they are hooked up dynamically while the
+	application runs. It's hard to know, simply looking at the code, what code will be
+	triggered when an event is fired. Decoupling is a great way to introduce some really
+	difficult bugs into your codebase. It's best not to use events if you don't actually
+	need them!
+</p>
+<p>
+	Some frameworks go a step beyond simple code decoupling, and treat producers
+	and consumers as separate <i>components</i>, where the producer cannot make
+	any assumptions on the consumer's thread behavior. For example, a consumer might
+	respond to events immediately, in thread, possibly tying up the producer's
+	thread in the process. Or, it might have events queues up, and poll occassionally
+	to handle them. In such highly generic situations, events are called "messages," and
+	implementations often involve sophisticated middleware to queue messages, persist them,
+	create inter-dependencies, and make sure they travel from source to destination via
+	repeated attempts, back-off algorithms, notifications to system administrators, etc.
+</p>
+<p>
+	One size does not fit all. With Diligence, we wanted to keep events lightweight:
+	we assume that your consumer and producer components are all running inside a
+	Prudence container: they are /resources/ and /web/dynamic/ documents that run
+	in web request threads, or /tasks/ that run asynchronously. There's thus no need
+	for generic middleware, though more sophisticated, dedicated messaging middleware is out
+	there and available if you need it.
+	(See <a href="http://www.rabbitmq.com/">RabbitMQ</a>.)
+</p>
+<p>  
+	On the other hand, the combination of Prudence Hazelcast clusters, MongoDB, and
+	JavaScript's inherent dynamism within the Prudence container allows for some
+	really scalable events! If what you need is asynchronicity and scalable distribution,
+	rather than generic decoupling, then Diligence events might be far more useful
+	and simpler than deploying complex middleware.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Events">Diligence.Events API documentation</a>
+	for more details.
+</p>
+
+
+<h2>In-Thread Events</h2>
+<p>
+	First, the basics. Here's our "/libraries/politeness/acknowledgements.js":
+</p>
+<pre>
+Diligence.Events.subscribe({
+	name: 'payments.successful',
+	fn: function(name, context) {
+		logger.info('User {0} has paid us {1}!', context.username, context.amount)
+		Acknowledgements.sendThankYou(context.username)
+	}
+})
+</pre>
+<p>
+	Then, to fire the event, somewhere in our payments workflow:
+</p>
+<pre>
+document.executeOnce('/libraries/politeness/acknowledgements/')
+	
+Diligence.Events.fire({
+	name: 'payments.successful',
+	context: {username: user.name, id: user.id, amount: payment.amount}
+})
+</pre>
+<p>
+	For this to work, you have to make sure the firing code has already run the
+	code that hooks up the listeners. Often, a simple document.execute will do the
+	trick, like in this example.
+</p>
+<form method="POST">
+	<p><%= Diligence.HTML.input({name: 'type', value: 'in-thread', type: 'hidden'}) %></p>
+	<p><%= Diligence.HTML.submit({value: 'Click to fire in-thread event'}) %></p>
+</form>
+
+
+<h2>Asynchronous Events</h2>
+<p>
+	You can easily make the listeners run outside your thread, in fact
+	anywhere in your Prudence cluster:
+</p>
+<pre>
+Diligence.Events.subscribe({
+	name: 'payments.successful',
+	dependencies: '/politeness/acknowledgements/',
+	fn: function(name, context) {
+		logger.info('User {0} has paid us {1}!', context.username, context.amount)
+		Acknowledgements.sendThankYou(context.username)
+	}
+})
+</pre>
+<p>
+	Note that we added "dependencies" to the listener, to allow it to be called
+	in different contexts. These dependencies are document.executedOnce to make sure
+	the thread has access to all the code it needs. 
+</p>
+<p>
+	Firing it:
+</p>
+<pre>
+document.executeOnce('/libraries/politeness/acknowledgements/')
+
+Diligence.Events.fire({
+	name: 'payments.successful',
+	async: true,
+	context: {username: user.name, id: user.id, amount: payment.amount}
+})
+</pre>
+<form method="POST">
+	<p><%= Diligence.HTML.input({name: 'type', value: 'async', type: 'hidden'}) %></p>
+	<p><%= Diligence.HTML.submit({value: 'Click to fire async event'}) %></p>
+</form>
+<p>
+	And... that's pretty much it. Every listener will run in its own thread
+	within the global pool. You can add a "distributed: true" flag to cause
+	listeners to be executed anywhere in the cluster.
+</p>
+<p>
+	How does this magic work? It's JavaScript magic:  
+	<i>the listener function's source code is serialized.</i>
+	The code that fires the event is called via <a href="../tasks/">Diligence's tasks library</a>.
+	The task makes sure to run the dependencies and evaluate the JavaScript you stored. Voila. 
+	(Serialization and eval will only occur on async events: otherwise, it's a regular function
+	call.)	
+</p>
+<p>
+	Concerned about JavaScript eval performance? Generally, it's very fast, and surely whatever overhead
+	is required to parse the JavaScript grammar would be less than any network I/O that a distributed event would involve.
+	If you're really worried, make sure to store as little as possible in the listener
+	function. It's best to just call a function from one of the dependency
+	libraries, which are already compiled and at their most efficient.
+</p>
+
+
+<h2>Stored Listeners</h2>
+<p>
+	So far so good, but both examples above require you to execute the code that subcribes
+	the listeners before firing the event. Stored listeners remove this requirement
+	by saving the event and its listeners in one of several storage implementations.
+</p>
+<p>
+	For example, let's store our listeners in application.distributedGlobals, so
+	that we can fire the event anywhere in the Prudence cluster:
+</p>
+<pre>
+var globalEvents = new Diligence.Events.GlobalsStore(application.distributedGlobals, 'myevents.')
+	
+Diligence.Events.subscribe({
+	name: 'payments.successful',
+	stores: globalEvents,
+	id: 'sendThankYou',
+	dependencies: '/politeness/acknowledgements/',
+	fn: function(name, context) {
+		logger.info('User {0} has paid us {1}!', context.username, context.amount)
+		Acknowledgements.sendThankYou(context.username)
+	}
+})
+</pre>
+<p>
+	We can also use application.globals or application.sharedGlobals.
+</p>
+<p>
+	One small issue is that with stored listeners is that they are inherently
+	multithreaded: so, you need to make sure that they are not registered more than once,
+	say by multiple nodes in the cluster, otherwise your listener code would be
+	called multiple times.
+</p>
+<p>	
+	That's what the listener "id" field is for. In fact, the "id"
+	field can also be used for in-thread listeners. It also might make sense
+	to set up all your stored listeners in your "/startup/" task, but it's not
+	a requirement: you can install listeners whenever necessary and relevant.
+</p>
+<p>
+	Because it's stored, firing the event does not require us to execute the listener
+	code first in our thread. We can remain blissfully unaware of who or what is
+	subscribed to our event:
+</p>
+<pre>
+Diligence.Events.fire({
+	name: 'payments.successful',
+	stores: globalEvents,
+	async: true,
+	distributed: true,
+	context: {username: user.name, id: user.id, amount: payment.amount}
+})
+</pre>
+<form method="POST">
+	<p><%= Diligence.HTML.input({name: 'type', value: 'stored', type: 'hidden'}) %></p>
+	<p><%= Diligence.HTML.submit({value: 'Click to fire stored event'}) %></p>
+</form>
+<p>
+	The "stores" param can also be an array, so you can fire the event on listeners from
+	various stores. The in-thread store is in "Events.defaultStores", so you can concat
+	that to your custom store if you want to fire the event across all stores. Or, set
+	"Events.defaultStore" to your own value.
+</p>
+
+
+<h2>Persistent Listeners</h2>
+<p>
+	In the above example, the listeners would have to be re-subcribed when the application restarts,
+	because it cannot guaranteed that application.distributedGlobals would keep its value.
+	(Well, you <i>can</i> configure Hazelcast to persist the distributedGlobals map...)
+</p>
+<p>
+	Let's store our listeners in MongoDB, instead (the default is to use the "events" MongoDB
+	collection):
+</p>
+<pre>
+Diligence.Events.subscribe({
+	name: 'payments.successful',
+	stores: new Diligence.Events.MongoDbCollectionStore(),
+	id: 'sendThankYou',
+	dependencies: '/politeness/acknowledgements/',
+	fn: function(name, context) {
+		logger.info('User {0} has paid us {1}!', context.username, context.amount)
+		Acknowledgements.sendThankYou(context.username)
+	}
+})
+</pre>
+<p>
+	Everything is otherwise the same. Neat!
+</p>
+<form method="POST">
+	<p><%= Diligence.HTML.input({name: 'type', value: 'persistent', type: 'hidden'}) %></p>
+	<p><%= Diligence.HTML.submit({value: 'Click to fire persistent event'}) %></p>
+</form>
+<p>
+	You can also store events inside a specific, arbitrary MongoDB document, using "Events.MongoDbDocumentStore".
+	This is a great way to keep events and their listeners (and the namespace for events) localized to a specific object
+	without adding external mechnisms and storage. 
+</p>
+<p>
+	Finally, you can create your own custom store class to store events anywhere else.
+</p>
+
+
+
+<%& '/site/footer/' %>

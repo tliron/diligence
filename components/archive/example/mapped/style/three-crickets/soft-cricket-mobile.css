@@ -1,0 +1,61 @@
+/*****************************
+ *  Soft Cricket Mobile 1.0  *
+ *                           *
+ *       By: Tal Liron       *
+ *****************************/
+
+body {
+	background-color: #ffe0d9;
+	font-family: Ubuntu, 'Lucida Sans Unicode', 'Lucida Grande', Verdana, Geneva, Tahoma, Arial, Helvetica, sans-serif;
+}
+
+div.image {
+	margin: 12px 12px 12px 12px;
+}
+
+p {
+	margin: 12px 12px 12px 12px;
+	font-size: 14px;
+	line-height: 170%;
+}
+
+h1, h2, h3 {
+	font-family: Georgia, Utopia, Palatino, "Times New Roman", Times, serif;
+	font-weight: bold;
+}
+h1 {
+	margin: 12px 12px 0px 12px;
+	font-size: 18px;
+	text-align: center;
+}
+h2 {
+	margin: 20px 12px 12px 12px;
+	font-size: 16px;
+}
+h3 {
+	margin: 6px 12px 20px 12px;
+	font-size: 12px;
+	text-align: center;
+}
+
+a:link {
+	color: #b22222;
+	text-decoration: none;
+}
+a:visited {
+	color: #b22222;
+	text-decoration: none;
+}
+a:hover {
+	background-color: #ffffa0;
+}
+
+a.neutral:link {
+	color: black;
+}
+a.neutral:visited {
+	color: black;
+}
+a.neutral:hover {
+	background-color: transparent;
+}

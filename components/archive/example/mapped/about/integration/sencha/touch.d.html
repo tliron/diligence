@@ -1,0 +1,262 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+document.executeOnce('/prudence/resources/')
+if (!Prudence.Resources.isMobileClient(conversation)) {
+%>
+<%& '/site/header/' %>
+<h1>Diligence's Sencha Integration Library</h1>
+<h2>Sencha Touch</h2>
+
+<p>
+	So, off the bat we've already discovered that you're using a desktop browser, and so have delivered you
+	desktop content for this URL. You will need a mobile browser -- Android, iOS, Blackberry or an emulator --
+	to see the full Sencha Touch demo on this page. Phone and tablet form factors are both fully supported.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Sencha">Diligence.Sencha API documentation</a>
+	for more details.
+</p>
+
+
+<h3>Data-Driven, Cross-Platform Mobile Apps</h3>
+<p>
+	But we can tell you what you <i>would</i> see: we connect a standard Sencha store to a MongoDB-backed
+	collection, and let you page through it using a Sencha Touch list, and let edit any item using a
+	Sencha Touch form. 	Astounding power with only a few dozen lines of code.
+</p>
+<p>
+	The whole experience is quite similar in concept to <a href="../grids/">Ext JS grids</a> --
+	and <i>very</i> similar in actual code due to similarities between Ext JS and Sencha Touch, especially in
+	the data access API -- but the resulting experience is obviously tailored for a smaller, touch-oriented
+	interface. The bottom line is that you are using the same server-sid Diligence code to deliver both desktop
+	and mobile application.
+</p>
+<p>
+	As with Ext JS, we are making good use of the mobile browser's cache, and fully support MongoDB's
+	extended JSON notation, so data types transfer directly.
+</p>
+
+
+<h3>Yummy Extras</h3>
+<p>
+	Sencha Touch is not quite as mature as Ext JS at this point, but we've added some goodies to make your
+	coding experience easier. For example, a paging plugin for Ext.List which offers similar functionality
+	to the PagingToolbar in Ext JS, but also supports swipe gestures for an "endless scrolling"
+	experience.
+</p>
+
+<%& '/site/footer/' %>
+<%
+}
+else {
+%><!DOCTYPE html>
+<%
+document.executeOnce('/diligence/integration/frontend/sencha/')
+%>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Diligence Demo</title>
+	
+	<%= Diligence.Sencha.senchaTouchHead(conversation) %>
+	
+    <style>
+        body {
+            background-color: #ffe0d9;
+        }
+    </style>
+</head>
+<body>
+	<div style="display: none;">
+		<div id="about">
+			<h3>About Diligence's Sencha Touch Integration</h3>
+			<p>
+				We connect a standard Sencha store to a MongoDB-backed
+				collection, and let you page through it using a Sencha Touch list, and let edit any item using a
+				Sencha Touch form. 	Astounding power with only a few dozen lines of code.
+			</p>
+			<p>
+				The whole experience is quite similar in concept to <a href="../grids/">Ext JS grids</a> --
+				and <i>very</i> similar in actual code due to similarities between Ext JS and Sencha Touch, especially in
+				the data access API -- but the resulting experience is obviously tailored for a smaller, touch-oriented
+				interface. The bottom line is that you are using the same server-sid Diligence code to deliver both desktop
+				and mobile application.
+			</p>
+			<p>
+				As with Ext JS, we are making good use of the mobile browser's cache, and fully support MongoDB's
+				extended JSON notation, so data types transfer directly.
+			</p>
+			
+			<h3>Yummy Extras</h3>
+			<p>
+				Sencha Touch is not quite as mature as Ext JS at this point, but we've added some goodies to make your
+				coding experience easier. For example, a paging plugin for Ext.List which offers similar functionality
+				to the PagingToolbar in Ext JS, but also supports swipe gestures for an "endless scrolling"
+				experience.
+			</p>
+		</div>
+	</div>
+</body>
+<script>
+Ext.setup({
+	icon: '<%= conversation.pathToBase %>/media/touch/icon.png',
+	tabletStartupScreen: '<%= conversation.pathToBase %>/media/touch/tablet_startup.png',
+	phoneStartupScreen: '<%= conversation.pathToBase %>/media/touch/phone_startup.png',
+	glossOnIcon: false,
+	fullscreen: true,
+	onReady: function() {
+		var pageSize = 10;
+		
+		new Diligence.data.Store({
+			storeId: 'diligence',
+			proxy: {
+				url: '../grids/mongo-db/'
+			},
+			pageSize: pageSize,
+			autoSave: true,
+			autoLoad: {
+				params: {
+					start: 0,
+					meta: true
+				}
+			}
+		});
+		
+		new Ext.Panel({
+			id: 'main',
+			fullscreen: true,
+			layout: 'card',
+			items: {
+				xtype: 'panel',
+				items: {
+					xtype: 'list',
+					store: 'diligence',
+					itemTpl: '{name}<tpl if="lastSeen"><br /><small>Last seen: {lastSeen:date("m/d/Y")}</small></tpl>',
+					disableSelection: true,
+					plugins: [new Diligence.ListPagingPlugin({pagingToolbar: 'paging'})],
+					listeners: {
+						itemtap: function(list, index, item, event) {
+							var record = list.getRecord(item);
+							var form = new Ext.form.FormPanel({
+								hideOnMaskTap: false,
+								scroll: 'vertical',
+								defaults: {
+									labelWidth: 100
+								},
+								items: [{
+									xtype: 'textfield',
+									name: 'name',
+									label: 'Name'
+								}, {
+									xtype: 'datepickerfield',
+									name: 'lastSeen',
+									label: 'Last Seen'
+								}, {
+									height: 20
+								}, {
+									layout: {
+										type: 'hbox',
+										pack: 'center'
+									},
+									items: [{
+										text: 'Cancel',
+										xtype: 'button',
+										handler: function() {
+											var form = this.up('form');
+											form.destroy();
+										}
+									}, {
+										width: 10
+									}, {
+										text: 'Save',
+										xtype: 'button',
+										handler: function() {
+											var form = this.up('form');
+											form.submit();
+										}
+									}]
+								}],
+								dockedItems: [{
+									xtype: 'toolbar',
+									dock: 'top',
+									title: 'Edit User'
+								}],
+								listeners: {
+									submit: function() {
+										this.destroy();
+									}
+								}
+							});
+							form.load(record);
+							Diligence.slideIn('main', form);
+						}
+					}
+				},
+				dockedItems: [{
+					dock: 'top',
+					xtype: 'toolbar',
+					title: 'Diligence Users',
+					layout: {
+						pack: 'right'
+					},
+					items: [{
+						iconMask: true,
+						iconCls: 'info',
+						handler: function() {
+							Ext.getCmp('info').show();
+						}
+					}]
+				}, {
+					dock: 'bottom',
+					xtype: 'paging',
+					id: 'paging',
+					store: 'diligence'
+				}]
+			}
+		});
+		
+		new Ext.Panel({
+			id: 'info',
+			floating: true,
+            modal: true,
+            centered: true,
+			scroll: 'vertical',
+            width: Ext.Element.getViewportWidth() * 0.9,
+            height: Ext.Element.getViewportHeight() * 0.9,
+			contentEl: 'about',
+			styleHtmlContent: true,
+			dockedItems: [{
+				dock: 'bottom',
+				xtype: 'toolbar',
+				layout: {
+					pack: 'center'
+				},
+				items: [{
+					text: 'Got it, thanks!',
+					handler: function() {
+						this.up('panel').hide();
+					}
+				}]
+			}]
+		});
+		
+		Ext.getCmp('info').show();
+	}
+});
+</script>
+</html>
+<%
+}
+%>

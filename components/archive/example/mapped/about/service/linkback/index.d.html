@@ -1,0 +1,231 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+document.executeOnce('/sincerity/jvm/')
+document.executeOnce('/diligence/foundation/html/')
+document.executeOnce('/prudence/blocks/')
+document.executeOnce('/prudence/resources/')
+document.executeOnce('/diligence/service/linkback/')
+
+var links = application.getGlobal('about.linkback.links', Sincerity.JVM.newSet(true))
+var message = ''
+if (String(conversation.request.method) == 'POST') {
+	var form = Prudence.Resources.getForm(conversation, {
+		addPageUri: 'string',
+		clearPageUris: 'boolean',
+		pageUri: 'string',
+		trackbackUri: 'string',
+		pingbackUri: 'string'
+	})
+	
+	if (form.clearPageUris) {
+		links.clear()
+	}
+	else if (form.addPageUri) {
+		links.add(form.addPageUri)
+	}
+	else if (form.pageUri && !form.trackbackUri && !form.pingbackUri) {
+		var discover = Diligence.Linkback.discover(form.pageUri)
+		if (discover) {
+			if (discover.type == 'trackback') {
+				form.trackbackUri = discover.uri
+				conversation.form.put('trackbackUri', form.trackbackUri)
+			}
+			else if (discover.type == 'pingback') {
+				form.pingbackUri = discover.uri
+				conversation.form.put('pingbackUri', form.pingbackUri)
+			}
+			else {
+				message = 'Auto-discovery did not Trackback or Linkback information on the page'
+			}
+		}
+	}
+	
+	if (form.trackbackUri) {
+		try {
+			Diligence.Linkback.track({
+				trackbackUri: form.trackbackUri,
+				uri: conversation.reference,
+				blogName: 'Diligence - Demo Application',
+				title: 'Linkback Demo',
+				excerpt: 'Just testing...'
+			})
+			message = 'Trackback succeeded! Go to the linked page to see if it acknowledges our linkback.'
+		}
+		catch (x) {
+			message = 'Trackback error: ' + x
+		}
+	}
+	else if (form.pingbackUri && form.pageUri) {
+		try {
+			Diligence.Linkback.ping({
+				pingbackUri: form.pingbackUri,
+				uri: conversation.reference,
+				targetUri: form.pageUri
+			})
+			message = 'Pingback succeeded! Go to the linked page to see if it acknowledges our linkback.'
+		}
+		catch (x) {
+			message = 'Pingback error: ' + x
+		}
+	}
+}
+%>
+<%{{ 'page.head' %>
+	<!-- Pingback -->
+	<%= Diligence.Linkback.pingbackHead(conversation) %>
+	
+	<!-- Trackback
+<%= Diligence.Linkback.trackbackHead({uri: conversation.reference, title: 'Diligence Demo Application', indent: '\t'}) %>
+	-->
+<%}}%>
+<%{{ 'page.main' %>
+<h1>Diligence's Linkback Service</h1>
+<p>
+	"Linkbacks" are a way to add crossreferening to hyperlinks: if I link to another page on another site, I can let that other site
+	know that I am linking to it, and then that other site can choose to display a link back to my site. This can be useful for users,
+	as it lets them quickly find relevant sites. But, it's probably more important in terms of SEO: the more links you have, the higher
+	your page's rank will be in search engines. And if you can get a link to your site on a popular site, all the better.
+</p>
+<p>
+	Because linkbacks require trust and mutuality, there are especially popular in the blogosphere, where bloggers often work with each
+	other (sometimes antagonistically!) to create more hits, and thus generate more revenue. 
+</p>
+<p>
+	Unfortunately, there's no single standard for linbacking, and all of them are rather cumbersome. Luckily, Diligence does most of the work for
+	you: it features clients and servers for both the <a href="http://www.sixapart.com/pronet/docs/trackback_spec">Trackback</a> and
+	<a href="http://www.hixie.ch/specs/pingback/pingback">Pingback</a> specs. As a server, it lets you accept these linkbacks from other sites,
+	respond properly to the remote clients, and register the linkback in a MongoDB collection. As a client, it lets you auto-discover trackback
+	and pingback URLs on remote pages, and do the necessary handshaking.
+</p>
+<p>
+	Pingback is by far the more complicated spec: it requires XML-RPC (we are using Diligence's RPC service for it), and also suggests that you
+	make sure that the other site is indeed linking to you before registering. Trackback is more lightweight, but allows telling the target
+	site more information about how you are linking them.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Linkback">Diligence.Linkback API documentation</a>
+	for more details.
+</p>
+
+
+<h2>Integarting Linkbacks into Your Product</h2>
+<p>
+	Diligence does a lot for you, but the burden is still on your to understand these non-trivial technologies well enough to integrate them properly
+	into your application. On this page, we're featuring a rather elaborate example of how linkbacks work on this page for the purpose of demonstation.
+	Much of this can be automated for your application: for example, in a blogging application, you might want to go over every new blog post
+	and try out all the links on the page with Diligence.Linkback.discover to see if they support linkbacks, and then to do the linkback automatically
+	without any user interaction. Or, you might prefer to have users explicitly click on a "linkback" feature. Diligence gives you the tools, making it
+	as easy as possible for you to do the rest.
+</p>
+
+
+<h2>How to Linkback <i>from</i> This Page?</h2>
+<h3>1. Link</h3>
+<p>
+	First, we need to make sure that we actually have a link to the remote site on our page. Here's a really simple form that lets you add
+	links to this page:
+</p>
+<form id="add" method="POST">
+	<p>
+		<%= Diligence.HTML.input({name: 'addPageUri', size: 70}, {_content: 'Page URL:'}) %>
+	</p>
+	<p>
+		<%= Diligence.HTML.submit({value: 'Add Link'}) %>
+	</p>
+</form>
+<form id="clear" method="POST">
+	<input type="hidden" name="clearPageUris" value="true" />
+	<p>
+		<%= Diligence.HTML.submit({value: 'Clear Link List'}) %>
+	</p>
+</form>
+<p>
+	Currently linked pages:
+<% for (var i = links.iterator(); i.hasNext(); ) { var link = i.next(); %>
+	<a href="<%= link %>">link</a>
+<% } %>
+</p>
+<h3>2. Auto-Discovery</h3>
+<p>
+	We support auto-discovery of trackback and pingback URLs, so you can first try to just enter the linked URL.
+	Make sure it's one of the links you've added above!
+	Pingback will be preferred if both Trackback and Pingback are supported by page. 
+</p>
+<form id="linkback" method="POST">
+	<p>
+		<%= Diligence.HTML.input({name: 'pageUri', size: 70}, {_content: 'Page URL:'}) %>
+	</p>
+<h3>3. Or Use Explicit Linkback URLs</h3>
+	<p>
+		In case that doesn't work, you might also have to enter an explicit trackback or pingback URL posted on that page:
+	</p>
+	<p>
+		<%= Diligence.HTML.input({name: 'trackbackUri', size: 70}, {_content: 'Trackback URL:'}) %>
+	</p>
+	<p>
+		(Note that you do <i>not</i> need to enter the page URL with trackback, but you <i>do</i> need it it with pingback)
+	</p>
+	<p>
+		<%= Diligence.HTML.input({name: 'pingbackUri', size: 70}, {_content: 'Pingback URL:'}) %>
+	</p>
+	<p>
+		<%= Diligence.HTML.submit({value: 'Linkback'}) %>
+	</p>
+</form>
+<% if (message) { %>
+<p>
+	<span style="color: red;"><%= message %></span>
+</p>
+<% } %>
+
+<h2>How to Linkback <i>to</i> This Page?</h2>
+<p>
+	This page contains information about its trackback and pingback URLs.
+	In case your software doesn't support auto-discovery of these, and you need to enter them explicitly, they are:
+</p>
+<p>
+	<%= Diligence.HTML.input({value: Diligence.Linkback.getTrackbackUri(conversation.reference), readonly: 'readonly', size: 70}, {_content: 'Trackback URL:'}) %>
+</p>
+<p>
+	<%= Diligence.HTML.input({value: Diligence.Linkback.getPingbackUri(), readonly: 'readonly', size: 70}, {_content: 'Pingback URL:'}) %>
+</p>
+
+
+<%
+var linkbacks = Diligence.Linkback.getLinkbacks(conversation.reference)
+%>
+<h2>Links to This Page (<%= linkbacks ? linkbacks.length : 0 %>)</h3>
+<p>
+	If you've successfully linkbacked from another site to this page, the links will be listed below.
+</p>
+<%
+if (linkbacks && linkbacks.length) {
+%>
+<ul>
+<%
+	for (var l in linkbacks) {
+		var link = linkbacks[l]
+%>
+	<li>
+		From <a href="<%= link.sourceUri %>"><%= link.sourceUri %></a> via <%= link.method %> on <%= link.timestamp %>
+<% if (link.excerpt) { %><p><%= link.excerpt %></p><% } %>
+	</li>
+<%
+	}
+}
+%>
+</ul>
+<%}}%>
+<%& '/site/page-template/' %>

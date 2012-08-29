@@ -1,0 +1,111 @@
+
+// Colors
+
+$status: #505050;
+$error: #FF0000;
+$recaptcha: #D0D0D0;
+
+// Proportions
+
+$centerpiece-width: 550px;
+$centerpiece-margin: 20px;
+
+$form-padding: 10px;
+$input-width: 312px; // to match recpatcha width 
+$button-width: 150px;
+
+$recaptcha-width: 800px;
+
+$form-internal: $centerpiece-width - $centerpiece-margin * 2 - $form-padding;
+$label-width: $form-internal - $input-width - 6;
+
+div.centerpiece {
+	width: $centerpiece-width;
+	margin-left: auto;
+	margin-right: auto;
+
+	h2 {
+		padding-top: 20px;
+		text-align: center;
+	}
+	
+	div.status {
+		text-align: center;
+		color: $status;
+		padding: 10px $centerpiece-margin 10px $centerpiece-margin;
+	}
+	
+	div.field {
+		padding: 5px $centerpiece-margin 5px $centerpiece-margin;
+		label {
+			float: left;
+			vertical-align: middle;
+			width: $label-width;
+			margin-right: $form-padding;
+		}
+		input {
+			width: $input-width;
+		}
+		textarea {
+			width: $input-width;
+			height: 300px;
+		}
+		div.error {
+			color: $error;
+			margin-left: $label-width + $form-padding;
+		}
+	}
+	
+	div.buttons {
+		margin-top: 20px;
+		padding-bottom: 20px;
+		input {
+			width: $button-width;
+			margin-left: $centerpiece-width - $button-width - $centerpiece-margin;
+		}
+	}
+
+	div.icon-matrix {
+		text-align: center;
+		> div {
+			display: inline-block;
+			text-align: center;
+			overflow: auto;
+			> div {
+				padding: $form-padding;
+				float: left;
+			}
+		}
+	}
+
+	div#recaptcha-js {
+		height: 129px;
+	}
+}
+
+#recaptcha {
+	overflow: auto;
+	width: $recaptcha-width;
+	margin: {
+		left: auto;
+		right: auto;
+		top: 10px;
+	}
+	background-color: $recaptcha;
+	color: black;
+	text-align: center;
+
+	iframe {
+		height: 300px;
+		width: $recaptcha-width;
+		border: none;
+	}
+
+	div.top {
+		margin-top: 10px;
+	}
+
+	div.bottom {
+		margin-bottom: 10px;
+	}
+}

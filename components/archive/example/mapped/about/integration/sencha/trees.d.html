@@ -1,0 +1,123 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+conversation.locals.put('extJs', true)
+
+document.executeOnce('/prudence/blocks/')
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's Sencha Integration Library</h1>
+<h3>Ext JS Trees</h3>
+
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Sencha">Diligence.Sencha API documentation</a>
+	for more details.
+</p>
+
+<h3>MongoDB Trees</h3>
+<p>
+In relational databases, implementing trees efficiently is a pain. MongoDB makes things
+much easier by allowing us to create documents of any structured depth.
+Here is a plain old Ext JS TreePanel, with a plain old TreeLoader backed by a MongoDB document.
+The server-side code:
+</p>
+<pre>
+var tree = new ExtJS.SimpleMongoDbTree({
+	collection: 'textpacks',
+	field: 'text',
+	query: {locale: 'fr'},
+	getNodeText: function(id, node) {
+		return typeof node == 'string' ? id + ': ' + node : id
+	}
+})
+</pre>
+<p>
+Pretty easy, no? And here's the result:
+</p>
+<div id="tree-mongo-db"></div>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	Ext.create('Ext.tree.Panel', {
+		store: Ext.create('Ext.data.TreeStore', {
+			proxy: {
+				type: 'rest',
+				url: 'mongo-db/'
+			},
+			defaultRootId: '/',
+			autoLoad: true
+		}),
+		renderTo: 'tree-mongo-db',
+		style: {margin: 'auto'},
+		width: 500,
+		height: 500,
+		autoScroll: true,
+		useArrows: true,
+		rootVisible: false
+	});
+});
+</script>
+<%}}%>
+<p>
+One cool extra is that Diligence's SimpleMongoDbTree can recognize DBRefs anywhere in the
+document, and allow Ext JS's tree loader to lazy-load them when the user clicks. This lets
+you stretch trees across as many MongoDB documents as you like, increasing atomicity for
+updating them and allowing fine-grained control over performance and user experience.
+</p>
+<p>
+Try clicking on the cluck.next node to see it load the other document.
+</p>
+
+  
+<h3>Self-Contained Trees</h3>
+<p>
+This second tree is "self contained," in that its data is provided as simple JavaScript
+arrays and dicts that you build or retrieve yourslef. You can provide the unique node IDs
+yourself, too, as dict keys, or let Diligence generate them automatically for you, as in this
+example:
+</p>
+<pre>
+tree = new ExtJS.SelfContainedTree({
+	root: ['HI', {text: 'HI2', children: ['FISH']}]
+})
+</pre>
+<p>
+And the widget:
+</p>
+<div id="tree-self-contained"></div>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	Ext.create('Ext.tree.Panel', {
+		store: Ext.create('Ext.data.TreeStore', {
+			proxy: {
+				type: 'rest',
+				url: 'self-contained/'
+			},
+			autoLoad: true
+		}),
+		renderTo: 'tree-self-contained',
+		style: {margin: 'auto'},
+		width: 500,
+		height: 500,
+		autoScroll: true,
+		useArrows: true,
+		rootVisible: false
+	});
+});
+</script>
+<%}}%>
+
+<%}}%>
+<%& '/site/page-template/' %>

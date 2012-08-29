@@ -1,0 +1,27 @@
+<%
+
+document.executeOnce('/diligence/service/progress/')
+document.executeOnce('/prudence/resources/')
+
+var key = conversation.locals.get('process') || conversation.form.get('process')
+var process = Diligence.Progress.getProcess(key)
+if (process) {
+	if (process.isActive()) {
+		var lastMilestone = process.getLastMilestone()
+		document.include('/diligence/service/progress/progress/')
+	}
+	else if (process.isSuccess()) {
+		process.redirectSuccess(conversation)
+	}
+	else if (process.isFailure()) {
+		process.redirectFailure(conversation)
+	}
+	else {
+		process.redirectCancelled(conversation)
+	}
+}
+else {
+	conversation.statusCode = Prudence.Resources.Status.ClientError.NotFound
+}
+
+%>

@@ -1,0 +1,41 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%& '/site/header/' %>
+<h1>Diligence's Syndication Service</h1>
+<p class="note">
+	Still working on documenting this feature, though it's otherwise pretty complete!
+</p>
+<p>
+	This module lets you easily attach <a href="http://tools.ietf.org/html/rfc4287">Atom</a> and
+	<a href="http://www.rssboard.org/rss-specification">RSS</a> feeds to any page.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Syndication">Diligence.Syndication API documentation</a>
+	for more details.
+</p>
+
+<h2>Feeds</h2>
+<p>
+	<a href="feed/">Feed</a>
+</p>
+
+<h2>Links</h2>
+<p>
+	The module contains a simple /web/fragments/ drop-in that adds links recognizes by all major browsers,
+	and another drop-in for the "syndication" button, using the de-facto standard icon.
+</p>
+
+
+
+<%& '/site/footer/' %>

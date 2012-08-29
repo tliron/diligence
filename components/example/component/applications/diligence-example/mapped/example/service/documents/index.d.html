@@ -1,0 +1,61 @@
+<%& '/site/header/' %>
+<% exampleHeader('Documents', 'Service'); %>
+
+<%
+
+document.executeOnce('/diligence/service/documents/')
+document.executeOnce('/prudence/resources/')
+document.executeOnce('/sincerity/templates/')
+
+var draft = Diligence.Documents.getDraft('4fc4457ae4b030c6611c072f')
+
+if (conversation.request.method.name == 'POST') {
+	var form = Prudence.Resources.getForm(conversation, {
+		source: 'string',
+		language: 'string'
+	})
+	draft.revise(form.source, form.language)
+}
+
+var rendered = draft.render({
+	codes: {
+		start: '{{',
+		end: '}}',
+		fn: function(text) {
+			return '<a href="/wiki/{0}">{0}</a>'.cast(text)
+		}
+	}
+})
+
+%>
+
+<p>
+	In this example, we'll let you revise one document. We've enabled support for a custom code
+	delimited by "{{" and "}}", in order to support wiki topic links. They do not point anywhere in
+	this example, but provide you with an example of what is possible. Try it and see! 
+</p>
+<div class="note">
+<p>
+	Showing document: <b><%= draft.document._id %></b>, revision: <b><%= draft.revision %></b>
+</p>
+<%= rendered %>
+</div>
+
+<form method="post">
+	<p>
+		Language:
+		<select name="language">
+			<option value="markdown" <%= draft.getLanguage() == 'markdown' ? 'selected="true"' : '' %>>Markdown</option>
+			<option value="textile" <%= draft.getLanguage() == 'textile' ? 'selected="true"' : '' %>>Textile</option>
+			<option value="confluence" <%= draft.getLanguage() == 'confluence' ? 'selected="true"' : '' %>>Confluence</option>
+			<option value="mediawiki" <%= draft.getLanguage() == 'mediaWiki' ? 'selected="true"' : '' %>>MediaWiki</option>
+			<option value="trac" <%= draft.getLanguage() == 'trac' ? 'selected="true"' : '' %>>Trac</option>
+			<option value="twiki" <%= draft.getLanguage() == 'twiki' ? 'selected="true"' : '' %>>TWiki</option>
+		</select><br />
+		<textarea name="source" cols="80" rows="25"><%= draft.getSource() %></textarea><br />
+		<input type="submit" value="Revise" />
+	</p>
+</form>
+
+<% exampleFooter('Documents', 'Service'); %>
+<%& '/site/footer/' %>

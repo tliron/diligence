@@ -1,0 +1,145 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%& '/site/header/' %>
+<h1>Diligence's Iterators Library</h1>
+<p>
+	Iterators are used to traverse potentially very large series of entries without
+	advance knowledge of how many entries are in the series. These are somewhat similar
+	to JavaScript iterators, but more generic. A wrapper (Iterators.Generator)
+	exists to let you use JavaScript iterators here. 
+<p>
+	Generally, any code that expects to traverse arrays can be made more scalable if
+	iterators are used instead (and Iterators.Array lets you easily consume arrays).
+	The problem with arrays is that <i>all</i> entries exist in memory at once: so that
+	1) the can take too much memory at once, and 2) they can waste valuable resources as we fill
+	in the array entirely up-front, when we might only want to traverse a subset of entries.
+<p>
+	The iterator API has been intentionally designed for compatibility with MongoDB.Cursor,
+	so that a MongoDB cursor can be used anywhere an iterator is expected. For
+	example, you can wrap a MongoDB cursor in a Iterators.Transfomer, include
+	it in a Iterators.Chain, etc.
+<p>
+	You must always close an iterator. The recommended semantics:
+</p>
+<pre>
+var iterator = ...
+try {
+	while (iterator.hasNext()) {
+		var next = iterator.next()
+	}
+}
+finally {
+	iterator.close()
+}
+</pre>
+<p>
+	All the wrappers in the iterators library know to automatically close all the iterators
+	they wrap, so you only every have to close the outermost iterator you are using.
+</p>
+<p>
+	An easy way to get a segment of an iterator's entries is to collapse it into an array.
+	Just remember that the array should have a relatively small, manageable size,
+	otherwise you're losing the advantages of iterators and can also risk running out
+	of heap memory. Example:
+</p>
+<pre>
+var start = 70000
+var limit = 500000
+limit = Math.min(limit, 10000) // sensible max
+var entries = Sincerity.Iterators.toArray(iterator, start, limit)
+</pre>
+<p>
+	You can create your own iterator objects and have them join the fun as long as they
+	agree with that protocol. Here are a bunch that come with Diligence.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Sincerity.Iterators">Sincerity.Iterators API documentation</a>
+	for more details.
+</p>
+
+
+<h3>Array Wrapper</h3>
+<pre>
+var	i1 = new Sincerity.Iterators.Array(['grapefruit', 'watermelon', 'durian'])
+</pre>
+
+<h3>JVM Wrapper</h3>
+<pre>
+var list = Sincerity.JVM.newList()
+list.add('antelope')
+list.add('zebra')
+var i2 = new Sincerity.Iterators.JVM(list.iterator())
+</pre>
+
+<h3>JavaScript Generator Function Wrapper</h3>
+<pre>
+function serials() {
+	for (var i = 0; i < 10; i++) {
+		yield i
+	}
+}
+var i3 = new Sincerity.Iterators.Generator(serials())
+</pre>
+
+<h3>Fetcher Function Wrapper</h3>
+<pre>
+function getNextThousand(options, index) {
+	if (index == 5) {
+		options.hasNext = false
+		return
+	}
+	return (index + 1) * 1000
+}
+var i4 = new Sincerity.Iterators.Fetcher(getNextThousand)
+</pre>
+
+<h3>Plain-Old MongoDB Cursors</h3>
+<pre>
+var programs = new MongoDB.Collection('programs')
+var i5 = programs.find({})
+</pre>
+
+<h3>Iterator Chain</h3>
+<pre>
+var i6 = new Sincerity.Iterators.Chain([i1, i2, i3, i4, i5])
+</pre>
+
+<h3>Transformer</h3>
+<pre>
+function putInBed(entry) {
+	if (typeof entry == 'string') {
+		return entry + ' in bed'
+	}
+	return entry
+}
+var i7 = new Sincerity.Iterators.Transformer(i6, putInBed)
+</pre>
+
+<h3>Eliminator</h3>
+<pre>
+function noOddNumbers(entry) {
+	if ((typeof entry == 'number') && (entry % 2 == 1)) {
+		return false
+	}
+	return true
+}
+var i8 = new Sincerity.Iterators.Eliminator(i7, noOddNumbers)
+</pre>
+
+<h3>Buffer</h3>
+<pre>
+var i9 = new Sincerity.Iterators.Buffer(i8, 5)
+</pre>
+
+<%& '/site/footer/' %>

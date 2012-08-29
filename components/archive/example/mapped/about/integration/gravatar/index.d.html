@@ -1,0 +1,85 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%& '/site/header/' %>
+<%
+document.executeOnce('/diligence/integration/backend/gravatar/')
+document.executeOnce('/diligence/foundation/html/')
+
+var email = 'tal.liron@threecrickets.com'
+switch (String(conversation.request.method)) {
+	case 'POST':
+		email = conversation.form.get('email')
+		break
+}
+
+var gravatar = new Diligence.Gravatar(email)
+var profile = gravatar.getProfile()
+var displayName = (profile && profile.entry && profile.entry.length > 0) ? profile.entry[0].displayName : email
+%>
+
+<h1>Diligence's Gravatar Integration Library</h1>
+<p>
+	<a href="http://en.gravatar.com/">Gravatar</a> is a popular service for managing user avatars
+	and simple profile pages by associating them with email addresses.
+</p>
+<p>
+	It makes users happy, because they can manage their avatars for many, many services
+	in one place. The user's email is hashed so that it is not made publicly available, unless the
+	user chooses to put them explicitly on their profile.
+</p>
+<p>
+	It makes site owners happy, because they can display avatars for users without having to store
+	them or otherwise manage them. Additionally, new users would have their avatar immediately displayed
+	without any effort on their part, and users do not like effort. If you're using the
+	<a href="../../service/authentication/">Authentication Module</a> in association with the
+	<a href="../../feature/registration/">Registration Module</a>, then you already have an email
+	address for the user, and can immediately fetch their avatar from Gravatar.
+</p>
+<p>
+	Worried about forcing users to use an external service? Then make Gravatar an optional fallback.
+	Provide users with a way to manage avatars on your site directly, and only default to Gravatar.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Gravatar">Diligence.Gravatar API documentation</a>
+	for more details.
+</p>
+
+
+<h2>Let's Do It</h2>
+<p>
+	Just enter an email address, and let the Diligence magic happen.
+</p>
+	
+<form method="POST">
+	<p><%= Diligence.HTML.input({name: 'email', value: email}, {_content: 'Email address:'}) %></p>
+	<p><%= Diligence.HTML.input({name: 'size'}, {_content: 'Avatar size (1-512, defaults to 80):'}) %></p>
+	<p><%= Diligence.HTML.submit({value: 'Fetch'}) %></p>
+</form>
+
+<h3>Display Name: <%= displayName %></h3>
+<p>
+	<a href="<%= gravatar.getProfileUri() %>">
+		<%= gravatar.img(conversation.form.get('size')) %>
+	</a>
+</p>
+
+<p>
+	The avatar above is hyperlinked to their Gravatar profile page. 
+	And here's the complete JSON dump of their profile: 
+</p>
+<pre>
+<%= Sincerity.JSON.to(profile, true) %>
+</pre>
+
+<%& '/site/footer/' %>

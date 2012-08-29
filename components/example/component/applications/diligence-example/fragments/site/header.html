@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+document.include('/example/header/')
+document.include('/example/footer/')
+%>
+<html>
+<head>
+	<title>Diligence - Examples</title>
+
+	<meta name="description" content="A scalable Prudence/MongoDB web development framework for JavaScript." />
+	<meta name="keywords" content="Diligence, Prudence, MongoDB, Three Crickets, Scalable, Scalability, REST, RESTful, Restlet, JVM, Java Virtual Machine, Java, JavaScript, Rhino, No-SQL, NoSQL" />
+	<link rel="shortcut icon" href="http://threecrickets.com/media/three-crickets/diligence.ico" />
+	<%== head %>
+	<% if(null !== conversation.locals.get('extJs')) { document.executeOnce('/diligence/integration/frontend/sencha/'); print(Diligence.Sencha.extJsHead(conversation)); } %>
+	<!--  Soft Crickets (needs to be *after* Ext JS CSS, if you're using it) -->
+	<link rel="stylesheet" type="text/css" href="<%= conversation.pathToBase %>/style/three-crickets/soft-cricket.css" />
+
+	<!-- Ubuntu font -->
+	<link href="http://fonts.googleapis.com/css?family=Ubuntu|Ubuntu:italic|Ubuntu:bold|Ubuntu:bolditalic" rel="stylesheet" type="text/css" />
+
+	<!-- jQuery -->
+	<script type="text/javascript" src="<%= conversation.pathToBase %>/scripts/jquery/jquery.core.min.js"></script>
+	<% if(null !== conversation.locals.get('reCaptcha')) { %>
+	<!-- reCAPTCHA -->
+	<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script><% } %>
+</head>
+<body>
+	<table class="soft" width="100%">
+		<tr valign="top">
+			<td width="25%">
+
+				<a href="<%= conversation.pathToBase %>/" class="neutral">
+					<table class="soft"><tr>
+						<td><h1>Diligence<br /><span style="font-size: 12px;">The Scalable Prudence/MongoDB<br />Web Development Framework</span></h1></td>
+						<td><img src="<%= conversation.pathToBase %>/media/diligence/diligence-small.png" border="0" style="margin-left: 10px;"></td>
+					</tr></table>
+				</a>
+
+				<div class="navigation">
+					<ul>
+						<li><a href="<%= conversation.pathToBase %>">About</a></li>
+						<li><a href="http://code.google.com/p/diligence-prudence/">Community and Support</a></li>
+						<li><a href="<%= conversation.pathToBase %>/api/">API Documentation</a></li>
+						<li><span class="heading">Drop-In Features</span>
+							<ul style="text-decoration:line-through">
+								<li><a href="<%= conversation.pathToBase %>/example/feature/blog/">Blog</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/feature/console/">Console</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/feature/contact-us/">Contact Us</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/feature/discussion/">Discussion</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/feature/registration/">Registration</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/feature/seo/">SEO</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/feature/shopping-cart/">Shopping Cart</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/feature/wiki/">Wiki</a></li>
+							</ul>
+						</li>
+						<li><span class="heading">Application Services</span>
+							<ul>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/service/authentication/">Authentication</a></li>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/service/authorization/">Authorization</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/backup/">Backup</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/cache/">Cache</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/documents/">Documents</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/events/">Events</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/forms/">Forms</a></li>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/service/html/">HTML</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/internationalization/">Internationalization</a></li>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/service/linkback/">Linkback</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/nonces/">Nonces</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/notification/">Notification</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/progress/">Progress</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/rpc/">RPC</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/rest/">REST</a></li>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/service/search/">Search</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/service/serials/">Serials</a></li>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/service/syndication/">Syndication</a></li>
+							</ul>
+						</li>
+						<li><span class="heading">Integrations</span>
+							<ul style="text-decoration:line-through">
+								<li><a href="<%= conversation.pathToBase %>/example/integration/gravatar/">Gravatar</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/integration/pay-pal/">PayPal</a></li>
+							</ul>
+						</li>
+						<li><span class="heading">Sencha Integration</span>
+							<ul>
+								<li><a href="<%= conversation.pathToBase %>/example/integration/sencha/">General Information</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/integration/sencha/grids/">Ext JS Grids</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/integration/sencha/trees/">Ext JS Trees</a></li>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/integration/sencha/charts/">Ext JS Charts</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/integration/sencha/forms/">Ext JS Forms</a></li>
+								<li><a href="<%= conversation.pathToBase %>/example/integration/sencha/direct/">Ext Direct</a></li>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/integration/sencha/touch/">Sencha Touch</a></li>
+							</ul>
+						</li>
+						<li><span class="heading">Tools</span>
+							<ul>
+								<li style="text-decoration:line-through"><a href="<%= conversation.pathToBase %>/example/tool/js-doc/" class="closed">JsDoc Template</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+<%
+var textPack = conversation.locals.get('diligence.service.internationalization.text')
+var permissions = conversation.locals.get('diligence.service.authorization.permissions')
+%>
+				<p>
+					<%# textPack.get('application.cluck.welcome', {now: new Date().format('HH:mm:ss.SS')}) %>
+				</p>
+<%
+if (permissions) {
+%>
+				<p>
+					Your permissions: <%= Diligence.JSON.to(permissions.getAll()) %> 
+				</p>
+<%
+}
+%>
+				<%# '/diligence/service/authentication/info/' %>
+
+			</td>
+			<td id="main-column" width="50%">
+				<div id="main">
+					<div id="main-content">

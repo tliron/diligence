@@ -1,0 +1,77 @@
+/**************************
+ *  Soft Cricket API 1.0  *
+ *                        *
+ *      By Tal Liron      *
+ **************************/
+
+body {
+    font-family: 'Lucida Sans Unicode', 'Lucida Grande', Verdana, Arial, sans-serif;
+    font-size: 12px;
+}
+
+h1 {
+    font-size: 14px;
+}
+
+/* Table colors */
+
+.TableHeadingColor {
+    background: #CCCCFF; /* Dark mauve */
+    color: #000000;
+}
+
+.TableSubHeadingColor {
+    background: #EEEEFF; /* Light mauve */
+    color: #000000
+}
+
+.TableRowColor {
+    background: #FFFFFF; /* White */
+    color: #000000
+}
+
+/* Left-hand frame */
+
+.FrameTitleFont {
+    font-size: 18px;
+    color: #000000
+}
+
+.FrameHeadingFont {
+    font-size: 14px;
+    color: #000000
+}
+
+.FrameItemFont {
+    font-size: 12px;
+    color: #000000
+}
+
+/* Navigation bar */
+
+.NavBarCell1 {
+    background-color: #EEEEFF; /* Light mauve */
+    color: #000000
+}
+
+.NavBarCell1Rev {
+    background-color: #00008B; /* Dark Blue */
+    color: #FFFFFF
+}
+
+.NavBarFont1 {
+}
+
+.NavBarFont1Rev {
+    color: #FFFFFF;
+}
+
+.NavBarCell2 {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+.NavBarCell3 {
+    background-color: #FFFFFF;
+    color: #000000;
+}

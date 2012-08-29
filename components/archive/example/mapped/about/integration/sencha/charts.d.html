@@ -1,0 +1,137 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+conversation.locals.put('extJs', true)
+
+document.executeOnce('/prudence/blocks/')
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's Sencha Integration Library</h1>
+<h2>Ext JS Charts</h2>
+
+<p>
+	Ext JS charts are ridiculously easy to roll out, effective, and massively deployable because they
+	don't require browser plugins (such as Flash):
+</p>
+
+<div id="chart-self-contained"></div>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	var pageSize = 20;
+	
+	var store = Ext.create('Diligence.data.Store', {
+		storeId: 'diligence',
+		proxy: {
+			url: 'self-contained/'
+		},
+		pageSize: pageSize,
+		autoSync: true,
+		autoLoad: {
+			params: {
+				start: 0,
+				meta: true
+			}
+		}
+	});
+	
+	Ext.create('Ext.chart.Chart', {
+		store: store,
+		axes: [{
+			type: 'Numeric',
+			position: 'left',
+			grid: true,
+			title: 'Amount',
+			fields: ['bought', 'sold'],
+			minimum: 0
+		}, {
+			type: 'Category',
+			position: 'bottom',
+			title: 'Things',
+			fields: 'type'
+		}],
+		series: [{
+			type: 'column',
+			title: ['Bought', 'Sold'],
+			highlight: true,
+			label: {
+				display: 'outside',
+				field: ['bought', 'sold']
+			},
+			axis: 'left',
+			xField: 'type',
+			yField: ['bought', 'sold'],
+			stacked: false
+		}],
+		legend: {
+			position: 'right'
+		},
+		animate: true,
+		shadow: true,
+		renderTo: 'chart-self-contained',
+		style: {margin: 'auto', display: 'block'},
+		width: 500,
+		height: 500
+	});
+});
+</script>
+<%}}%>
+
+<p>
+	With Diligence, you just need to define a data source to back your store, the same way you would with
+	<a href="../grids/">grids</a>, so you might want to check out our examples there. Any Diligence source can be
+	thrown into a chart.
+</p>
+<p>
+	And just to make sure you've been paying attention, here's a grid linked to the same store as the chart above.
+	Edit the grid and the chart will immediately update (with cool animation) to match the values -- and of course the
+	server-side source is also updated. Magic? Yes! Magic is possible if you just believe in Diligence and Ext JS.
+	Future versions may even support unicorns and goldfish that grant wishes.
+</p>
+<div id="grid-self-contained"></div>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Sencha">Diligence.Sencha API documentation</a>
+	for more details.
+</p>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	var pageSize = 20;
+	
+	Ext.data.StoreManager.lookup('diligence').getColumns(function(store, columns) {
+		Ext.create('Ext.grid.Panel', {
+			store: store,
+			columns: columns,
+			forceFit: true,
+			selType: 'cellmodel',
+			plugins: [
+				Ext.create('Ext.grid.plugin.CellEditing', {clicksToEdit: 1})
+			],
+			bbar: {
+				xtype: 'pagingtoolbar',
+				pageSize: pageSize,
+				store: store
+			},
+			renderTo: 'grid-self-contained',
+			style: {margin: 'auto'},
+			width: 500,
+			height: 200
+		});
+	});
+});
+</script>
+<%}}%>
+
+<%}}%>
+<%& '/site/page-template/' %>

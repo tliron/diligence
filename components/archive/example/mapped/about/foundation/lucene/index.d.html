@@ -1,0 +1,101 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+conversation.locals.put('extJs', true)
+
+document.executeOnce('/prudence/blocks/')
+document.executeOnce('/diligence/foundation/html/parsing/')
+document.executeOnce('/about/foundation/lucene/')
+
+var query = conversation.query.get('query'), results
+if (null !== query) {
+	var directory = new Sincerity.Lucene.Directory('/tmp/index')
+	try {
+		results = directory.search({query: query, defaultField: 'text', previewField: 'text', fragmentLength: 50, maxFragments: 3})
+		results = Sincerity.Iterators.toArray(results)
+	}
+	finally {
+		directory.close()
+	}
+}
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's Lucene Library</h1>
+<p class="note">
+	Still working on documenting this feature, though it's otherwise pretty complete!
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Sincerity.Lucene">Sincerity.Lucene API documentation</a>
+	for more details.
+</p>
+
+
+<form>
+	<p><%= Diligence.HTML.input({name: 'query', value: query}, {_content: 'Search:'}) %></p>
+	<p><%= Diligence.HTML.submit({value: 'Search'}) %></p>
+</form>
+
+<%
+if (results) {
+%>
+<h4>Search Results (<%= results.length %>)</h4>
+<ul>
+<%
+	for (var r in results) {
+%>
+<li class="search-result"><span full="<%= results[r].text.escapeDoubleQuotes() %>"><%= results[r].preview %></span></li>
+<%
+	}
+%>
+</ul>
+<%
+}
+%>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	Ext.select('li.search-result').on('click', function(event, el) {
+		var text = Ext.fly(el).getAttribute('full');
+		Ext.create('Ext.Window', {
+			title: 'Full Text',
+			width: 500,
+			height: 500,
+			layout: 'border',
+			items: {
+				region: 'center',
+				xtype: 'textarea',
+				value: text,
+				readOnly: true
+			}
+		}).show();
+	});
+});
+</script>
+<%}}%>
+<%{{ 'page.head' %>
+	<style>
+		li.search-result {
+			list-style: disc inside;
+		}
+		li.search-result span:hover {
+			text-decoration: underline;
+		}
+		li.search-result span strong {
+			font-weight: bold;
+		}
+	</style>
+<%}}%>
+
+<%}}%>
+<%& '/site/page-template/' %>

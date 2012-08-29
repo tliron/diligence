@@ -1,0 +1,79 @@
+
+<h1>Log Window</h1>
+<p>
+	This window at the bottom of the screen usually shows you the last lines of the log file
+	and refreshes its view every 3 seconds.
+</p>
+<p>
+	You can toggle auto-refreshing using the "Freeze" button.
+</p>
+<p>
+	You can also travel backward and forward in the log using the arrow buttons. When you start
+	travelling, auto-refresh automatically freezes, so you may want to un-toggle "Freeze" when
+	you're done travelling.
+</p>
+<p>
+	Looking for something in particular in the log? Use the "Grep" area to enter a regular expression
+	with which to filter the log file. (This works by grepping the log file into the server's temporary
+	directory.) Grep stays active while auto-refreshing. Live grep!
+</p>
+<p>
+	Switch to a different log file using the combo box to the right, either choosing one of the
+	available options or typing in your own. The path is relative to the Prudence's /logs/ directory
+	on the server.
+</p>
+
+<h1>Program Window</h1>
+<p>
+	Type in your JavaScript code with friendly syntax coloring, and click "Execute" to evaluate
+	your code on the server. 
+</p>
+<p>
+	By default much of Diligence is already available to you, so you can use APIs
+	such as Tasks, Resources and MongoDB without having to document.execute them first.
+</p>
+<p>
+	The "logger" variable is initialized using Diligence's logging library, providing you with
+	a quick way to see the results of your code right in the console's log window:
+</p>
+<pre>
+var name = 'World'
+logger.info('Hello, {0}', name)
+</pre>
+<p>
+	You can also return full textual representations to the console: simply set the "representation"
+	variable to your value. If a representation is made available by your code, the console will popup
+	a window with the result. Use newline characters ("\n") to return multiline representations:
+</p>
+<pre>
+representation = 'Hello, World!\nHello, other world!'
+</pre>
+<p>
+	As a shortcut, use the print() and println() functions to append anything, after stringifying it,
+	to the representation.
+</p>
+<p>
+	Click "Execute and Download" to download this representation via your browser. By default, it is
+	a plain text file named "console.txt", but you can change this using Prudence's standard API.
+	For example, let's download a CSV file to be opened by spreadsheet software:
+</p>
+<pre>
+println('1,2,3,4')
+println('5,6,7,8')
+println('9,10,11,12')
+conversation.mediaTypeName = 'text/csv'
+conversation.disposition.filename = 'transactions.csv'	
+</pre>
+
+<h1>Saved Programs Window</h1>
+<p>
+	Click "Save Program" to store your program for later. Programs are stored in MongoDB's "programs"
+	collection. [Note that using the same program name again will override your stored program.] 
+</p>
+<p>
+	Double-click on a program name in the "Saved Programs" window in order to load it into your
+	program window.
+</p>
+<p>
+	Click "Rename" to rename it, or "Delete" to delete it.
+</p>

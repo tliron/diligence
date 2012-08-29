@@ -1,0 +1,112 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%& '/site/header/' %>
+
+<h1>Diligence's Discussion Feature</h1>
+
+<h2>A Demo Discussion</h2>
+<p>
+	So easy to use! In this case, we're storing the discussion in a single MongoDB document. Feel free to reply to any post
+	or to post your own root thread in the discussion:
+</p>
+
+<div class="note">
+
+<%
+
+document.executeOnce('/diligence/feature/discussion/')
+
+var forum = new Diligence.Discussion.Forum('documents', {_id: MongoDB.id('4e0d0b73e799cb4316c2fd73')})
+
+if (String(conversation.request.method) == 'POST') {
+	var content = conversation.form.get('content')
+	var reply = conversation.form.get('reply')
+	if (content) {
+		if (reply) {
+			forum.respond(reply, {content: content})
+		}
+		else {
+			forum.newRoot({content: content})
+		}
+	}
+	conversation.response.redirectSeeOther(conversation.reference.path)
+	conversation.stop()
+}
+
+function printPost(post, depth) {
+%>
+<div>
+	<% for (var i = 0; i < depth; i++) { print('&nbsp;&nbsp;&nbsp;'); }; %><%= post.content %> <a href="?reply=<%= post.path %>">reply</a>
+</div>
+<%
+	if (post.responses) {
+		depth += 1
+		for (var r in post.responses) {
+			printPost(post.responses[r], depth)
+		}
+	}
+}
+
+var roots = forum.getRoots()
+for (var t in roots) {
+	var root = roots[t]
+	printPost(root, 0)
+}
+
+var reply = conversation.query.get('reply')
+%>
+
+</div>
+
+<form method="post">
+<% if (reply) { %>
+	<div>Add reply:</div>
+	<input type="hidden" name="reply" value="<%= reply %>" />
+<% } else { %>
+	<div>Add comment:</div>
+<% } %>
+	<textarea name="content" cols="50"></textarea>
+	<input type="submit" value="Post" />
+</form>
+
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Discussion">Diligence.Discussion API documentation</a>
+	for more details.
+</p>
+
+
+<h2>Editable Graph Structures in MongoDB</h2>
+<p>
+If you'll take a look at Diligence's Ext JS tree integration, you'll see it's pretty neat. But it was literally neat because the trees for Ext-JS are immutable, and easily stored in a MongoDB document, which can hold a structure of arbitrary depth. However, if you want your tree to change, though, by multiple users and threads -- document databases such as MongoDB begin to show some of their limitations. (Graph databases, such as neo4j, are of course perfect for this use case.)
+</p>
+<p>
+Nevertheless, it's not impossible, and can get excellent all-around performance.
+</p>
+<p>
+How is this solved for the Discussion Feature? First off, what it does is let you attach a "forum" to any MongoDB document. It could thus be a Page from the Wiki Feature, a blog post, or just anything in your application. Of course, permissions apply, and you can allow, for example, for registered users to post new threads and have "visitor" users (Facebook, Twitter, etc.) only the right to comment. The discussion is threaded, in that comments can have any level of depth. It's very easy to drop in, and makes a lot of web application features instantly sociable.
+</p>
+<p>
+MongoDB's atomic operations do not support such recursion, so we needed a different method. You can see ideas on the MongoDB <a href="http://www.mongodb.org/display/DOCS/Trees+in+MongoDB">trees page</a>.
+</p>
+<p>
+After some consideration, we used a variation of the "materialized paths" pattern. We have the forum posts stored as plain array, with each having a path as well as a parent field. We parse this document on load, to give it a tree-like structure more amenable to work with. The flat storage structure, however, allows for easy use of MongoDB's update operation. For each post, I store a "nextResponse" running serial. I update it atomically with $inc for each new post, to make sure it's unique, and append that number to the parent's path to create the new path. I then add the new response using MongoDB's $push. The result is that any number of users can respond at the same time to the same forum, and each response takes only 2 MongoDB write operations, only one of which waits for the response.
+</p>
+<p>
+A graph DB would do this better, but the real comparison would be to a relational database. Just two writes, but the whole forum is read with one read. I think this counts as a smashing success of an implementation.
+</p>
+<p>
+You'll notice a rule of thumb we've applied here: if in relational database you always want your tables to be normalized, in document databases your goal is to use as few documents as possible. In this case, the entire forum is embedded into one document (together with the document's other data, if there is any). The document limit in MongoDB is 4MB, easily adequate for comments. But what if you want a more open forum? Well, the Discussion Module also comes with forum implementations that store each thread in post in its own document, or even each post in its own document. All use the same API. Mix and match for the best performance and growth necessity suitable for your needs.
+</p>
+
+<%& '/site/footer/' %>

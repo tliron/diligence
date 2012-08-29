@@ -1,0 +1,105 @@
+<%{{ head %>
+<style>
+	form > div {
+		line-height: 180%;
+		margin: 12px 0;
+	}
+	form div.error {
+		color: red;
+		display: inline;
+		padding-left: 5px;
+	}
+	form input.error {
+		border: 1px solid red;
+	}
+</style>
+<%}}%>
+<%& '/site/header/' %>
+<% exampleHeader('Forms', 'Service'); %>
+
+<%
+
+document.executeOnce('/prudence/resources/')
+document.executeOnce('/diligence/service/forms/')
+
+var form = Diligence.Forms.getForm('/form/multiply/')
+var results = form.handle(conversation) // will only return a result when posting to this page (manual mode)
+
+%>
+
+<p>
+	We'll show several examples here of the different mode support by the Diligence Forms Service.
+	Try experimenting with invalid values in order to see how validation works.
+	In order to be valid, the first value has to be a number, while the second has to be integer.
+	Also try entering the magic values "1" and "2" in order to generate an exception.
+</p>
+
+<h3>Redirect Mode</h3>
+<form action="<%= conversation.pathToBase %>/form/multiply/?mode=redirect" method="post">
+	<p>
+		First value: <input name="first" />
+	</p>
+	<p>
+		Second value: <input name="second" />
+	</p>
+	<p>
+		<input type="submit" value="Multiply!" />
+	</p>
+</form>
+
+<h3>Capture Mode</h3>
+<p>
+	Here we'll be staying on the same URL but actually capturing a different page,
+	specifically "/example/service/forms/results.d.html".
+</p>
+<form action="<%= conversation.pathToBase %>/form/multiply/?mode=capture&from=<%= encodeURIComponent(conversation.reference) %>" method="post">
+	<p>
+		First value: <input name="first" />
+	</p>
+	<p>
+		Second value: <input name="second" />
+	</p>
+	<p>
+		<input type="submit" value="Multiply!" />
+	</p>
+</form>
+
+<h3>Manual Mode</h3>
+<p>
+	Here we'll be staying on the same page and do all our processing here.
+	For this example to work, we don't actually need to set up the form as a RESTful
+	resource. The results will appear underneath this form.
+</p>
+<form method="post">
+	<div>
+		<%= form.htmlText({name: 'first', conversation: conversation, results: results}) %>
+	</div>
+	<div>
+		<%= form.htmlText({name: 'second', conversation: conversation, results: results}) %>
+	</div>
+	<div>
+		<input type="submit" value="Multiply!" />
+	</div>
+</form>
+<% if (results) { %>
+<div class="note">
+	<%= results.msg %>
+<% if (!results.success && results.errors && results.errors.length) { %>
+	<ul>
+<% for (var name in results.errors) { %>
+		<li style="list-style-type: disc; margin-left: 20px;"><%= name %>: <%= results.errors[name] %></li>
+<% } %>
+	</ul>
+<% } %>
+</div>
+<% } %>
+
+<h3>JSON Mode</h3>
+<p>
+	For an example of using "AJAX" to access the resource in JSON mode, see the
+	<a href="../../integration/sencha/forms/">Sencha Integration Forms examples</a>.
+</p>
+
+
+<% exampleFooter('Forms', 'Service'); %>
+<%& '/site/footer/' %>

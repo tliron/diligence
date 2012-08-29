@@ -1,0 +1,32 @@
+
+// "Web safe" fonts
+
+// See: http://safalra.com/web-design/typography/web-safe-fonts-myth/
+$serif-wide: Georgia, Utopia, Palatino;
+$serif-narrow: 'Times New Roman', Times;
+$sans-serif-wide: Verdana, Geneva;
+$sans-serif-narrow: Tahoma, Arial, Helvetica;
+
+// Our fonts (we prefer wider ones)
+
+$serif: $serif-wide, $serif-narrow, serif;
+$sans-serif: Ubuntu, 'Lucida Sans Unicode', 'Lucida Grande', $sans-serif-wide, $sans-serif-narrow, sans-serif;
+
+// (Note: Lucida Sans Unicode looks bad in bold)
+
+// Cross-browser pre
+
+@mixin pre {
+	white-space: pre-wrap; // css-3
+	white-space: -moz-pre-wrap; // Mozilla, since 1999
+	white-space: -pre-wrap; // Opera 4-6
+	white-space: -o-pre-wrap; // Opera 7
+	word-wrap: break-word; // Internet Explorer 5.5+
+}
+
+@mixin tab-size($size) {
+	tab-size: $size;
+	-moz-tab-size: $size;
+	-o-tab-size: $size;
+	-webkit-tab-size: $size;
+}

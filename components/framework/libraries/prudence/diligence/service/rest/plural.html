@@ -1,0 +1,23 @@
+<%
+
+document.executeOnce('/prudence/resources/')
+
+var data = Prudence.Resources.getEntity(conversation, 'object')
+if (!data) {
+	conversation.stop()
+}
+
+if (data.resource.extJs) {
+	var query = Prudence.Resources.fromAttributeMap(data.query, null, {extjs: 'bool'})
+	if (query.extjs === false) {
+		document.include('/diligence/service/rest/plural-plain/')
+	}
+	else {
+		document.include('/diligence/service/rest/plural-ext-js/')
+	}
+}
+else {
+	document.include('/diligence/service/rest/plural-plain/')
+}
+
+%>

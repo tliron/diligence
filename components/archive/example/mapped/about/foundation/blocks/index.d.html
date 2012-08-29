@@ -1,0 +1,193 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%>
+<%& '/about/foundation/blocks/greetings-library/' %>
+<%{{ 'page.main' %>
+<h1>Diligence's Blocks Library</h1>
+<p>
+	The Blocks Library makes Prudence's HTML generation system more flexible by introducing
+	the concept of "blocks" to the concept of fragments. Whereas fragments are complete documents,
+	any part of a document can be marked as a "block" which can then be included in any other.
+</p>
+<p>
+	Blocks can be simple text, or "closures" (JavaScript functions) that generate output, which is
+	automatically captured by the library.
+</p>
+<p>
+	Why would you need this? After all, you can simply define functions on your own and call them from
+	anywhere in your document, without Diligence's help.
+	The thing is that it's not trivial to make sure you're only calling them once, or to easily handle
+	concatenate multiple function results. Diligence takes care of all that. Blocks are guaranteed to be executed
+	no more than once per conversation. If they're not used, they're never executed,
+	and there are no resources wasted.
+</p>
+<p>
+	The secret (shh!) is that block values are simply cached in conversation.locals. That
+	means you can easily interact with other Prudence code, which does not use the
+	Blocks Library.
+</p>
+<p>
+	Here's how you would define a block:
+</p>
+<pre>
+&lt;%{{ 'greetings.hello' -> name %&gt;
+&lt;span style="color: blue;"&gt;
+Hello there, &lt;%= name %&gt;!
+&lt;/span&gt;
+&lt;%}}%&gt;
+</pre>
+<p>
+	And here's how you would include it:
+</p>
+<pre>
+&lt;%&& 'greetings.hello', 'Tal' %&gt;
+</pre>
+<p>
+	Note the cool use of <a href="http://threecrickets.com/prudence/manual/handlers/#toc-Subsection-51">custom scriptlets</a> to define and use blocks.
+</p>
+<p>
+	Live example of the above: <%&& 'greetings.hello', 'Tal' %> Neat.
+</p>
+<p>
+	Note that blocks such as the above, that accept arguments, are <i>not</i> called
+	once-and-only-once, but are executed anew each time with the provided
+	arguments. Only blocks without arguments are rendered once-and-only-once.
+</p>
+<p>
+	Some use cases for blocks are detailed below.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Blocks">Diligence.Blocks API documentation</a>
+	for more details.
+</p>
+
+
+<h3>Block Libraries</h3>
+<p>
+	Your document may need to include many re-usable bits and pieces at various places, but creating a
+	/web/fragments/ file for each one would introduce a lot of clutter, especially when it's very likely
+	that these fragments would always be used together. Instead, you could put all the pieces in one
+	single fragment and define them as blocks, which you can then insert separately. The fragment in this
+	case can be considered as a "block library." You may have many of these block libraries in your
+	application.
+</p>
+<p>
+	Because the blocks aren't rendered if they aren't used, there's no harm in including a large block
+	library, even if you only need one block from it.
+</p>
+<p>
+	Note that it makes no sense to cache block library fragments, using Prudence's document.cacheDuration
+	API, because you want the block to be available for execution. Instead, you'll want to cache the
+	rendered document into which you include the blocks.
+</p>
+<p class="note">
+	For clarity, we like naming block library fragments with "-library" in the name. For example, the greetings library
+	used here is "greetings-library.html". Feel free to ignore this advice.
+</p>
+
+<h3>Templates</h3>
+<p>
+	Blocks let you organize your documents according to your logic and priorities, rather than forcing you
+	into HTML's strict top-to-bottom paradigm. You do this by first defining blocks, which correspond
+	to parts of the HTML document, and then assemble them together in a "template." A template is any
+	/web/fragments/ file that uses Blocks.include to assemble the parts. Templates, then, are
+	like the reverse of block libraries.
+</p>
+<p>
+	For example, consider that in HTML literal CSS stylesheets should go in the &lt;head&gt;, while literal
+	scripts should usually go after the &lt;body&gt;. That's annoying if what you want to do keep the relevant
+	CSS and script together with the HTML.
+</p>
+<p>
+	Here's how a template solution could look. This is the complete /web/fragments/page-template.html file:
+</p>
+<pre>
+&lt;%
+document.executeOnce('/prudence/blocks/')
+%&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;&lt;%&& 'page.title' %&gt;&lt;/title&gt;
+	&lt;%&& 'page.head' %&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;%&& 'page.main' %&gt;
+&lt;/body&gt;	
+&lt;%&& 'page.foot' %&gt;
+&lt;/html&gt;
+</pre>	
+<p>
+	We could then use it like so:
+</p>
+<pre>
+&lt;%
+document.executeOnce('/prudence/blocks/')
+Blocks.set('page.title', 'Welcome to Our Site!')
+%&gt;
+&lt;%# Here we'll define our head block %&gt;
+&lt;%{{ 'page.head' %&gt;
+&lt;style&gt;
+	div {
+		margin: 10px;
+	}
+&lt;/style&gt;
+&lt;%}}%&gt;
+&lt;%# Here we'll define our foot block %&gt;
+&lt;%{{ 'page.foot' %&gt;
+&lt;script&gt;
+// Reload this important page every 5 seconds
+setTimeout(function() {
+	location.reload(true);
+}, 5000);	
+&lt;/script&gt;
+&lt;%}}%&gt;
+&lt;%# Here we'll define our main block %&gt;
+&lt;%{{ 'page.main' %&gt;
+&lt;p&gt;Hello!&lt;/p&gt;
+&lt;%}}%&gt;
+&lt;%# So far, we haven't actually executed any of the above blocks.
+    It's only now, when we include the template, that all blocks will be rendered. %&gt;
+&lt;%& '/page-template/ %&gt;
+</pre>
+<p>
+	Note the use of Block.append instead of Block.set: the value (or closure's value) is added to
+	the block, instead of replacing it. This allows you to put various style sheets or scripts into
+	the template via multiple calls to Block.append.
+</p>
+<p>
+	Like block libraries, note that it makes no sense to cache template fragments, using Prudence's document.cacheDuration
+	API, because you want the block to be available for execution. Instead, you'll want to cache the
+	rendered document which includes the template.
+</p>
+<p class="note">
+	For clarity, we like naming template fragments with "-template" in the name. For example, the template used for this site
+	is "site-template.html". Feel free to ignore this advice.
+</p>
+
+<h3>Template Inheritence</h3>
+<p>
+	A useful feature in many web templating engines is template inheritence. It lets you more easily
+	design different sections of your site while maintaining a consistent design. Instead of
+	building all your templates from scratch, you could inherit from an already existing template.
+	Thus changes to the parent template would affect all inherited templates, allowing you to centrally
+	manage all your templates, and thus your site.
+</p>
+<p>
+	This is easy to do with Prudence: simply introduce your overrides before including the parent
+	template:
+</p>
+
+<%}}%>
+
+<%& '/site/page-template/' %>

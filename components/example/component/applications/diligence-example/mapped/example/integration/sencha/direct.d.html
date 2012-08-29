@@ -1,0 +1,97 @@
+<%{{ head %>
+<%
+document.executeOnce('/diligence/integration/frontend/sencha/')
+Diligence.Sencha.extJsHead(conversation, 'ext-all-gray')
+%>
+<%}}%>
+<%& '/site/header/' %>
+<% exampleHeader('Sencha', 'Integration', 'Ext Direct'); %>
+
+<p>
+	We've implemented a server-side stored shopping cart, that is thread-safe for concurrent access from
+	multiple users. The shopping cart is updated using JavaScript calls, <i>not</i> HTML forms (though note
+	that Ext Direct will also handle HTML forms). To appreciate what's going on in this demo, We recommend
+	using <a href="http://getfirebug.com/">Firebug</a> to see all the communication with the server.
+</p>
+<p>
+	Add the magic item "magic" in order to see an exception thrown. Also try adding the same item twice:
+	you will get an error message.
+</p>
+<p>
+	A nice little Ext JS trick used in this example is that we actually disable the buttons until we
+	properly initialize communication with the server. This allows for some more robustness.
+</p>
+<p id="shopping-cart" class="note">
+	<i>Loading...</i>
+</p>
+<p>
+	New item: <input id="item" value="elephant" />
+	<button id="add-item" disabled="true">Add to shopping cart</button>
+	<button id="get-items" disabled="true">Refresh shopping cart</button>
+</p>
+<%{{ foot %>
+<script type="text/javascript">
+function refresh() {
+	Diligence.ShoppingCart.getItems(function(provider, response) {
+		if (response.type == 'exception') {
+			Ext.Msg.alert('Shopping Cart', 'Exception: ' + response.message);
+		}
+		else {
+			var items = response.result;
+			Ext.fly('shopping-cart').update('<b>Contents:</b> ' + items.join('; '));
+		}
+	});
+}
+
+function init() {
+	refresh();
+	
+	Ext.fly('add-item')
+	.set({disabled: null}, false)
+	.on('click', function() {
+		var item = Ext.fly('item').getValue();
+		if (!item) {
+			Ext.Msg.alert('Shopping Cart', 'Enter an item first!');
+			return;
+		}
+		Diligence.ShoppingCart.addItem(item, Ext.bind(function(provider, response) {
+			if (response.type == 'exception') {
+				Ext.Msg.alert('Shopping Cart', 'Exception: ' + response.message);
+			}
+			else {
+				if (response.result) {
+					Ext.Msg.alert('Shopping Cart', 'Added "' + this + '" to your cart!');
+					refresh();
+				}
+				else {
+					Ext.Msg.alert('Shopping Cart', 'You already have "' + this + '" in your cart!');
+				}
+			}
+		}, item));
+	});
+	
+	Ext.fly('get-items')
+	.set({disabled: null}, false)
+	.on('click', refresh);
+}
+
+Ext.onReady(function() {
+	Ext.Ajax.request({
+		url: '<%= conversation.pathToBase %>/direct/shoppingcart/',
+		method: 'GET',
+		disableCaching: false,
+		success: function(response) {
+			var provider = Ext.decode(response.responseText);
+			Ext.Direct.addProvider(provider);
+			init();
+		},
+		failure: function(response) {
+			console.log(response);
+		}
+	});
+});
+</script>
+<%}}%>
+
+<% exampleFooter('Sencha', 'Integration', 'Ext Direct'); %>
+<%& '/site/footer/' %>

@@ -1,0 +1,39 @@
+<%
+
+document.executeOnce('/diligence/service/html/')
+document.executeOnce('/diligence/feature/registration/')
+document.executeOnce('/prudence/resources/')
+
+var form = Diligence.Resources.getCurrentForm(conversation)
+var results = Diligence.Resources.getCurrentFormResults(conversation)
+var siteName = Diligence.Registration.getSiteName()
+
+%>
+<form id="registration-form" method="POST">
+	<div class="centerpiece">
+		<%= Diligence.HTML.build({_key: 'diligence.feature.registration.form.title', _tag: 'h2', _cast: {siteName: siteName}}) %>
+		<div class="field">
+			<%= form.htmlText('email', results) %>
+		</div>
+		<div class="field">
+			<%= form.htmlText('username', results) %>
+		</div>
+		<div class="field">
+			<%= form.htmlPassword('password', results) %>
+		</div>
+		<div class="field">
+			<%= form.htmlPassword('password2', results) %>
+		</div>
+		<div class="field">
+			<%= Diligence.HTML.label({_content: form.fields.recaptcha_response_field.label}) %>
+			<div id="recaptcha-js"></div>
+			<%= form.htmlError('recaptcha_response_field', results) %>
+		</div>
+ 		<div class="buttons">
+			<%= Diligence.HTML.submit({_key: 'diligence.feature.registration.form.button.create'}) %>
+		</div>
+	</div>
+	<noscript>
+		<%& '/diligence/integration/backend/re-captcha/noscript/' %>
+	</noscript>
+</form>

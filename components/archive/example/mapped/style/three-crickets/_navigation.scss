@@ -1,0 +1,56 @@
+/*******************
+ * Navigation Menu *
+ *******************/
+
+/* Adapted from: http://css.maxdesign.com.au/listamatic2/vertical07.htm */
+
+$navigation-width: 210px !default;
+$navigation-indent: 30px !default;
+$navigation-highlight: 10px !default;
+$navigation-line: #AF868E !default;
+$navigation-link: #333 !default;
+$navigation-link-hover: #ffffa0 !default;
+
+div.navigation {
+	font-size: 12px;
+	a, .heading {
+		-moz-box-sizing: content-box !important; /* To counteract Ext JS css */
+		display: block;
+		color: $navigation-link;
+		background-color: transparent;
+		text-decoration: none;
+		width: $navigation-width - $navigation-highlight;
+		padding: 2px $navigation-highlight 2px 10px;
+		border-left: 1px solid $navigation-line;
+		border-top: 1px solid $navigation-line;
+		line-height: 120%;
+	}
+	a:hover {
+		background-color: $navigation-link-hover;
+		border-right: $navigation-highlight solid $navigation-line;
+		padding: 2px 1px 2px 10px;
+	}
+	ul {
+		margin: 0px;
+		padding: 0px;
+		list-style-type: none;
+		line-height: 100%;
+		ul {
+			margin-left: $navigation-indent;
+			list-style-type: none;
+		}
+	}
+	li {
+		li a {
+			width: $navigation-width - $navigation-indent - $navigation-highlight;
+			border-top: none;
+			border-bottom: none;
+		}
+	}
+	.heading {
+		font-style: italic;
+	}
+	.closed, .heading {
+		border-bottom: 1px solid $navigation-line;
+	}
+}

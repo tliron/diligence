@@ -1,0 +1,61 @@
+					</div>
+				</div>
+			</td>
+			<td width="25%" align="right">
+				<a href="http://threecrickets.com/" class="neutral"><img src="<%= conversation.pathToBase %>/media/three-crickets/three-crickets-small.png" border="0" style="margin-top: 5px; margin-right: 5px;" /></a>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+		try {
+			var pageTracker = _gat._getTracker('UA-12329042-2');
+			pageTracker._trackPageview();
+		} catch(err) {}
+	</script>
+	<script type="text/javascript">
+		function toc(options) {
+			var win = $(window);
+			var main = $('#main-column');
+			var toc = $('#toc');
+			options.queue = false;
+			toc.animate({
+				top: win.scrollTop() + win.height() - toc.height() - 80,
+				left: main.offset().left + main.width()
+			}, options);
+		}
+	
+		$(document).ready(function() {
+			toc({
+				duration: 0,
+				complete: function() {
+					$(this).show();
+					toc({duration: 0});
+				}
+			});
+			
+			$(window)
+			.scroll(function() { toc({duration: 150}); })
+			.resize(function() { toc({duration: 150}); });
+		});
+	</script>	
+<%
+if(null !== conversation.locals.get('reCaptcha')) {
+	document.executeOnce('/diligence/foundation/prudence/blocks/')
+	var reCaptcha = application.globals.get('diligence.integration.backend.reCaptcha.publicKey')
+%>
+	<script type="text/javascript">
+		Recaptcha.create('<%= reCaptcha %>', 'recaptcha-js', {
+			theme: 'blackglass',
+			callback: Recaptcha.focus_response_field
+		});
+	</script>
+<%
+}
+%>
+<%== foot %>
+</body>
+</html>

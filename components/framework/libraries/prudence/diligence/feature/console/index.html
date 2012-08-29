@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+-->
+<%
+document.executeOnce('/diligence/integration/frontend/sencha/')
+var theme = application.globals.get('diligence.feature.console.theme') || null
+%>
+<html>
+<head>
+	<title>Diligence Console</title>
+	<link rel="shortcut icon" href="http://threecrickets.com/media/three-crickets/diligence.ico" />
+
+	<%= Diligence.Sencha.extJsHead(conversation, {theme: theme}) %>
+
+	<!-- Ubuntu font -->
+	<link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet" type="text/css" />
+	<link href="http://fonts.googleapis.com/css?family=Ubuntu:italic" rel="stylesheet" type="text/css" />
+	<link href="http://fonts.googleapis.com/css?family=Ubuntu:bold" rel="stylesheet" type="text/css" />
+	<link href="http://fonts.googleapis.com/css?family=Ubuntu:bolditalic" rel="stylesheet" type="text/css" />
+
+	<!-- CodeMirror -->
+	<link rel="stylesheet" href="<%= conversation.pathToBase %>/style/codemirror/codemirror.css" />
+	<link rel="stylesheet" href="<%= conversation.pathToBase %>/style/codemirror/javascript.css" />
+	<script src="<%= conversation.pathToBase %>/script/codemirror/codemirror.js"></script>
+	<script src="<%= conversation.pathToBase %>/script/codemirror/javascript.js"></script>
+
+	<!-- Diligence Console -->
+	<link rel="stylesheet" href="<%= conversation.pathToBase %>/style/diligence/feature/console.css" />
+	<script src="<%= conversation.pathToBase %>/script/diligence/feature/console.js"></script>
+
+<% if (theme == 'access') { %>
+	<style>
+		div.CodeMirror-gutter {
+			color: #000000;
+			background-color: #555555;
+			border-right-color: #777777;
+		}
+	</style>
+<% } %>
+</head>	
+<body>
+	<div id="header">
+		<div align="center">
+			<table><tr><td align="center">
+				The Diligence Console<br/>
+				<span style="font-size: 12px; font-style: italic;">Palatable debugging since 2011</span>
+			</td><td style="padding-left: 15px;">
+				<a href="http://threecrickets.com/diligence/"><img src="<%= conversation.pathToBase %>/media/diligence/diligence-tiny.png" /></a>
+			</td></tr></table>
+		</div>
+	</div>
+	<form id="execution" style="display: none;" action="execution/" method="POST">
+		<input id="execution-program" name="program" value="" type="hidden" />
+		<input name="download" value="true" type="hidden" />
+	</form>
+</body>
+</html>

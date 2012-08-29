@@ -1,0 +1,15 @@
+<%
+document.executeOnce('/diligence/service/html/')
+document.executeOnce('/sincerity/json/')
+%>
+<html>
+<head>
+	<%= Diligence.HTML.build({_content: 'Diligence REST Service - ' + data.resource.name, _tag: 'title'}) %>
+</head>
+<body>
+<%= Diligence.HTML.build({_content: 'Resource: ' + data.resource.name, _tag: 'h3'}) %>
+<pre>
+<%= Sincerity.JSON.to(data.value.documents, true).escapeElements() %>
+</pre>
+</body>
+</html>

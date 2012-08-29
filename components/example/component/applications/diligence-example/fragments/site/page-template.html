@@ -1,0 +1,11 @@
+<%
+document.executeOnce('/diligence/foundation/prudence/blocks/')
+
+// Here we're making sure that page.main is rendered before the header,
+// because it might contain block definitions that the header would use.
+
+Diligence.Blocks.get('page.main')
+%>
+<%& '/site/header/' %>
+<%&& 'page.main' %>
+<%& '/site/footer/' %>

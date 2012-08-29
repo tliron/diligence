@@ -1,0 +1,111 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+conversation.locals.put('extJs', true)
+
+document.executeOnce('/prudence/blocks/')
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's Sencha Integration Library</h1>
+<p>
+	We love, love, love Ext JS, which is by far the best client-side JavaScript framework, and its mobile cousin
+	Sencha Touch, and wanted Diligence to do them justice. We're happy with the result! This is a <i>big</i> library, with
+	lots of examples and explanations, so get yourself a cup of coffee, tea or yerbamatte, and get comfy.
+</p>
+<p>
+	The main sections:
+</p>
+
+<ul>
+	<li><a href="grids/">Grids</a>: Easily Ext JS's most impressive widget</li>
+	<li><a href="trees/">Trees</a>: Easily Ext JS's most impressive widget, too</li>
+	<li><a href="charts/">Charts</a>: Look, ma, no Flash! (HTML5 FTW)</li>
+	<li><a href="forms/">Forms</a>: AJAX forms with client-side <i>and</i> server-side validation</li>
+	<li><a href="direct/">Ext Direct</a>: Ext JS's elegant client-side RPC</li>
+	<li><a href="touch/">Sencha Touch</a>: Easily create data-driven mobile apps</li>
+</ul>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Sencha">Diligence.Sencha API documentation</a>
+	for more details.
+</p>
+
+<h2>General Comments</h2>
+
+<h3>Extended JSON</h3>
+<p>
+	Off the bat, let's mention we added support for MongoDB's extended JSON notation to Ext JS,
+	specifically for $date and $long. This allows you to easily send JSON
+	coming from MongoDB straight to the client and not worry about having to massage the data.
+	Moreover, you can make use of extended JSON without MongoDB, making it easy to pass
+	dates directly to the client.
+</p>
+
+
+<h3>Client-Side Caching with Prudence</h3>
+<p>
+	By default, Ext JS and almost all other client-side JavaScript frameworks and widgets enable an
+	annoying form of client cache overriding in their communication with the server. You'll see in all our
+	examples here that we're explicitly turning off Ext JS's cache overriding. Why? Because in
+	Diligence this is unnecessary: Prudence lets us do the right thing and actually use client-side caching
+	to our benefit. 
+</p>
+<p>
+	What's with the cache bashing, anyway? The story is that most server-side containers don't offer
+	good support for conditional HTTP, which means that clients (the web browsers in which the client-side
+	frameworks run) treat <i>all</i> data coming from the same URL as cacheable. If you attempt
+	to hit the same URL twice, the browser will try to optimize and use its already cached data.
+	In many cases, this is <i>not</i> what you want, because the data from the server may be different
+	upon subsequent requests.
+</p>	 
+<p>
+	Ext JS and other client-side frameworks get around this problem by changing the URL for each
+	request. A random or timestamp-based query parameter is added to the URL, so the web browser
+	must consider it different from previous requests, and will not use its cache. The new request,
+	in fact, will have no cache to fall back to. At the other end, the server ignores this extra
+	query parameter and just generates and returns its data as usual. 
+</p>
+<p>
+	This is a <i>terrible</i> solution! Think about it: every single request will be cached, but that
+	cached data will never be used again, because the exact URL will not be used again. It's a waste
+	of resources on the client. And why not make use of the cache when appropriate? If the data
+	on the server indeed did not change since we last hit it, we can save lots of resources and
+	bandwidth by not generating data and instructing the client to use its cached version. Multiply
+	that by thousands of clients and thousands of requests, and you've increased your ability to
+	scale up.
+</p>
+<p>
+	(It's not just the client that suffers: proxies, gateways and caches along the way, whether at
+	the hosting backbone infrastructure, or at various points along the internet/intranet on the
+	way to the client, will also not be able to optimize these requests, and may even waste
+	resources on an optimization that is devilishly bypassed.)
+</p>
+<p>
+	Diligence does the right thing: data from the server is returned with a timestamp, which is then compared
+	to the client's cached version. Moreover, Diligence uses <a href="http://threecrickets.com/prudence/manual/resources/#toc-Subsubsection-83">Prudence's handleGetInfo()</a>
+	to fetch <i>only</i> the timestamp <i>before</i> fetching all the data, so that HTTP can be truly conditional. Thus, only if the client has an
+	outdated version is handleGet called and the data generated. Lots of MongoDB requests can be entirely
+	avoided!
+</p>
+<p>
+	Even if the timestamp changes for every single request, you still have an important advantage:
+	because the URL is constant, the new version coming from the server will replace the cached
+	version the client maintains for that URL. So, while you're not saving resources on the server
+	in such super-dynamic situations, you are still saving resources on the client.
+</p>
+<p>
+	Let's do HTTP right, OK?
+</p>
+
+<%}}%>
+<%& '/site/page-template/' %>

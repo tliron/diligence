@@ -1,0 +1,256 @@
+/***********************
+ *  Soft Cricket 1.13  *
+ *                     *
+ *    By: Tal Liron    *
+ **********************/
+/**********
+ * Layout *
+ **********/
+body {
+  margin: 0px 8px;
+  /* To counteract Ext JS css */
+  background: url(../../media/three-crickets/soft-cricket/background.png);
+  /* From: http://www.eosdev.com/Backgrounds/Back_Tilework/EosTilework2h.htm */
+  font-family: Ubuntu, "Lucida Sans Unicode", "Lucida Grande", Verdana, Geneva, Tahoma, Arial, Helvetica, sans-serif !important;
+  font-size: 12px !important; }
+
+div#main {
+  padding-left: 22px;
+  padding-right: 22px;
+  background-color: #ffd8d0; }
+
+div#main-content {
+  background-color: #ffe0d9;
+  padding: 4px 28px 18px 28px; }
+
+table.soft {
+  border-spacing: 0px;
+  border-collapse: separate;
+  /* To counteract Ext JS css */ }
+  table.soft > tbody > tr > td {
+    padding: 0px; }
+
+/*************
+ * Main Text *
+ *************/
+p {
+  margin: 12px 0px;
+  /* To counteract Ext JS css */ }
+
+p, ul, li, div.Indented, div.Unindented, blockquote.Quote {
+  font-size: 12px;
+  line-height: 180%; }
+
+div.Indented + div.Indented, div.Unindented + div.Indented, div.Indented + div.Unindented, div.Unindented + div.Unindented {
+  margin-top: 14px; }
+
+/***********
+ * Headers *
+ ***********/
+h1 {
+  font-family: Georgia, Utopia, Palatino, "Times New Roman", Times, serif;
+  font-size: 28px;
+  margin: 18px 0px; }
+
+h2 {
+  font-family: Georgia, Utopia, Palatino, "Times New Roman", Times, serif;
+  font-size: 22px;
+  margin-top: 42px; }
+
+h3 {
+  font-family: Georgia, Utopia, Palatino, "Times New Roman", Times, serif;
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 28px; }
+
+h4, div.Paragraph {
+  font-weight: bold;
+  margin-top: 24px;
+  margin-bottom: 6px; }
+
+/***************
+ * Text Blocks *
+ ***************/
+pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  -webkit-tab-size: 4;
+  border: 1px dashed black;
+  background-color: white;
+  line-height: 140%;
+  padding: 16px;
+  margin: 22px 0px; }
+
+.note, blockquote.Quote {
+  border: 1px dashed black;
+  background-color: #ffd8d0;
+  padding: 16px;
+  margin: 22px 0px; }
+
+.result {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  -webkit-tab-size: 4;
+  width: 200px;
+  overflow: auto; }
+
+/**********
+ * Breaks *
+ **********/
+div.hr {
+  height: 57px;
+  background-image: url(../../media/three-crickets/soft-cricket/ruler.png);
+  background-repeat: no-repeat;
+  background-position: center; }
+  div.hr hr {
+    display: none; }
+
+/*********
+ * Links *
+ *********/
+a {
+  text-decoration: none; }
+  a:link {
+    color: #b22222; }
+  a:visited {
+    color: #b22222; }
+  a:hover {
+    background-color: #ffffa0; }
+
+a.neutral:link {
+  color: black; }
+a.neutral:visited {
+  color: black; }
+a.neutral:hover {
+  background-color: transparent; }
+
+/****************
+ * Floating TOC *
+ ****************/
+div#toc {
+  position: absolute;
+  display: none;
+  padding: 16px;
+  margin: 22px 0px; }
+  div#toc div.title {
+    font-weight: bold;
+    margin-bottom: 6px; }
+  div#toc div.subsection {
+    margin-top: 6px; }
+  div#toc div.subsubsection {
+    margin-left: 12px; }
+  div#toc a {
+    color: black; }
+
+/*******************
+ * Navigation Menu *
+ *******************/
+/* Adapted from: http://css.maxdesign.com.au/listamatic2/vertical07.htm */
+div.navigation {
+  font-size: 12px; }
+  div.navigation a, div.navigation .heading {
+    -moz-box-sizing: content-box !important;
+    /* To counteract Ext JS css */
+    display: block;
+    color: #333333;
+    background-color: transparent;
+    text-decoration: none;
+    width: 200px;
+    padding: 2px 10px 2px 10px;
+    border-left: 1px solid #af868e;
+    border-top: 1px solid #af868e;
+    line-height: 120%; }
+  div.navigation a:hover {
+    background-color: #ffffa0;
+    border-right: 10px solid #af868e;
+    padding: 2px 1px 2px 10px; }
+  div.navigation ul {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+    line-height: 100%; }
+    div.navigation ul ul {
+      margin-left: 30px;
+      list-style-type: none; }
+  div.navigation li li a {
+    width: 170px;
+    border-top: none;
+    border-bottom: none; }
+  div.navigation .heading {
+    font-style: italic; }
+  div.navigation .closed, div.navigation .heading {
+    border-bottom: 1px solid #af868e; }
+
+div.centerpiece {
+  width: 550px;
+  margin-left: auto;
+  margin-right: auto; }
+  div.centerpiece h2 {
+    padding-top: 20px;
+    text-align: center; }
+  div.centerpiece div.status {
+    text-align: center;
+    color: #505050;
+    padding: 10px 20px 10px 20px; }
+  div.centerpiece div.field {
+    padding: 5px 20px 5px 20px; }
+    div.centerpiece div.field label {
+      float: left;
+      vertical-align: middle;
+      width: 182px;
+      margin-right: 10px; }
+    div.centerpiece div.field input {
+      width: 312px; }
+    div.centerpiece div.field textarea {
+      width: 312px;
+      height: 300px; }
+    div.centerpiece div.field div.error {
+      color: red;
+      margin-left: 192px; }
+  div.centerpiece div.buttons {
+    margin-top: 20px;
+    padding-bottom: 20px; }
+    div.centerpiece div.buttons input {
+      width: 150px;
+      margin-left: 380px; }
+  div.centerpiece div.icon-matrix {
+    text-align: center; }
+    div.centerpiece div.icon-matrix > div {
+      display: inline-block;
+      text-align: center;
+      overflow: auto; }
+      div.centerpiece div.icon-matrix > div > div {
+        padding: 10px;
+        float: left; }
+  div.centerpiece div#recaptcha-js {
+    height: 129px; }
+
+#recaptcha {
+  overflow: auto;
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  background-color: #d0d0d0;
+  color: black;
+  text-align: center; }
+  #recaptcha iframe {
+    height: 300px;
+    width: 800px;
+    border: none; }
+  #recaptcha div.top {
+    margin-top: 10px; }
+  #recaptcha div.bottom {
+    margin-bottom: 10px; }

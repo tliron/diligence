@@ -1,0 +1,5 @@
+*/5 * * * * <% document.executeOnce('/diligence/service/cache/'); new Diligence.Cache({name: 'result', logLevel: 'info'}).prune(); %>
+*/5 * * * * <% document.executeOnce('/diligence/service/nonces/'); Diligence.Nonces.prune(); %>
+* * * * * <% document.executeOnce('/diligence/service/notification/'); Diligence.Notification.sendQueuedNotices(); %>
+* 4 * * * <% document.executeOnce('/diligence/service/notification/'); Diligence.Notification.sendQueuedDigests('daily'); %>
+* 5 * * 0 <% document.executeOnce('/diligence/service/notification/'); Diligence.Notification.sendQueuedDigests('weekly'); %>

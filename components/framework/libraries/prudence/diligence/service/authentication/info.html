@@ -1,0 +1,22 @@
+<div id="login-info">
+<%
+
+document.executeOnce('/diligence/service/authentication/')
+document.executeOnce('/diligence/service/html/')
+
+var session = Diligence.Authentication.getCurrentSession(conversation)
+var user = session ? session.getUser() : null
+
+if (user) {
+%>
+	<div><%= Diligence.HTML.span({_key: 'diligence.service.authentication.form.info.greeting', _cast: {name: user.getDisplayName()}}) %></div>
+	<div><%= Diligence.HTML.a({_key: 'diligence.service.authentication.form.info.logout', href: Diligence.Authentication.getLogoutUri(), _query: {from: conversation.reference}}) %></div>
+<%
+}
+else {
+%>
+	<div><%= Diligence.HTML.a({_key: 'diligence.service.authentication.form.info.login', href: Diligence.Authentication.getUri(), _query: {from: conversation.reference}}) %></div>
+<%
+}
+%>
+</div>

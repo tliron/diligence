@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<project name="Diligence" default="build">
+
+	<property file="custom.properties" />
+	
+	<property name="root" location=".." />
+	<property name="manual" location="${root}/components/reference/manual" />
+	<property name="framework" location="${root}/components/framework" />
+	<property name="example" location="${root}/components/example" />
+	
+	<property name="cache" location="${root}/build/cache" />
+	<property name="cache.manual" location="${cache}/framework/reference/manuals/${maven.group}/${maven.artifact}/${version}" />
+	<property name="cache.example" location="${cache}/example" />
+	<property name="cache.maven.pom" location="${cache}/maven/pom" />
+	<property name="cache.maven.build" location="${cache}/maven/build" />
+
+	<property name="distribution" location="${root}/build/distribution" />
+	<property name="distribution.content" location="${distribution}/content" />
+
+	<target name="manual" description="Create manual if not present">
+		<available file="${cache.manual}" property="manual-present" />
+		<antcall target="manual-overwrite" />
+	</target>
+
+	<target name="clean-manual" description="Clean manual">
+		<delete dir="${cache.manual}" />
+	</target>
+
+	<target name="manual-lyx" if="lyx">
+		<exec executable="${lyx}" failifexecutionfails="false">
+			<arg value="--export" />
+			<arg value="pdf" />
+			<arg value="${cache.manual}/${component}_manual.lyx" />
+		</exec>
+	</target>
+
+	<target name="manual-elyxer" if="elyxer">
+		<exec executable="${elyxer}" failifexecutionfails="false">
+			<arg value="--unicode" />
+			<arg value="--title" />
+			<arg value="${documentation.title} Manual" />
+			<arg value="--css" />
+			<arg value="soft-cricket-api.css" />
+			<arg value="${cache.manual}/${component}_manual.lyx" />
+			<arg value="${cache.manual}/${component}_manual.html" />
+		</exec>
+	</target>
+
+	<target name="manual-overwrite" description="Create manual" unless="manual-present">
+		<mkdir dir="${cache.manual}" />
+		<copy todir="${cache.manual}">
+			<fileset dir="${manual}" excludes="*~, *.js" />
+			<filterchain>
+					<replacetokens>
+						<token key="VERSION" value="${version}" />
+					</replacetokens>
+			</filterchain>
+		</copy>
+		<antcall target="manual-lyx" />
+		<antcall target="manual-elyxer" />
+		<copy todir="${cache.example}/programs">
+			<fileset dir="${manual}" includes="*.js" />
+		</copy>
+		<mkdir dir="${cache.example}/.sincerity" />
+		<exec executable="${sincerity.home}/sincerity">
+			<arg value="container:use" />
+			<arg value="${cache.example}" />
+			<arg value=":" />
+			<arg value="delegate:start" />
+			<arg value="export-manual" />
+			<arg value="${cache.manual}/${component}_manual.html" />
+		</exec>
+	</target>
+
+	<target name="deploy" if="maven" description="Deploy to Maven repository">
+		<copy todir="${cache.maven.pom}">
+			<fileset dir="maven" excludes="*~" />
+			<filterchain>
+					<replacetokens>
+						<token key="VERSION" value="${version}" />
+						<token key="ROOT" value="${root}" />
+						<token key="CACHE" value="${cache.maven.build}" />
+					</replacetokens>
+			</filterchain>
+		</copy>
+		<exec executable="${maven}" dir="${cache.maven.pom}" failifexecutionfails="false">
+			<arg value="deploy" />
+			<arg value="-DaltDeploymentRepository=${maven.repo}" />
+		</exec>
+	</target>
+
+	<target name="components" depends="manual, deploy" description="Assemble components" />
+
+	<target name="distribution" depends="components" description="Create Sincerity container">
+		<copy todir="${distribution.content}/configuration/sincerity">
+			<fileset dir="sincerity" />
+		</copy>
+		<exec executable="${sincerity.home}/sincerity">
+			<arg value="container:create" />
+			<arg value="--force" />
+			<arg value="${distribution.content}" />
+			<arg value="${sincerity.template}" />
+			<arg value=":" />
+			<arg value="repositories:attach" />
+			<arg value="three-crickets" />
+			<arg value=":" />
+			<arg value="dependencies:install" />
+		</exec>
+	</target>
+
+	<target name="package-zip" depends="distribution" description="Create distribution package">
+		<zip destfile="${distribution}/${component}-${version}.zip">
+			<zipfileset dir="${distribution.content}" excludes="cache/, logs/, sincerity" />
+			<zipfileset dir="${distribution.content}" includes="sincerity" filemode="755" />
+		</zip>
+	</target>
+	
+	<target name="package-installbuilder" depends="distribution" description="Create InstallBuilder installer">
+		<exec executable="${installbuilder}">
+			<arg value="build" />
+			<arg value="./installbuilder/${component}.xml" />
+			<arg value="windows" />
+			<arg value="--license" />
+			<arg value="./installbuilder/license.xml" />
+		</exec>
+		<exec executable="${installbuilder}">
+			<arg value="build" />
+			<arg value="./installbuilder/${component}.xml" />
+			<arg value="osx" />
+			<arg value="--license" />
+			<arg value="./installbuilder/license.xml" />
+			<arg value="--setvars" />
+			<arg value="project.outputDirectory=${cache}" />
+		</exec>
+		<zip destfile="${distribution}/${component}-${version}-osx-installer.zip">
+			<zipfileset dir="${cache}/${component}-${version}-osx-installer.app" prefix="${component}-${version}-osx-installer.app" />
+		</zip>
+		<chmod perm="ugo+rx">
+			<fileset dir="${distribution}" includes="*.run" />
+		</chmod>
+	</target>
+
+	<target name="build" depends="distribution" description="Build distribution" />
+	
+	<target name="clean" description="Clean">
+		<delete dir="${cache}" />
+		<delete dir="${distribution}" />
+	</target>
+	
+	<target name="rebuild" depends="clean, build" description="First clean and then build distribution" />
+	
+	<target name="dirty" description="Quick-and-dirty update of the content">
+		<copy todir="${distribution.content}">
+			<fileset dir="${framework}" />
+			<fileset dir="${example}" />
+		</copy>
+		<copy todir="${distribution.content}/programs">
+			<fileset dir="${manual}" includes="*.js" />
+		</copy>
+		<exec executable="${sincerity.home}/sincerity">
+			<arg value="container:use" />
+			<arg value="${distribution.content}" />
+			<arg value=":" />
+			<arg value="delegate:start" />
+			<arg value="export-manual" />
+			<arg value="${cache.manual}/${component}_manual.html" />
+		</exec>
+	</target>
+	
+</project>

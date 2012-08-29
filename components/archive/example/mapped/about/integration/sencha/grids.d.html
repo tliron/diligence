@@ -1,0 +1,345 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+conversation.locals.put('extJs', true)
+
+document.executeOnce('/prudence/blocks/')
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's Sencha Integration Library</h1>
+<h2>Ext JS Grids</h2>
+
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Sencha">Diligence.Sencha API documentation</a>
+	for more details.
+</p>
+
+<h3>MongoDB Grids</h3>
+<p>
+And now, to grids, easily Ext JS's most powerful widget. Ext JS's data model already
+supports REST very well, making Prudence a natural choice. MongoDB might seem less
+natural -- after all, its schema-less collections don't always follow the row-column
+paradigm.
+</p>
+<p>
+But, check this code out:
+</p>
+<pre>
+var store = new ExtJS.SimpleMongoDbSource({
+	collection: 'users',
+	fields: ['name', {name: 'lastSeen', type: 'date'}],
+	columns: {
+		name: {header: 'Name', width: 200},
+		lastSeen: {header: 'Last Seen', width: 250}
+	}
+})
+</pre>
+<p>
+And the impressive result, with paging, editing:
+</p>
+<div id="grid-mongo-db"></div>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	var pageSize = 20;
+	
+	var store = Ext.create('Diligence.data.Store', {
+		proxy: {
+			url: 'mongo-db/'
+		},
+		pageSize: pageSize,
+		autoSync: true,
+		autoLoad: {
+			params: {
+				start: 0,
+				meta: true
+			}
+		}
+	});
+	
+	store.getColumns(function(store, columns) {
+		Ext.create('Ext.grid.Panel', {
+			store: store,
+			columns: columns,
+			forceFit: true,
+			selType: 'cellmodel',
+			plugins: [
+				Ext.create('Ext.grid.plugin.CellEditing', {clicksToEdit: 1})
+			],
+			bbar: {
+				xtype: 'pagingtoolbar',
+				pageSize: pageSize,
+				store: store
+			},
+			renderTo: 'grid-mongo-db',
+			style: {margin: 'auto'},
+			width: 500,
+			height: 500
+		});
+	});
+});
+</script>
+<%}}%>
+<p>
+We've extended Ext JS's GridPanel to make it a bit easier to work with, but the
+changes are slight, and you can definitely use regular Ext JS components, or your
+own special extensions. In particular, we let you initialize the grid columns as
+well as the the fields on the server, allowing for especially dynamic representations
+of your data.
+</p>
+
+
+<h3>Arbitrary REST Grids</h3>
+<p>
+Direct MongoDB support is cool, but Diligence also lets you wrap any existing RESTful resource,
+whether internal to your application or external to it. From REST to grid in a few lines of code!
+</p>
+<p>
+There are two reasons you might want to do this: 
+</p>
+<p>
+First, this lets you attach a grid to <i>anything</i> RESTful. All you need to is create a proper URI
+for it, and let the wrapper do the Ext JS specifics. 	
+</p>
+<p>
+Second, your Prudence application likely already has a carefully thought-out RESTful URI space to
+access your data. (Perhaps you're using Diligence's Mapping Module to create parts of it.)
+It makes sense to throw these resources directly into an Ext JS grid, instead of creating
+special connections for it. This allows you to reuse code and keep data access code in a single
+location.
+</p>
+<p>
+Here's an example using an internal resource:	
+</p>
+<pre>
+var store = new ExtJS.ResourceSource({
+	resource: {
+		uri: '/data/users/',
+		internal: true
+	},
+	fields: ['name', {name: 'lastSeen', type: 'date'}],
+	columns: {
+		name: {header: 'Name', width: 200},
+		lastSeen: {header: 'Last Seen', width: 250}
+	}
+})
+</pre>
+<p>
+Try it:
+</p>
+<div id="grid-resource"></div>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	var pageSize = 20;
+	
+	var store = Ext.create('Diligence.data.Store', {
+		proxy: {
+			//url: '<%= conversation.pathToBase %>/data/users/'
+			url: 'resource/'
+		},
+		pageSize: pageSize,
+		autoSync: true,
+		autoLoad: {
+			params: {
+				start: 0,
+				meta: true
+			}
+		}
+	});
+
+	store.getColumns(function(store, columns) {
+		Ext.create('Ext.grid.Panel', {
+			store: store,
+			columns: columns,
+			forceFit: true,
+			selType: 'cellmodel',
+			plugins: [
+				Ext.create('Ext.grid.plugin.CellEditing', {clicksToEdit: 1})
+			],
+			bbar: {
+				xtype: 'pagingtoolbar',
+				pageSize: pageSize,
+				store: store
+			},
+			renderTo: 'grid-resource',
+			style: {margin: 'auto'},
+			width: 500,
+			height: 500
+		});
+	});
+});
+</script>
+<%}}%>
+
+
+<h3>Self-Contained Grids</h3>
+<p>
+Of course, we can also throw data into a grid directly.
+Note that this store takes care for (high-performance) thread-safety, as data may be modified
+concurrently by web requests:
+</p>
+<pre>
+var data = [{
+	type: 'fish3',
+	color: 'red',
+	born: new Date()
+}, {
+	type: 'fish',
+	color: 'green',
+	born: new Date()
+}, {
+	type: 'cat',
+	color: 'orange',
+	born: new Date()
+}]
+
+for (var i = 0; i < 10; i++) {
+	data = data.concat(Objects.clone(data))
+}
+
+var store = new ExtJS.SelfContainedSource({
+	data: data,
+	columns: {
+		born: {width: 250}
+	}
+})
+</pre>
+<p>
+Try it:
+</p>
+<div id="grid-self-contained"></div>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	var pageSize = 20;
+	
+	var store = Ext.create('Diligence.data.Store', {
+		storeId: 'self-contained',
+		proxy: {
+			url: 'self-contained/'
+		},
+		pageSize: pageSize,
+		autoSync: true,
+		autoLoad: {
+			params: {
+				start: 0,
+				meta: true
+			}
+		}
+	});
+
+	store.getColumns(function(store, columns) {
+		Ext.create('Ext.grid.Panel', {
+			store: store,
+			columns: columns,
+			forceFit: true,
+			selType: 'cellmodel',
+			plugins: [
+				Ext.create('Ext.grid.plugin.CellEditing', {clicksToEdit: 1})
+			],
+			bbar: {
+				xtype: 'pagingtoolbar',
+				pageSize: pageSize,
+				store: store
+			},
+			renderTo: 'grid-self-contained',
+			style: {margin: 'auto'},
+			width: 500,
+			height: 500
+		});
+	});
+});
+</script>
+<%}}%>
+
+
+<h3>Data Views</h3>
+<p>
+Grids are awesome, but Ext JS data views are also very useful, as they allow you to present data
+as needed using Ext JS's powerful templating. Luckily, data views can use the same Diligence stores we
+set up for our grids. Here's one that uses the <i>exact</i> same store as the previous grid, effectively
+linking the two widgets. So, if you page one, it will page the other, too. The template we're using:
+</p> 
+<pre>
+var tpl = new Ext.XTemplate(
+	'&lt;tpl for="."&gt;',
+		'&lt;div id="{id}" class="x-view-item" style="color: {color};"&gt;',
+			'A {type}, born {[values.born.getFullYear()]}',
+		'&lt;/div&gt;',
+	'&lt;/tpl&gt;',
+	'&lt;div class="x-clear"&gt;&lt;/div&gt;'
+);
+</pre>
+<p>
+Try it:
+</p>
+<div id="dataview"></div>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	var pageSize = 20;
+	
+	var tpl = Ext.create('Ext.XTemplate',
+		'<tpl for=".">',
+			'<div id="{id}" class="x-view-item" style="color: {color};">',
+				'A {type}, born {[values.born.getFullYear()]}',
+			'</div>',
+		'</tpl>',
+		'<div class="x-clear"></div>'
+	);
+	
+	/*new Ext.Panel({
+		items: 	new Ext.DataView({
+			store: Diligence.store,
+			tpl: tpl,
+			multiSelect: true,
+			simpleSelect: true,
+			itemSelector: 'div.x-view-item',
+			selectedClass: 'x-view-selected',
+			overClass: 'x-view-over'
+		}),
+		bbar: {
+			xtype: 'pagingtoolbar',
+			pageSize: pageSize,
+			store: Diligence.store
+		},
+		renderTo: 'dataview',
+		style: {margin: 'auto'},
+		width: 500,
+		height: 500
+	});*/
+});
+</script>
+<%}}%>
+<%{{ 'page.head' %>
+	<style>
+		div.x-view-item {
+			line-height: 180%;
+			padding-left: 5px;
+			border-bottom: 1px #CCCCCC solid;
+		}
+		
+		div.x-view-over {
+			background-color: #DDDDDD;
+		}
+		
+		div.x-view-selected {
+			background-color: #D0DEF0;
+		}
+	</style>
+<%}}%>
+
+<%}}%>
+<%& '/site/page-template/' %>

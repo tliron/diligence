@@ -1,0 +1,198 @@
+/***********************
+ *  Soft Cricket 1.13  *
+ *                     *
+ *    By: Tal Liron    *
+ **********************/
+
+@import "common"; 
+
+$fringe: #ffd8d0;
+$paper: #ffe0d9;
+$link: #b22222;
+$link-hover: #ffffa0;
+
+$navigation-width: 210px;
+$navigation-indent: 30px;
+$navigation-highlight: 10px;
+$navigation-line: #AF868E;
+$navigation-link: #333;
+$navigation-link-hover: #ffffa0;
+
+/**********
+ * Layout *
+ **********/
+
+body {
+	margin: 0px 8px; /* To counteract Ext JS css */
+	background: url(../../media/three-crickets/soft-cricket/background.png); /* From: http://www.eosdev.com/Backgrounds/Back_Tilework/EosTilework2h.htm */
+	font-family: $sans-serif !important;
+	font-size: 12px !important;
+}
+
+div#main {
+	padding-left: 22px;
+	padding-right: 22px;
+	background-color: $fringe;
+}
+div#main-content {
+	background-color: $paper;
+	padding: 4px 28px 18px 28px;
+}
+
+table.soft {
+	border-spacing: 0px;
+	border-collapse: separate; /* To counteract Ext JS css */
+	> tbody {
+		> tr {
+			> td {
+				padding: 0px;
+			}
+		}
+	}
+}
+
+/*************
+ * Main Text *
+ *************/
+
+p {
+	margin: 12px 0px; /* To counteract Ext JS css */
+}
+p, ul, li, div.Indented, div.Unindented, blockquote.Quote {
+	font-size: 12px;
+	line-height: 180%;
+}
+div.Indented + div.Indented, div.Unindented + div.Indented, div.Indented + div.Unindented, div.Unindented + div.Unindented {
+	margin-top: 14px;
+}
+
+/***********
+ * Headers *
+ ***********/
+
+h1 {
+	font-family: $serif;
+	font-size: 28px;
+	margin: 18px 0px;
+}
+
+h2 {
+	font-family: $serif;
+	font-size: 22px;
+	margin-top: 42px;
+}
+
+h3 {
+	font-family: $serif;
+	font-style: italic;
+	font-size: 14px;
+	margin-top: 28px;
+}
+
+h4, div.Paragraph {
+	font-weight: bold;
+	margin-top: 24px;
+	margin-bottom: 6px;
+}
+
+/***************
+ * Text Blocks *
+ ***************/
+
+pre {
+	@include pre;
+	@include tab-size(4);
+	border: 1px dashed black;
+	background-color: white;
+	line-height: 140%;
+	padding: 16px;
+	margin: 22px 0px;
+}
+
+.note, blockquote.Quote {
+	border: 1px dashed black;
+	background-color: $fringe;
+	padding: 16px;
+	margin: 22px 0px;
+}
+
+.result {
+	@include pre;
+	@include tab-size(4);
+	width: 200px;
+	overflow: auto;
+}
+
+/**********
+ * Breaks *
+ **********/
+
+div.hr {
+	height: 57px;
+	background-image: url(../../media/three-crickets/soft-cricket/ruler.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	hr {
+		display: none;
+	}
+}
+
+/*********
+ * Links *
+ *********/
+
+a {
+	text-decoration: none;
+	&:link {
+	    color: $link;
+	}
+	&:visited {
+	    color: $link;
+	}
+	&:hover {
+		background-color: $link-hover;
+	}
+	&:active {
+	}
+}
+
+a.neutral {
+	&:link {
+	    color: black;
+	}
+	&:visited {
+	    color: black;
+	}
+	&:hover {
+		background-color: transparent;
+	}
+	&:active {
+	}
+}
+
+/****************
+ * Floating TOC *
+ ****************/
+
+div#toc {
+	position: absolute;
+	display: none;
+	padding: 16px;
+	margin: 22px 0px;
+	div.title {
+		font-weight: bold;
+		margin-bottom: 6px;
+	}
+	div.subsection {
+		margin-top: 6px;
+	}
+	div.subsubsection {
+		margin-left: 12px;
+	}
+	a {
+		color: black;
+	}
+}
+
+@import "navigation";
+@import "forms";

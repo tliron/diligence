@@ -1,0 +1,239 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+document.executeOnce('/about/integration/sencha/multiplier/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
+document.executeOnce('/sincerity/json/')
+
+var results = multiplierForm.handle({conversation: conversation})
+if (!results || (results.mode != 'json')) {
+
+conversation.locals.put('extJs', true)
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's Sencha Integration Library</h1>
+<h2>Ext JS Forms</h2>
+
+<p>
+	The Ext JS form widget allows for flexible form layouts, and includes various widgets for
+	representing form fields.
+	As far as submitting the form, Ext JS offers three (!) different ways of doing so, and Diligence
+	supports them all.
+</p>
+<p>
+	Diligence's support layer for Ext JS forms is really just a function added to <a href="../../../foundation/resources/forms/">Diligence's form support</a>
+	in order to convert fields to Ext JS's format. Otherwise, all the server-side stuff you
+	see here is just how Savoy supports forms generally.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Sencha">Diligence.Sencha API documentation</a>
+	for more details.
+</p>
+
+
+<h3>Awesome Demos</h3>
+<p>
+	For all these demos, use the third button (without validation or masking) to test the server-side
+	validation, otherwise client-side validation will make sure that the server always gets valid
+	values. Also, make sure to hover over invalid fields, so you can see the error message! It's being
+	supplied by Diligence's Internationalizaion service.
+</p>
+
+
+<%{{ 'page.scripts' %>
+<script>
+var fieldsWithValues = <%= Sincerity.JSON.to(Diligence.Sencha.getFormFields(conversation, multiplierForm, (results && !results.success) ? results : null), true, true) %>;
+
+var fieldsWithValuesWithValidationWithoutMasking = <%= Sincerity.JSON.to(Diligence.Sencha.getFormFields(conversation, multiplierForm, (results && !results.success) ? results : null, true, false), true, true) %>;
+
+var fieldsWithValuesBare = <%= Sincerity.JSON.to(Diligence.Sencha.getFormFields(conversation, multiplierForm, (results && !results.success) ? results : null, false, false), true, true) %>;
+
+var fields = <%= Sincerity.JSON.to(Diligence.Sencha.getFormFields(conversation, multiplierForm), true, true) %>;
+
+var fieldsWithValidationWithoutMasking = <%= Sincerity.JSON.to(Diligence.Sencha.getFormFields(conversation, multiplierForm, null, true, false), true, true) %>;
+
+var fieldsBare = <%= Sincerity.JSON.to(Diligence.Sencha.getFormFields(conversation, multiplierForm, null, false, false), true, true) %>;
+
+var titles = {
+	'standard-form': 'Standard Form Multiplier',
+	'standard-form-half': 'Standard Form Multiplier (with validation, without masking)',
+	'standard-form-bare': 'Standard Form Multiplier (without validation or masking)',
+	'ajax-form': 'AJAX Multiplier',
+	'ajax-form-half': 'AJAX Multiplier (with validation, without masking)',
+	'ajax-form-bare': 'AJAX Multiplier (without validation or masking)',
+	'direct-form': 'Ext Direct Multiplier',
+	'direct-form-half': 'Ext Direct Multiplier (with validation, without masking)',
+	'direct-form-bare': 'Ext Direct Multiplier (without validation or masking)'
+};
+
+var fields = {
+	'standard-form': fieldsWithValues,
+	'standard-form-half': fieldsWithValuesWithValidationWithoutMasking,
+	'standard-form-bare': fieldsWithValuesBare,
+	'ajax-form': fields,
+	'ajax-form-half': fieldsWithValidationWithoutMasking,
+	'ajax-form-bare': fieldsBare,
+	'direct-form': fields,
+	'direct-form-half': fieldsWithValidationWithoutMasking,
+	'direct-form-bare': fieldsBare
+};
+
+function openForm(event, el) {
+	var config = {
+		xtype: 'form',
+		border: false,
+		bodyCls: 'x-border-layout-ct', // Uses the neutral background color
+		bodyPadding: 10,
+		layout: 'anchor',
+		defaults: {
+			anchor: '100%'
+		},
+		defaultType: 'textfield',
+		items: fields[el.id],
+		buttons: [{
+			text: 'Submit',
+			disabled: true,
+			formBind: true,
+			handler: function() {
+				var form = this.up('form').getForm();
+				if (form.isValid()) {
+					form.submit({
+						success: function(form, action) {
+							Ext.Msg.alert('Success!', action.result.msg);
+						},
+						failure: function(form, action) {
+							Ext.Msg.alert('Failure!', action.result.msg);
+						}
+					});
+				}
+			}
+		}]
+	};
+	
+	if (el.id.substring(0, 8) == 'standard') {
+		config.standardSubmit = true;
+		config.url = '?form=' + el.id;
+	}
+	else if (el.id.substring(0, 4) == 'ajax') {
+		config.url = '?mode=json';
+	}
+	else if (el.id.substring(0, 6) == 'direct') {
+		config.api = {
+			submit: Diligence.Multiplier.multiply
+		};
+		config.paramOrder = ['first', 'second'];
+	}
+	
+	Ext.create('Ext.window.Window', {
+		title: titles[el.id],
+		width: 350,
+		items: config
+	}).show();
+}
+
+Ext.onReady(function() {
+	Diligence.addDirectProvider({
+		namespace: 'Diligence',
+		baseUrl: '<%= conversation.pathToBase %>',
+		success: function() {
+			Ext.select('.open-form').on('click', openForm);
+		}
+	});
+});
+</script>
+<%}}%>
+
+<h3>Standard Forms</h3>
+<p>
+	These work the same way as HTML's &lt;form&gt; tag (and in fact use it behind the scenes): the browser
+	does a regular POST to a URL with data formatted as a "application/x-www-form-urlencoded" MIME type.
+	Because it is a regular browser POST, the whole page is reloaded.
+</p>
+<p>
+	For the purposes of this demo, we will re-open the form on page reload upon failed submission,
+	so that the user (you!) can try again. Obviously, the better solution for this particular use case
+	would be to use an AJAX form (see below). Still, you'll get to see the standard form in action.
+</p>
+<p>
+	<button id="standard-form" class="open-form">Standard</button>
+	<button id="standard-form-half" class="open-form">Standard with validation, without masking</button>
+	<button id="standard-form-bare" class="open-form">Standard without validation or masking</button>
+</p>
+<% if (results && (results.mode == 'none')) { %>
+<h3>Results from Last Standard Submission</h3>
+<div class="note">
+	<%= results.msg %>
+<% if (!results.success) { %>
+	<ul>
+<% for (var name in results.errors) { %>
+		<li style="list-style-type: disc; margin-left: 20px;"><%= name %>: <%= results.errors[name] %></li>
+<% } %>
+	</ul>
+<% } %>
+</div>
+<%{{ 'page.scripts' %>
+<script>
+Ext.onReady(function() {
+	openForm(null, Ext.get('<%= conversation.query.get("form") %>'));
+	Ext.Msg.alert('<%= results.success ? "Success!" : "Failure!" %>', '<%= results.msg.escapeSingleQuotes() %>');
+});
+</script>
+<%}}%>
+<% } %>
+
+
+<h3>AJAX Forms</h3>
+<p>
+	These are the default, and make most sense for the kind of UI that Ext JS implies: the form does
+	a <i>background</i> (AJAX) POST to a URL, in the same format as standard HTML form. The difference is that
+	the response is not a regular web page seen by the user, but JSON data used by Ext JS to manage
+	errors, and also your own data as is necessary for your application. The whole page is not reloaded
+	(unless you explicitly do so in your code).  
+</p>
+<p>
+	<button id="ajax-form" class="open-form">AJAX with validation and masking</button>
+	<button id="ajax-form-half" class="open-form">AJAX with validation, without masking</button>
+	<button id="ajax-form-bare" class="open-form">AJAX without validation or masking</button>
+</p>
+
+
+<h3>Ext Direct Forms</h3>
+<p>
+	These work similarly to AJAX forms, but the Ext Direct protocol is used instead of a generic HTML form post.
+	The advantages of using Ext Direct are that 1) you can simulate the form submit from your code, via an elegant and simple
+	function call, and 2) if you're using Ext Direct lot already, you can handle all client access, including forms, uniformly.
+</p>
+<p>
+	See Diligence's <a href="../direct/">Ext Direct</a> page for more dicussion.
+</p>
+<p>
+	<button id="direct-form" class="open-form">Ext Direct</button>
+	<button id="direct-form-half" class="open-form">Ext Direct with validation, without masking</button>
+	<button id="direct-form-bare" class="open-form">Ext Direct without validation or masking</button>
+</p>
+
+
+<h3>Loading Forms</h3>
+<p>
+	Ext JS supports dynamic pre-filling of part or all of the form via AJAX.
+</p>
+<p>
+	TODO
+</p>
+
+<%}}%>
+<%& '/site/page-template/' %>
+<%
+}
+%>

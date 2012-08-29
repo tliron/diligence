@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<%#
+
+This file is part of Diligence for Prudence
+
+Copyright 2011 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http:www.opensource.org/licenses/lgpl-3.0.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+var info = feed.getInfo()
+print(feed.render())
+%>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<%= Syndication.render({tag: 'title', object: info.title}) %>
+	<%= Syndication.render({tag: 'subtitle', object: info.subtitle}) %>
+	<link rel="self" href="<%= info.uri %>"/>
+	<link href="<%= info.webUri %>"/>
+	<updated></updated>
+	<%= Syndication.render({tag: 'author', object: info.author}) %>
+	<id>urn:uuid:38d50dda-83fa-11df-bf87-00241ddd2a14</id>
+	<entry>
+		<title></title>
+		<link href="http://threecrickets.com/news/"/>
+		<id>urn:uuid:</id>
+		<published></published>
+		<updated></updated>
+		<summary type="html"></summary>
+		<author><name></name></author>
+	</entry>
+	...
+</feed>

@@ -1,0 +1,16 @@
+<%& '/site/header/' %>
+<% exampleHeader('Serials', 'Service'); %>
+
+<%
+document.executeOnce('/diligence/service/serials/')
+%>
+
+<p>
+	Every time you refresh this page you'll see a unique number in the series called "example":
+</p>
+<p class="note">
+	<%= Diligence.Serials.next('example') %>
+</p>
+
+<% exampleFooter('Serials', 'Service'); %>
+<%& '/site/footer/' %>

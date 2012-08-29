@@ -1,0 +1,55 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+document.executeOnce('/diligence/feature/contact-us/')
+var form = new Diligence.ContactUs.Form({conversation: conversation})
+
+if (conversation.query.get('mode') == 'json') {
+	form.handle({conversation: conversation})
+}
+else {
+
+conversation.locals.put('reCaptcha', true)
+conversation.locals.put('extJs', true)
+%>
+<%{{ 'page.main' %>
+<h1>Diligence's "Contact Us" Feature</h1>
+<p>
+	This simple feature contains a /web/fragment/ that displays
+	an HTML form with a CAPTCHA that allows users to send a message on a specific
+	<a href="../../service/notification/">notification service</a> channel. System administrators
+	or others subscribing to the channel would then receive it. Straightforward!
+</p>
+<p>
+	Note that a different form is displayed depending on whether the user is logged in. Logged-in
+	users will not have to enter their email address or pass the CAPTCHA. We already know they
+	are legit, by virtue of having logged in!
+</p>
+<p>
+	The originating IP address is included in the email. 
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.ContactUs">Diligence.ContactUs API documentation</a>
+	for more details.
+</p>
+<%
+form.handle({conversation: conversation, mode: 'include'})
+%>
+<p>
+	And here is an <a href="../../integration/sencha/forms/">Ext JS</a> version of it:
+</p>
+<%& '/diligence/feature/contact-us/sencha/' %>
+<%}}%>
+<%& '/site/page-template/' %>
+<% } %>

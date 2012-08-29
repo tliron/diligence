@@ -1,0 +1,7 @@
+<% function exampleFooter(name, kind, section) { %>
+<p style="text-align: right;"><a href="?source=true">Click to see the source code</a></p>
+<div class="hr"><hr /></div>
+<%# '/manual/creative-commons-license/' %>
+<h2>From the Manual</h2>
+<%& '/manual/' + kind.toLowerCase() + '/' + (name + (section ? '-' + section : '')).toLowerCase().replace(' ', '-') + '/' %>
+<% } %>

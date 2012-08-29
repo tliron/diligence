@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.threecrickets.diligence</groupId>
+	<artifactId>orientdb-experiment</artifactId>
+	<version>@VERSION@</version>
+	<packaging>pom</packaging>
+
+	<name>Diligence: OrientDB Experiment Application</name>
+	<description>An OrientDB experiment application for Diligence.</description>
+	<url>http://threecrickets.com/diligence/</url>
+	<inceptionYear>2011</inceptionYear>
+
+	<scm>
+		<connection>scm:git:https://code.google.com/p/diligence/</connection>
+		<url>http://code.google.com/p/diligence/source/browse/</url>
+	</scm>
+
+	<organization>
+		<name>Three Crickets LLC</name>
+		<url>http://threecrickets.com/</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License, Version 3</name>
+			<url>https://www.gnu.org/licenses/lgpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>tal.liron</id>
+			<name>Tal Liron</name>
+			<email>tal.liron@threecrickets.com</email>
+			<timezone>-6</timezone>
+		</developer>
+	</developers>
+
+	<mailingLists>
+		<mailingList>
+			<name>The Prudence Community</name>
+			<archive>https://groups.google.com/forum/#!forum/prudence-community</archive>
+		</mailingList>
+	</mailingLists>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.threecrickets.diligence</groupId>
+			<artifactId>diligence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.threecrickets.sincerity.library</groupId>
+			<artifactId>sincerity-orientdb</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<directory>@CACHE@</directory>
+
+		<plugins>
+			<!-- jar artifact -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<archive>
+								<manifestEntries>
+									<Package-Folders>package</Package-Folders>
+								</manifestEntries>
+							</archive>
+							<descriptors>
+								<descriptor>package.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

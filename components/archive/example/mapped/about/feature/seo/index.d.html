@@ -1,0 +1,295 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%& '/site/header/' %>
+<h1>Diligence's SEO Feature</h1>
+
+<p>
+	This feature helps you comply with a few de-facto search engine standards to improve your interaction with them, specifically
+	robots.txt and sitemap.xml.
+</p>
+<p>
+	At first glance, there's nothing very sophisticated about these standards, and you might be tempted to create the required text
+	files manually and then serve them statically. However, large applications with many URLs can easily have unweildy site maps.
+	This Diligence feature helps you create them and manage them fairly automatically. It supports <i>very, very large</i> site maps.
+</p>
+<p>
+	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.SEO">Diligence.SEO API documentation</a>
+	for more details.
+</p>
+
+
+<h2>The Goods</h2>
+<h3>robots.txt</h3>
+<p>
+	Search engines expect to find this resource right at the root of your domain.
+	Its <a href="http://www.robotstxt.org/robotstxt.html">plain text content</a> tells them where to find your sitemap URL,
+	and can also control the crawling of your domain.
+</p>
+<p>
+	Your robots.txt will likely not be very dynamic. Because it matches URLs starting with stated URLs, it can easily
+	cover large sections of your site, and require infrequent tweaking.
+</p>	
+<p>
+	When would you need a lot of robots.txt tweaking? A common case for large sites is that public resources are deprecated or
+	otherwise cancelled. In such cases you still want to keep them up for reference, and to allow hyperlinks elsewhere on the
+	web to still be able to reach them -- there's SEO value in that. But, you do not want these resources to appear in search
+	engines and confuse users (you want them to find the new, better resources). A robots.txt exclusion would do the trick.
+</p>	
+
+<h3>sitemap.xml</h3>
+<p>
+	If your robots.txt doesn't state otherwise, then this resource will also be at the root of your domain.
+	Its <a href="http://sitemaps.org/protocol.php">XML content</a> can either list URLs directly, or,
+	more commonly, act as the primary index of other XML files called URL sets.
+</p>
+<p>
+	Search engines do take site maps seriously. A carefully maintained site map would
+	help them keep up to date with your dynamic site, in turn helping to get human searchers to the
+	page they want (or the page you want them to want...). It's likely this would indirectly and directly
+	improve your ranking, too.
+</p>
+
+<h2>Live Demo</h2>
+<p>
+	To see what it looks like, we've installed the SEO feature under this application. Though,
+	you'll probably usually install it under the root application (see below). The site map
+	is also being generated in dynamic mode, which is the default (again, see below).  
+</p>
+<p>	
+	<a href="<%= conversation.pathToBase %>/robots.txt">See the robots.txt</a>
+</p>
+<p>
+	<a href="<%= conversation.pathToBase %>/sitemap.xml">See the sitemap.xml</a>
+</p>
+
+
+<h2>Dynamic or Static?</h2>
+<p>
+	URL sets can grow to be very large (think: Wikipedia), so search engines have put limits on file size:
+	50,000 URLs per file and 10MB, uncompressed. That's right, you're allowed to compress your site map files
+	with gzip to save bandwidth. There doesn't seem to be a limit on the number of files you can serve,
+	so potentially your site map can be as big as needed.
+</p>
+<p>
+	Diligence supports two ways of generating site map resources: dynamic (via /web/fragments/) and static (via
+	/web/static/). Dynamic is the default, and should be fine for small web sites. It generates robots.txt
+	and sitemap.xml on demand, using Prudence's standard caching to keep things smooth and fast.
+</p>
+<p>
+	But, dynamic mode does not support more than 50,000 URLs per URL set. What's more, it generates these
+	within the HTTP request thread. So, you definitely do not want to use dynamic mode for large sites, or sites
+	which are slow to generate the URL sets! If you do, each time you get hit by a search engine for
+	the site map (can happen several times a day for "hot" sites!) a web request thread will be tied up for the length
+	of time it takes to generate the huge URL set. There are two problems for this: first and worst, the search engine
+	may penalize you for being so slow, and second, even if you are caching agressively, it means that you will
+	occasionally have one <i>very</i> heavy request, breaking the ironclad rules laid out in Prudence's
+	<a href="http://threecrickets.com/prudence/scaling/">Scaling Tips</a> article. 
+</p>
+<p>
+	Static mode can support URL sets of any size: it works by generating all required files in an
+	asynchronous Prudence task so that they can take as much time as necessary, without tying up
+	any user thread. You can set the task to run via Prudence's crontab: once a day, twice a day, etc.
+	The task makes sure to split URL sets into "pages" of 50,000 URLs max, and to gzip compress
+	them. It even makes sure to generate them in a separate spool directory, and then swap
+	them all at once, so that search engines hitting your site exactly during site map generation
+	don't see a partial, inconsistent picture. And it all happens asynchronously, using Diligence tasks,
+	so that multiple URL sets can be generated simultaneously. And, of course, since they are plain
+	old files, you can also host them outside of Prudence.
+</p>
+<p>
+	Note that robots.txt is always generated dynamically: its size limit is 100KB, which should
+	be manageable. The implication is that you can't go crazy with very large lists of
+	exclusions/inclusions. If this is an issue, you can use
+	<a href="http://www.robotstxt.org/meta.html">meta tags</a> instead.
+</p>
+
+
+<h2>Instruction Manual</h2>
+<p>
+	Every application in your Prudence instance can have its own URL sets, but it only makes sense for the
+	root application to have both robots.txt and sitemap.xml. We'll start our guide with an application
+	that is <i>not</i> the at root, because it's simpler.
+</p>
+<p>
+	From our settings.js: 
+</p>	
+<pre>
+predefinedGlobals = Sincerity.Objects.flatten({
+	diligence: {
+		feature: {
+			seo: {
+				domains: [{
+					rootUri: 'http://localhost:8080'
+				}, {
+					rootUri: 'http://threecrickets.com'
+				}],
+				locations: [{
+					name: 'the-real-thing',
+					domains: ['http://localhost:8080', 'http://threecrickets.com'],
+					locations: ['/happy/', '/this/', '/is/', '/working/'],
+					exclusions: ['/diligence/media/', '/diligence/style/', '/diligence/script/'],
+					inclusions: ['/diligence/media/name/'],
+					factory: 'Explicit'
+				}, {
+					name: 'test',
+					domains: ['http://localhost:8080'],
+					factory: 'Fake',
+					dependency: '/about/feature/seo/fake-locations/'
+				}]
+			}
+		}
+	}
+}
+</pre>
+<p>
+	Note the two arrays: domains and locations. There is a many-to-many connection between them, such
+	your application can support many domains, many location groups, and apply different locations groups
+	to different domains. This is because Prudence allows for multiple virtual hosting, so that each
+	application may very well be running on different domains at the same time, and may want to present
+	itself differently to search engines on each domain.
+</p>
+<p>
+	If you don't need to support virtual hosting, ignore the domains array and domains parameters:
+	it will be assumed that your locations are to be applied to all domains.
+</p>
+<p>
+	You then route the SEO resources for the application in its routing.js:
+</p>
+<pre>
+document.executeOnce('/diligence/feature/seo/')
+Diligence.SEO.routing()
+</pre>
+
+
+<h3>Locations</h3>
+<p>
+	Locations are configured using Diligence's plug-in library, which uses the factory pattern to generate
+	plug-ins. In our first locations config, we used the "Explicit" factory, which is built-in to the
+	SEO feature. This lets use explicitly list our locations as arrays within the config. Obviously,
+	this is useful only for very small sites with a known list of URLs. 
+</p>
+<p>
+	The "name" field is important: this becomes exactly the name of the URL set as it appears in the
+	site map. As for exclusions and inclusions: they are lumped into robots.txt.
+</p>
+<p>
+	More interesting is our second locations config: it uses our own factory, which we called "Fake".
+	This factory generates lots and lots (300,000) fake locations, and is useful for testing out very
+	large site maps. (Bottom line: it takes about 7 seconds to generate the complete, gzip-compressed 7-page
+	site map for that many URLs.) It's also a good example for you to use to create your own location
+	factories. 
+</p>
+<p>
+	The key to factory success is understanding the <a href="../../foundation/iterators/">Diligence iterators library</a>: as long as you keep
+	your iterator properly fed, you should be able to scale to site maps of scary sizes. 
+</p>
+<p>
+	One more thing to note is that each locations config will be executed simultaneously on its own
+	tasks thread, and this is true for all locations configs on all applications which you include in
+	your root application, as detailed below.
+</p>
+
+
+<h3>The Root Application</h3>
+<p>
+	At minimum, the settings.js of the root application should look something like this:
+</p>
+<pre>
+predefinedGlobals = Sincerity.Objects.flatten({
+	diligence: {
+		feature: {
+			seo: {
+				domains: [{
+					rootUri: 'http://localhost:8080',
+					applications: [{
+						name: 'My Application',
+						internalName: 'myapp'
+					}],
+					delaySeconds: 100,
+					dynamic: false,
+					staticRelativePath: 'sitemap-local',
+					workRelativePath: 'sitemap-local'
+				}]
+			}
+		}
+	}
+}
+</pre>
+<p>
+	You'll see that we added a few more fields to our domain config: beyond the root URI,
+	we are also configuring our robots.txt here, which we will be hosting, and configuring
+	the paths to use for static generation. The static path is relative to the application's
+	/web/static/ directory, while the work path will be under your application's root
+	directory's "work" subdirectory. Alternatively, you can use "staticPath" or "workPath" to
+	provide absolute paths. For example, you might prefer to use "workPath: '/tmp/sitemap'".
+</p>
+<p>
+	Note that these paths are per domain: if you hosting multiple domains via virtual
+	hosting, each site map should go to a different path.
+	Via a simple <a href="http://threecrickets.com/prudence/manual/handlers/#filters">capturing filter</a>
+	we make sure that each domain gets it correct site map. Thus, the outside world doesn't
+	actually see these static subdirectories: the URI space for the site map all appears,
+	publicly, at the root.
+</p>
+<p>
+	The truly magical field is "applications": this is an array of application names for
+	which locations will be added to this domain. The URL sets for each application for this
+	will be merged into the main site map, and its exclusions/inclusions will be merged into
+	robots.txt. It's up to you to make sure that URL set names from all
+	applications don't overlap, since their files are all moved into the same static
+	directory.
+</p>
+<p>
+	The root application can also have its own "locations" field,
+	which will also be merged in. We omitted it in this example for simplicity.
+</p>
+<p>
+	To have your site map generated regularly, put something like the following in your <a href="http://threecrickets.com/prudence/manual/tasks/#toc-Subsection-54">application's crontab</a>
+	(as a single line). In this example, we're having our site map generator run every
+	day at 4:00AM:
+</p>
+<pre>
+0 4 * * * /diligence/eval/ document.executeOnce('/diligence/feature/seo/'); SEO.getDomain('http://localhost:8080').generateStatic();	
+</pre>
+<p>
+	You then route the SEO resources for the root application in its routing.js:
+</p>
+<pre>
+document.executeOnce('/diligence/feature/seo/')
+Diligence.SEO.routing(true)
+</pre>
+<p>
+	Well, one tiny little convenience here: though you do need to install the routes in your
+	root application, you are free to host the SEO resources on another app (works via the magic
+	of Prudence's <a href="http://threecrickets.com/prudence/manual/routing/#toc-Subsubsection-100">router.captureOther</a>).
+	So, we can call SEO.install(true, 'myapp').
+</p>
+<p>
+	...And do all of the SEO stuff on myapp, even though it's not at root. The root application
+	really doesn't have to do anything else.
+<p>
+	Optionally, you can also <a href="http://threecrickets.com/prudence/manual/static-web/#toc-Subsection-55">register the ".gz" extension</a>
+	to serve the gzip MIME type. Search engines would not really care, but it makes your URI-space more correct and debuggable. 
+	Do this in the application's default.js:
+</p>
+<pre>
+document.executeOnce('/diligence/feature/seo/')
+Diligence.SEO.registerExtensions()	
+</pre>
+<p>
+	And that's pretty much it!
+</p>
+
+
+<%& '/site/footer/' %>

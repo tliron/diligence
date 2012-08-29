@@ -1,0 +1,26 @@
+<%#
+
+This file is part of Diligence
+
+Copyright 2011-2012 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http://www.gnu.org/copyleft/lesser.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+var textPack = Diligence.Internationalization.getCurrentPack(conversation)
+var captcha = {
+	noScriptHeader: textPack.get('diligence.integration.backend.reCaptcha.noscript.header'),
+	noScriptLabel: textPack.get('diligence.integration.backend.reCaptcha.noscript.label')
+}
+%>
+<div id="recaptcha">
+	<%= Diligence.HTML.div({_content: captcha.noScriptHeader, 'class': 'top'}) %>
+	<iframe src="http://api.recaptcha.net/noscript?k=<%= encodeURIComponent(application.globals.get('diligence.integration.backend.reCaptcha.publicKey')) %>"> </iframe>
+	<div class="bottom"><%= Diligence.HTML.textarea({name: 'recaptcha_challenge_field', cols: 100, rows: 5}, {_content: captcha.noScriptLabel}) %></div>
+	<input type="hidden" name="recaptcha_response_field" value="manual_challenge" />
+</div>

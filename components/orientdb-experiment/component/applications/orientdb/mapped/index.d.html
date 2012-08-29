@@ -1,0 +1,57 @@
+<%& '/site/header/' %>
+
+<%
+
+document.executeOnce('/orient-db/')
+document.executeOnce('/sincerity/json/')
+
+try {
+OrientDB.createDatabase({uri: 'remote:localhost/scratchpad', password: 'E5976D471E5F84A53D3E9FEE000B97B10007E0007533E757CE478988C12CB53F'})
+} catch (x) {}
+var db = new OrientDB.Database('remote:localhost/scratchpad')
+
+try {
+	try {
+	db.newClass('Person')
+	} catch (x) {}
+	try {
+	db.execute('CREATE PROPERTY Person.first STRING')
+	} catch (x) {}
+	try {
+	db.execute('CREATE INDEX Person.first NOTUNIQUE')
+	} catch (x) {}
+
+	//db.begin()
+	var doc = db.newDocument('Person', {
+		first: 'Tal',
+		last: 'Liron',
+		address: {street: '3021 W. Wilson Ave', city: 'Chicago'},
+		created: new Date()
+	})
+	doc.save()
+	//db.commit()
+
+	var results = db.query('SELECT * FROM index:Person.first WHERE key = \'Tal\'')
+	//var results = db.query('SELECT * FROM Person')
+	while (results.hasNext()) {
+		var o = results.next()
+		//o = o.field('rid')
+		//print(o.toJSON())
+		print(Sincerity.JSON.to(o))
+		print('<br>')
+	}
+}
+finally {
+	db.close()
+}
+
+
+%>
+
+<h1>OrientDB Experiment</h1>
+
+<p>
+	Click <a href="sample/">here</a> to see the sample resource.
+</p>
+
+<%& '/site/footer/' %>

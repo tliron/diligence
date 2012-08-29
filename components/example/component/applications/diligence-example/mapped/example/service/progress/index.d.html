@@ -1,0 +1,48 @@
+<%& '/site/header/' %>
+<% exampleHeader('Progress', 'Service'); %>
+
+<%
+
+document.executeOnce('/diligence/service/progress/')
+
+if (conversation.request.method.name == 'POST') {
+	var process = Diligence.Progress.startProcess({
+		description: 'Searching for your flights...',
+		maxDuration: 20 * 1000,
+		redirect: conversation.reference,
+		task: {
+			delay: 10000,
+			fn: function(context) {
+				document.executeOnce('/diligence/service/progress/')
+				var process = Diligence.Progress.getProcess()
+				process.addMilestone({
+					name: 'stage2',
+					description: 'Now searching with our partners'
+				})
+			}
+		}
+	})
+	process.redirectWait(conversation, application)
+}
+
+%>
+
+<p>
+	In this example we'll start a fake process with a maximum duration of 20 seconds.
+	After 10 seconds, a milestone will kick in and you'll see that you've entered the
+	"Now searching with our partners" stage. When the process expires, you will be
+	redirected back to this page.
+</p>
+<p>
+	The "please wait" page is intentionally simple. You can, of course, customize it
+	as you wish.
+</p>
+
+<form method="post">
+	<p>
+		<input type="submit" value="Start a process" />
+	</p>
+</form>
+
+<% exampleFooter('Progress', 'Service'); %>
+<%& '/site/footer/' %>

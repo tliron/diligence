@@ -1,0 +1,41 @@
+<html>
+<%
+document.executeOnce('/diligence/service/html/')
+document.executeOnce('/sincerity/localization/')
+%>
+<head>
+	<%= Diligence.HTML.build({_content: process.getDescription(), _tag: 'title'}) %>
+</head>
+<body>
+	<table width="380" height="100%" align="center" valign="center"><tr><td align="center">
+		<%= Diligence.HTML.build({_content: process.getDescription(), _tag: 'p', align: 'center'}) %>
+		<div style="position: relative; width: 300px; height: 30px; text-align: left; background-color: #bdbdbd;">
+			<div style="width: 300px; height: 30px; background-color: #0a0; width: <%= Math.floor(process.getProgress() * 100) %>%;">
+				<div style="position: absolute; top: 0; left: 0; padding-top: 5px; text-align: center; width: 100%;">
+					<%= Math.round(process.getProgress() * 100) %>%
+				</div>
+			</div>
+		</div>
+		<p align="center">
+			<%= Sincerity.Localization.formatDuration(process.getDuration(), true) %> so far
+		</p>
+		<p align="center">
+			<%= lastMilestone.description || lastMilestone.event %>
+		</p>
+		<form id="form" method="post" action="/diligence/wait/">
+			<input type="hidden" name="process" value="<%= key %>" />
+			<noscript>
+				<p align="center">
+					<a href=".">Click to check status</a>
+					<input type="submit" value="Click to check status" />
+				</p>
+			</noscript>
+		</form>
+	</td></tr></table>
+</body>
+<script>
+setTimeout(function() {
+	location.reload(true);
+}, 1000);	
+</script>
+</html>

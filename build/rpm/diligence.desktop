@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Start Diligence
+Comment=Start Diligence
+Terminal=false
+Exec=/usr/lib/diligence/diligence use /usr/lib/savory : start restlet
+Icon=/usr/lib/diligence/diligence.png
+Categories=Application;Development

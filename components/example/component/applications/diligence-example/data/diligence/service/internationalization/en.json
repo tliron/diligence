@@ -1,0 +1,136 @@
+{
+	"direction": "ltr",
+	"text": {
+		"application": {
+			"diligence-example": {
+				"time": "It is now {now}"
+			}
+		},
+		"diligence": {
+			"foundation": {
+				"validation": {
+					"required": "This field is required",
+					"number": {
+						"not": "Must be a number"
+					},
+					"integer": {
+						"not": "Must be an integer"
+					},
+					"email": {
+						"not": "Must be a valid email address"
+					},
+					"reCaptcha": {
+						"not": "You must pass the humanity test"
+					}
+				}
+			},
+			"integration": {
+				"backend": {
+					"reCaptcha": {
+						"noscript": {
+							"header": "(This would be easier with JavaScript enabled in your browser!)",
+							"label": "When you succeed in the humanity test gives you, paste the text here:"
+						}
+					}
+				}
+			},
+			"service": {
+				"authentication": {
+					"form": {
+						"login": {
+							"title": "Welcome, {siteName} Users",
+							"button": {
+								"login": "Login"
+							},
+							"label": {
+								"username": "Username",
+								"password": "Password",
+								"openIdUsername": "{siteName} username"
+							},
+							"alternative": {
+								"title": "Not a {siteName} User?",
+								"register": "Click here to become one",
+								"services": "Or login with your user from one of these services:"
+							},
+							"validation": "Unknown username/password combination"
+						},
+						"openId": {
+							"title": "Welcome, {siteName} Users",
+							"button": {
+								"login": "Login"
+							},
+							"label": {
+								"username": "{siteName} username"
+							}
+						},
+						"info": {
+							"login": "Login",
+							"logout": "Logout",
+							"greeting": "Hello, {name}"
+						}
+					},
+					"status": {
+						"loggedIn": "You are logged in as {name}.",
+						"loggedOut": "You are not logged in."
+					}
+				}
+			},
+			"feature": {
+				"contactUs": {
+					"form": {
+						"title": "Contact Us",
+						"button": {
+							"send": "Send"
+						},
+						"label": {
+							"email": "Your email",
+							"message": "Message",
+							"recaptcha_response_field": "Humanity test"
+						},
+						"success": "Thank you for contacting us!"
+					},
+					"message": {
+						"subject": "Someone has contacted you on {siteName}",
+						"text": "IP address: {address}\nHostname:   {hostName}\n\n{message}"
+					} 
+				},
+				"registration": {
+					"form": {
+						"title": "Create a New {siteName} User",
+						"button": {
+							"create": "Create"
+						},
+						"label": {
+							"email": "Email",
+							"username": "Username",
+							"password": "Password",
+							"password2": "Password validation",
+							"recaptcha_response_field": "Humanity test"
+						},
+						"validation": {
+							"usernameUsed": "The username you provided is already in use, please choose a different one",
+							"passwordDifferent": "The password validation is not the same as the password",
+						},
+						"success": "An email with registration instructions has been sent to you."
+					},
+					"confirmation": {
+						"success": "Thank you for confirming your email address! You may now <a href=\"{loginUri}\">log in</a> with your username.",
+						"invalid": "The confirmation code seems to be invalid."
+					},
+					"message": {
+						"registration": {
+							"subject": "Confirm your registration with {siteName}",
+							"text": "Open the following link in your web browser to confirm your registration for user {username}:\r\n{link}\r\n",
+							"html": "<html><p>Open the following link in your web browser to confirm your registration for user <b>{username}<b>:</p><p><a href=\"{link}\">{link}</a></p></html>"
+						},
+						"welcome": {
+							"subject": "Welcome to {siteName}",
+							"text": "Thank you for registering with {siteName}\r\nYou may now login with user {username}\r\n",
+							"html": "<html><p>Thank you for registering with {siteName}</p><p>You may now login with user <b>{username}</b></p><a href=\"{link}\">{link}</a></p></html>"
+						}
+					}
+				}
+			}
+		}
+	}
+}

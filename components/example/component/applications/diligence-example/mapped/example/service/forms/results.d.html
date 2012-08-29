@@ -1,0 +1,56 @@
+<%{{ head %>
+<style>
+	form > div {
+		line-height: 180%;
+		margin: 12px 0;
+	}
+	form div.error {
+		color: red;
+		display: inline;
+		padding-left: 5px;
+	}
+	form input.error {
+		border: 1px solid red;
+	}
+</style>
+<%}}%>
+<%& '/site/header/' %>
+<%
+
+document.executeOnce('/diligence/service/forms/')
+
+var form = Diligence.Forms.getCapturedForm(conversation)
+var results = Diligence.Forms.getCapturedResults(conversation)
+var from = conversation.query.get('from') || conversation.request.referrerRef
+
+if (results) {
+%>
+<h1>Multiplication Results</h1>
+<div class="note">
+	<%= results.msg %>
+<% if (!results.success && results.errors && results.errors.length) { %>
+	<ul>
+<% for (var name in results.errors) { %>
+		<li style="list-style-type: disc; margin-left: 20px;"><%= name %>: <%= results.errors[name] %></li>
+<% } %>
+	</ul>
+<% } %>
+</div>
+<% } %>
+<p>
+	<a href="<%= from %>">Click to go back</a> or try again:
+</p>
+<form action="<%= conversation.reference %>" method="post">
+	<div>
+		<%= form.htmlText({name: 'first', conversation: conversation, results: results}) %>
+	</div>
+	<div>
+		<%= form.htmlText({name: 'second', conversation: conversation, results: results}) %>
+	</div>
+	<div>
+		<input type="submit" value="Multiply!" />
+	</div>
+</form>
+
+
+<%& '/site/footer/' %>

@@ -1,0 +1,37 @@
+<%
+
+document.executeOnce('/diligence/service/html/')
+document.executeOnce('/prudence/resources/')
+
+var form = Diligence.Resources.getCurrentForm(conversation)
+var results = Diligence.Resources.getCurrentFormResults(conversation)
+
+%>
+<form id="contact-us-form" method="POST">
+	<div class="centerpiece">
+		<%= Diligence.HTML.build({_key: 'diligence.feature.contactUs.form.title', _tag: 'h2'}) %>
+<% if (!form.hasUser) { %>
+		<div class="field">
+			<%= form.htmlText('email', results) %>
+		</div>
+<% } %>
+		<div class="field">
+			<%= form.htmlTextArea('message', results) %>
+		</div>
+<% if (!form.hasUser) { %>
+		<div class="field">
+			<%= Diligence.HTML.label({_content: form.fields.recaptcha_response_field.label}) %>
+			<div id="recaptcha-js"></div>
+			<%= form.htmlError('recaptcha_response_field', results) %>
+		</div>
+<% } %>
+ 		<div class="buttons">
+			<%= Diligence.HTML.submit({_key: 'diligence.feature.contactUs.form.button.send'}) %>
+		</div>
+	</div>
+<% if (!form.hasUser) { %>
+	<noscript>
+		<%& '/diligence/integration/backend/re-captcha/noscript/' %>
+	</noscript>
+<% } %>
+</form>

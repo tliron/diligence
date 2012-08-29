@@ -1,0 +1,36 @@
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd"><%#
+
+This file is part of Diligence for Prudence
+
+Copyright 2011 Three Crickets LLC.
+
+The contents of this file are subject to the terms of the LGPL version 3.0:
+http:www.opensource.org/licenses/lgpl-3.0.html
+
+Alternatively, you can obtain a royalty free commercial license with less
+limitations, transferable or non-transferable, directly from Three Crickets
+at http://threecrickets.com/
+
+%><%
+
+document.executeOnce('/diligence/feature/seo/')
+document.executeOnce('/diligence/foundation/xml/')
+
+var domain = Diligence.SEO.getCurrentDomain(conversation)
+if (domain && domain.isDynamic()) {
+	var rootUri = domain.getRootUri()
+	var sets = domain.getAllSetNames()
+	for (var s in sets) {
+%>
+	<sitemap>
+		<loc><%= (rootUri + '/sitemap-' + sets[s] + '.xml').escapeText() %></loc>
+	</sitemap><%
+	}
+%>
+</sitemapindex><%
+}
+else {
+	conversation.statusCode = 404
+	conversation.stop()
+}
+%>

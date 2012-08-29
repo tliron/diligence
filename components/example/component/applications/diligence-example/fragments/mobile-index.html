@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Diligence</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+
+	<!-- Ubuntu font -->
+	<link href="http://fonts.googleapis.com/css?family=Ubuntu|Ubuntu:italic|Ubuntu:bold|Ubuntu:bolditalic" rel="stylesheet" type="text/css" />
+
+	<!-- Soft Cricket -->
+	<link href="style/three-crickets/soft-cricket-mobile.css" rel="stylesheet" type="text/css" />
+	
+	<!-- Apple Touch -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="apple-touch-icon" href="<%= conversation.pathToBase %>/media/touch/icon.png" />
+	<link rel="apple-touch-startup-image" sizes="768x1004" href="<%= conversation.pathToBase %>/media/touch/tablet_startup.png" />
+	<!-- Make sure the "default" one is the last (for old iOS versions that can't select by size) -->
+	<link rel="apple-touch-startup-image" href="<%= conversation.pathToBase %>/media/touch/phone_startup.png" />
+</head>
+<body>
+	<h1>
+		Diligence<br />
+	</h1>
+	<h3>
+		Scalable Prudence/MongoDB<br />Web Development
+	</h3>
+	
+	<div class="image" style="float: right">
+		<a href="?mode=desktop" class="neutral"><img src="media/diligence/diligence-small.png" /></a>
+	</div>
+
+	<p>Diligence is a collection of ready-to-use code to help you tackle much of the dreary work required for building massively multi-user web applications.</p>
+	<p>It relies on and fully embraces <a href="http://threecrickets.com/prudence/">Prudence</a> 
+	(the "Diligence JavaScript" flavor) and <a href="http://www.mongodb.org/">MongoDB</a>, two platforms designed from the ground-up for REST-friendly scalability.
+	With Diligence you can quickly get users logging in, accessing data with permissions, subscribing to email notifications, shopping and paying you, interacting with each
+	other, and managing their own content on your site. It lets you cleanly integrate with third party technologies and services, 
+	from <a href="http://www.sencha.com/products/extjs/">Ext JS</a> and <a href="http://www.sencha.com/products/touch/">Sencha Touch</a> to Facebook.</p>
+
+	<h2>Want More?</h2>
+	
+	<p>You're already seeing the first demo: we've detected that you're using a mobile web browser, and so are showing you this mobile-optimized page.</p>
+	
+	<p>From here you can continue to:</p>
+	
+	<p align="center"><a href="?mode=desktop">The complete Diligence site</a></p>
+	<p align="center"><a href="about/integration/sencha/touch/">The Sencha Touch demo</a></p>
+	
+	<div class="image" style="text-align: center; margin-top: 50px;">
+		<img src="media/three-crickets/soft-cricket/ruler.png" />
+	</div>
+	<div class="image" style="text-align: center;">
+		<a href="http://threecrickets.com/" class="neutral"><img src="media/three-crickets/three-crickets-small.png" /></a>
+	</div>
+</body>
+<script>
+// Moves toolbar out of the way in iOS
+window.scrollTo(0, 1);	
+</script>
+</html>
