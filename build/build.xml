@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <project name="Diligence" default="build">
 
-	<property file="custom.properties" />
+	<property name="root" location="${basedir}/.." />
+
+	<property file="${root}/build/private.properties" />
+	<property file="${root}/build/custom.properties" />
 	
-	<property name="root" location=".." />
 	<property name="manual" location="${root}/components/reference/manual" />
 	<property name="framework" location="${root}/components/framework" />
 	<property name="example" location="${root}/components/example" />
@@ -62,7 +64,7 @@
 			<fileset dir="${manual}" includes="*.js" />
 		</copy>
 		<mkdir dir="${cache.example}/.sincerity" />
-		<exec executable="${sincerity.home}/sincerity">
+		<exec executable="${sincerity}">
 			<arg value="container:use" />
 			<arg value="${cache.example}" />
 			<arg value=":" />
@@ -72,9 +74,9 @@
 		</exec>
 	</target>
 
-	<target name="deploy" if="maven" description="Deploy to Maven repository">
+	<target name="deploy-maven" if="maven" description="Deploy to Maven repository">
 		<copy todir="${cache.maven.pom}">
-			<fileset dir="maven" excludes="*~" />
+			<fileset dir="${root}/build/maven" excludes="*~" />
 			<filterchain>
 				<replacetokens>
 					<token key="VERSION" value="${version}" />
@@ -85,27 +87,51 @@
 		</copy>
 		<exec executable="${maven}" dir="${cache.maven.pom}" failifexecutionfails="false">
 			<arg value="deploy" />
-			<arg value="-DaltDeploymentRepository=${maven.repo}" />
+			<arg value="-DaltDeploymentRepository=default::default::${distribution.repo}" />
 		</exec>
 	</target>
 
-	<target name="components" depends="manual, deploy" description="Assemble components" />
+	<target name="components" depends="manual, deploy-maven" description="Assemble components" />
 
-	<target name="distribution" depends="components" description="Create Sincerity container">
+	<target name="distribution-overwrite" description="Create Sincerity container" unless="content-present">
+		<antcall target="deploy-maven" />
 		<copy todir="${distribution.content}/configuration/sincerity">
 			<fileset dir="sincerity" />
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+			</filterchain>
 		</copy>
-		<exec executable="${sincerity.home}/sincerity">
+		<exec executable="${sincerity}">
 			<arg value="container:create" />
 			<arg value="--force" />
 			<arg value="${distribution.content}" />
 			<arg value="${sincerity.template}" />
 			<arg value=":" />
 			<arg value="repositories:attach" />
+			<arg value="public" />
+			<arg value="${component}" />
+			<arg value="maven" />
+			<arg value="${distribution.repo}" />
+			<arg value=":" />
+			<arg value="repositories:attach" />
+			<arg value="public" />
 			<arg value="three-crickets" />
+			<arg value="maven" />
+			<arg value="${dependencies.repo}" />
 			<arg value=":" />
 			<arg value="dependencies:install" />
+			<arg value=":" />
+			<arg value="repositories:detach" />
+			<arg value="public" />
+			<arg value="${component}" />
 		</exec>
+	</target>
+
+	<target name="distribution" description="Create Sincerity container if not present">
+		<available file="${distribution.content}" property="content-present" />
+		<antcall target="distribution-overwrite" />
 	</target>
 
 	<target name="package-zip" depends="distribution" description="Create distribution package">
@@ -157,7 +183,7 @@
 		<copy todir="${distribution.content}/programs">
 			<fileset dir="${manual}" includes="*.js" />
 		</copy>
-		<exec executable="${sincerity.home}/sincerity">
+		<exec executable="${sincerity}">
 			<arg value="container:use" />
 			<arg value="${distribution.content}" />
 			<arg value=":" />
