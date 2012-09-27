@@ -14,7 +14,7 @@
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman newcent
+\font_roman default
 \font_sans default
 \font_typewriter default
 \font_default_family default
@@ -220,8 +220,11 @@ Caching Per User
 \begin_layout Standard
 This very powerful feature uses a cache key patten handler to inject the
  currently logged in user ID into the cache key.
- This lets you cache any /web/dynamic/ or /web/fragment/ resource <i>per
- user</i>, which can do wonders towards helping your site scale.
+ This lets you cache any /web/dynamic/ or /web/fragment/ resource 
+\emph on
+per user
+\emph default
+, which can do wonders towards helping your site scale.
  Of course, it does not make sense to cache every dynamic part of a page,
  but if you can indetify those fragments that look different only for different
  users then you've achieved a lot.
@@ -12151,7 +12154,7 @@ A full tutorial of Ext JS grids is beyond what we can do in this Manual,
 You start by creating a 
 \begin_inset CommandInset href
 LatexCommand href
-name "“Model” class"
+name "``Model'' class"
 target "http://docs.sencha.com/ext-js/4-1/#!/api/Ext.data.Model"
 
 \end_inset
@@ -12211,7 +12214,7 @@ stringid
 The model also defines a 
 \begin_inset CommandInset href
 LatexCommand href
-name "“Proxy,”"
+name "``Proxy,''"
 target "http://docs.sencha.com/ext-js/4-1/#!/api/Ext.data.proxy.Proxy"
 
 \end_inset
@@ -12271,7 +12274,7 @@ documents
 The 
 \begin_inset CommandInset href
 LatexCommand href
-name "“Store”"
+name "``Store''"
 target "http://docs.sencha.com/ext-js/4-1/#!/api/Ext.data.Store"
 
 \end_inset
@@ -12336,7 +12339,7 @@ _id
 By default, the grid is not editable, but we can add the 
 \begin_inset CommandInset href
 LatexCommand href
-name "“CellEditing”"
+name "``CellEditing''"
 target "http://docs.sencha.com/ext-js/4-1/#!/api/Ext.grid.plugin.CellEditing"
 
 \end_inset
@@ -13708,7 +13711,7 @@ A full tutorial of Ext JS trees is beyond what we can do in this Manual,
 The 
 \begin_inset CommandInset href
 LatexCommand href
-name "“TreeStore”"
+name "``TreeStore''"
 target "http://docs.sencha.com/ext-js/4-1/#!/api/Ext.data.TreeStore"
 
 \end_inset
@@ -13747,7 +13750,7 @@ root
 The store also defines a 
 \begin_inset CommandInset href
 LatexCommand href
-name "“Proxy,”"
+name "``Proxy,''"
 target "http://docs.sencha.com/ext-js/4-1/#!/api/Ext.data.proxy.Proxy"
 
 \end_inset
