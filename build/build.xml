@@ -141,7 +141,7 @@
 		</zip>
 	</target>
 	
-	<target name="package-platform-installers" depends="distribution" description="Create InstallBuilder installer">
+	<target name="package-platform-installers" depends="distribution" description="Create InstallBuilder installer" if="installbuilder">
 		<copy todir="${cache}" file="${root}/build/installbuilder/${component}.xml">
 			<filterchain>
 				<replacetokens>
@@ -172,6 +172,8 @@
 			<fileset dir="${distribution}" includes="*.run" />
 		</chmod>
 	</target>
+
+	<target name="package" depends="package-zip, package-platform-installers" description="Create all packages and installers" />
 
 	<target name="build" depends="distribution" description="Build distribution" />
 	

@@ -56,7 +56,5 @@ a different URL.
 3) Finally, Sincerity is used to assemble the distribution into the
 "build/distribution/content" directory, from where it is ready to run.
 
-Optionally, you can run "ant package-zip" and "ant package-installbuilder"
-to package the distribution. Packages will be put in the
-"build/distribution" directory.
- 
+Optionally, you can run "ant package" to package the distribution. Packages
+will be put in the "build/distribution" directory.
