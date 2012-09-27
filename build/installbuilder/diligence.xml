@@ -1,7 +1,7 @@
 <project>
     <shortName>diligence</shortName>
     <fullName>Diligence</fullName>
-    <version>1.0-beta1</version>
+    <version>@VERSION@</version>
     <licenseFile>${build_project_directory}/../../components/notices/license.txt</licenseFile>
     <wrapLicenseFileText>0</wrapLicenseFileText>
     <leftImage>${build_project_directory}/../../components/media/diligence.png</leftImage>
