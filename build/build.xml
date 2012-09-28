@@ -11,7 +11,7 @@
 	<property name="example" location="${root}/components/example" />
 	
 	<property name="cache" location="${root}/build/cache" />
-	<property name="cache.manual" location="${cache}/framework/reference/manuals/${maven.group}/${maven.artifact}/${version}" />
+	<property name="cache.manual" location="${cache}/framework/reference/manuals/${maven.group}/${maven.artifact}/${version}${version.postfix}" />
 	<property name="cache.example" location="${cache}/example" />
 	<property name="cache.maven.pom" location="${cache}/maven/pom" />
 	<property name="cache.maven.build" location="${cache}/maven/build" />
@@ -54,7 +54,7 @@
 			<fileset dir="${manual}" excludes="*~, *.js" />
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${version}" />
+					<token key="VERSION" value="${version}${version.postfix}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -79,7 +79,9 @@
 			<fileset dir="${root}/build/maven" excludes="*~" />
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${version}" />
+					<token key="VERSION" value="${version}${version.postfix}" />
+					<token key="SINCERITY.MONGODB.VERSION" value="${sincerity.mongodb.version}" />
+					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
 					<token key="ROOT" value="${root}" />
 					<token key="CACHE" value="${cache.maven.build}" />
 				</replacetokens>
@@ -99,7 +101,11 @@
 			<fileset dir="sincerity" />
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${version}" />
+					<token key="VERSION" value="${version}${version.postfix}" />
+					<token key="SINCERITY.VERSION" value="${sincerity.version}" />
+					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
+					<token key="DOCUMENTATION.VERSION" value="${documentation.version}" />
+					<token key="MONGOVISION.VERSION" value="${mongovision.version}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -135,7 +141,7 @@
 	</target>
 
 	<target name="package-zip" depends="distribution" description="Create distribution package">
-		<zip destfile="${distribution}/${component}-${version}.zip">
+		<zip destfile="${distribution}/${component}-${version}${version.postfix}.zip">
 			<zipfileset dir="${distribution.content}" excludes="cache/, logs/, sincerity" />
 			<zipfileset dir="${distribution.content}" includes="sincerity" filemode="755" />
 		</zip>
@@ -145,7 +151,7 @@
 		<copy todir="${cache}" file="${root}/build/installbuilder/${component}.xml">
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${version}" />
+					<token key="VERSION" value="${version}${version.postfix}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -165,8 +171,8 @@
 			<arg value="--setvars" />
 			<arg value="project.outputDirectory=${cache}" />
 		</exec>
-		<zip destfile="${distribution}/${component}-${version}-osx-installer.zip">
-			<zipfileset dir="${cache}/${component}-${version}-osx-installer.app" prefix="${component}-${version}-osx-installer.app" />
+		<zip destfile="${distribution}/${component}-${version}${version.postfix}-osx-installer.zip">
+			<zipfileset dir="${cache}/${component}-${version}${version.postfix}-osx-installer.app" prefix="${component}-${version}${version.postfix}-osx-installer.app" />
 		</zip>
 		<chmod perm="ugo+rx">
 			<fileset dir="${distribution}" includes="*.run" />
