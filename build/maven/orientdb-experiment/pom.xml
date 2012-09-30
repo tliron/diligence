@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>com.threecrickets.sincerity.library</groupId>
 			<artifactId>sincerity-orientdb</artifactId>
-			<version>1.0</version>
+			<version>[1.0,1.1)</version>
 		</dependency>
 	</dependencies>
 
