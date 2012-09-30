@@ -11,13 +11,30 @@
 	<property name="example" location="${root}/components/example" />
 	
 	<property name="cache" location="${root}/build/cache" />
-	<property name="cache.manual" location="${cache}/framework/reference/manuals/${maven.group}/${maven.artifact}/${version}${version.postfix}" />
+	<property name="cache.manual" location="${cache}/framework/reference/manuals/${component.group}/${component.artifact}/${component.version}${component.version.postfix}" />
 	<property name="cache.example" location="${cache}/example" />
 	<property name="cache.maven.pom" location="${cache}/maven/pom" />
 	<property name="cache.maven.build" location="${cache}/maven/build" />
 
 	<property name="distribution" location="${root}/build/distribution" />
 	<property name="distribution.content" location="${distribution}/content" />
+
+	<property name="googlecode" location="${dependencies}/libraries/python/googlecode_upload.py" />
+	<macrodef name="googlecode">
+		<attribute name="description" />
+		<attribute name="label" />
+		<attribute name="suffix" />
+		<sequential>
+			<exec executable="${googlecode}">
+				<arg value="--project=${component}" />
+				<arg value="--user=${googlecode.username}" />
+				<arg value="--password=${googlecode.password}" />
+				<arg value="--summary=@{description} for version ${component.version}${component.version.postfix}" />
+				<arg value="--labels=${component.version.short}${component.version.short.postfix},@{label}" />
+				<arg value="${distribution}/${component}-${component.version}${component.version.postfix}@{suffix}" />
+			</exec>
+		</sequential>
+	</macrodef>
 
 	<target name="manual" description="Create manual if not present">
 		<available file="${cache.manual}" property="manual-present" />
@@ -54,7 +71,7 @@
 			<fileset dir="${manual}" excludes="*~, *.js" />
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${version}${version.postfix}" />
+					<token key="VERSION" value="${component.version}${component.version.postfix}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -75,13 +92,14 @@
 	</target>
 
 	<target name="deploy-maven" if="maven" description="Deploy to Maven repository">
+		<antcall target="manual" />
 		<delete dir="${cache.maven.pom}" />
 		<delete dir="${cache.maven.build}" />
 		<copy todir="${cache.maven.pom}">
 			<fileset dir="${root}/build/maven" excludes="*~" />
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${version}${version.postfix}" />
+					<token key="VERSION" value="${component.version}${component.version.postfix}" />
 					<token key="SINCERITY.MONGODB.VERSION" value="${sincerity.mongodb.version}" />
 					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
 					<token key="ROOT" value="${root}" />
@@ -95,6 +113,15 @@
 		</exec>
 	</target>
 
+	<target name="deploy-googlecode" if="googlecode.password" description="Deploy to Google Code">
+		<googlecode description="Universal installer" label="universal" suffix="-installer.jar" />
+		<googlecode description="Zip distribution" label="zip" suffix=".zip" />
+		<googlecode description="RPM package" label="rpm" suffix=".rpm" />
+		<googlecode description="Debian package" label="deb" suffix=".deb" />
+		<googlecode description="Mac OS X installer" label="mac" suffix="-osx-installer.zip" />
+		<googlecode description="Windows installer" label="windows" suffix="-windows-installer.exe" />
+	</target>
+
 	<target name="components" depends="manual, deploy-maven" description="Assemble components" />
 
 	<target name="distribution-overwrite" description="Create Sincerity container" unless="content-present">
@@ -103,7 +130,8 @@
 			<fileset dir="sincerity" />
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${version}${version.postfix}" />
+					<token key="VERSION" value="${component.version}${component.version.postfix}" />
+					<token key="DEPENDENCIES" value="${dependencies.repo}" />
 					<token key="SINCERITY.VERSION" value="${sincerity.version}" />
 					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
 					<token key="DOCUMENTATION.VERSION" value="${documentation.version}" />
@@ -143,7 +171,7 @@
 	</target>
 
 	<target name="package-zip" depends="distribution" description="Create distribution package">
-		<zip destfile="${distribution}/${component}-${version}${version.postfix}.zip">
+		<zip destfile="${distribution}/${component}-${component.version}${component.version.postfix}.zip">
 			<zipfileset dir="${distribution.content}" excludes="cache/, logs/, sincerity" />
 			<zipfileset dir="${distribution.content}" includes="sincerity" filemode="755" />
 		</zip>
@@ -153,7 +181,7 @@
 		<copy todir="${cache}" file="${root}/build/installbuilder/${component}.xml">
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${version}${version.postfix}" />
+					<token key="VERSION" value="${component.version}${component.version.postfix}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -173,8 +201,8 @@
 			<arg value="--setvars" />
 			<arg value="project.outputDirectory=${cache}" />
 		</exec>
-		<zip destfile="${distribution}/${component}-${version}${version.postfix}-osx-installer.zip">
-			<zipfileset dir="${cache}/${component}-${version}${version.postfix}-osx-installer.app" prefix="${component}-${version}${version.postfix}-osx-installer.app" />
+		<zip destfile="${distribution}/${component}-${component.version}${component.version.postfix}-osx-installer.zip">
+			<zipfileset dir="${cache}/${component}-${component.version}${component.version.postfix}-osx-installer.app" prefix="${component}-${component.version}${component.version.postfix}-osx-installer.app" />
 		</zip>
 		<chmod perm="ugo+rx">
 			<fileset dir="${distribution}" includes="*.run" />
