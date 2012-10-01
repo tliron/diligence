@@ -244,6 +244,102 @@ Diligence.REST = Diligence.REST || function() {
 		
 		return Public
 	}())
+	
+	/**
+	 * A RESTful resource for structured documented represented in JSON, JSON-P,
+	 * XML, a human-friendly HTML representation that can be opened in a web
+	 * browser, or as a pure JVM objects (for internal requests). 
+	 * 
+	 * @class
+	 * @name Diligence.REST.DocumentResource
+	 * @augments Diligence.REST.Resource
+	 */
+	Public.DocumentResource = Sincerity.Classes.define(function(Module) {
+		/** @exports Public as Diligence.REST.DocumentResource */
+		var Public = {}
+
+		/** @ignore */
+		Public._inherit = Module.Resource
+
+		/** @ignore */
+		Public._configure = ['getDocument']
+
+		/** @ignore */
+		Public._construct = function(config) {
+			arguments.callee.overridden.call(this, this)
+		}
+
+		Public.mediaTypes = [
+  			'text/plain',
+ 			'application/json',
+ 			'application/javascript',
+ 			'application/xml',
+ 			'text/html'
+ 			'application/java',
+ 		]
+
+		Public.doGet = function(conversation) {
+			var doc = this.getDocument(conversation)
+			
+			var query = Prudence.Resources.getQuery(conversation, {human: 'bool', format: 'string', jsonp: 'string'})
+			query.human = Sincerity.Objects.ensure(query.human, false) // make sure it's never null
+			
+			if (Sincerity.Objects.exists(query.format)) {
+				// Allow selection of format via "?format=" (for clients that are not fully RESTful)
+				// This will override whatever has been selected by content negotiation
+				switch (query.format) {
+					case 'json':
+						conversation.mediaTypeName = 'application/json'
+						break
+					case 'jsonp':
+						conversation.mediaTypeName = 'application/javascript'
+						break
+					case 'xml':
+						conversation.mediaTypeName = 'application/xml'
+						break
+					case 'html':
+						conversation.mediaTypeName = 'text/html'
+						break
+					default:
+						// Unsupported format
+						return Prudence.Resources.Status.ClientError.BadRequest
+				}
+			}
+			
+			switch (String(conversation.mediaTypeName)) {
+				case 'application/java':
+					if (!conversation.internal) {
+						// Only internal clients should be requesting this media type!
+						return Prudence.Resources.Status.ClientError.BadRequest
+					}
+					return result
+			  
+				case 'application/json':
+				case 'text/plain':
+					return Sincerity.JSON.to(doc, query.human)
+			
+				case 'application/xml':
+					return Sincerity.XML.to(doc, query.human)
+
+				case 'application/javascript':
+					if (!Sincerity.Objects.exists(query.jsonp) || (query.jsonp.length == 0)) {
+						// JSON-P requires the "jsonp" query parameter
+						// TODO: should we also test the query.jsonp is a legal JavaScript function name?
+						return Prudence.Resources.Status.ClientError.BadRequest
+					}
+					return query.jsonp + '(' + Sincerity.JSON.to(doc) + ')'
+					
+				case 'text/html':
+					return '<html><body><pre>' + Sincerity.XML.escapeElements(Sincerity.JSON.to(doc, true)) + '</pre></body></html>'
+
+				default:
+					// Should never happen!
+					return Prudence.Resources.Status.ServerError.Internal
+			}
+		}
+
+		return Public
+	}(Public))
 
 	/**
 	 * A RESTful resource for any iterable data.
@@ -296,11 +392,11 @@ Diligence.REST = Diligence.REST || function() {
 		}
 		
 		Public.mediaTypes = [
-			'application/json',
-			'application/xml',
-			'application/java',
-			'text/plain',
-			'text/html'
+   			'text/plain',
+ 			'application/json',
+ 			'application/xml',
+ 			'application/java',
+ 			'text/html'
 		]
 
 		Public.doGet = function(conversation) {
@@ -331,18 +427,22 @@ Diligence.REST = Diligence.REST || function() {
 			}
 			*/
 			
-			if (query.format) {
-				// Force a format
+			if (Sincerity.Objects.exists(query.format)) {
+				// Allow selection of format via "?format=" (for clients that are not fully RESTful)
+				// This will override whatever has been selected by content negotiation
 				switch (query.format) {
+					case 'json':
+						conversation.mediaTypeName = 'application/json'
+						break
 					case 'xml':
 						conversation.mediaTypeName = 'application/xml'
 						break
 					case 'html':
 						conversation.mediaTypeName = 'text/html'
 						break
-					case 'json':
-						conversation.mediaTypeName = 'application/json'
-						break
+					default:
+						// Unsupported format
+						return Prudence.Resources.Status.ClientError.BadRequest
 				}
 			}
 
@@ -949,7 +1049,43 @@ Diligence.REST = Diligence.REST || function() {
 
 		return Public
 	}(Public))
-	
+
+	/**
+	 * A logging resource.
+	 * 
+	 * @class
+	 * @name Diligence.REST.LoggingResource
+	 */
+	Public.LoggingResource = Sincerity.Classes.define(function(Module) {
+		/** @exports Public as Diligence.REST.LoggingResource */
+		var Public = {}
+		
+		/** @ignore */
+		Public._inherit = Module.Resource
+
+		Public.doPost = function(conversation) {
+			var record = Prudence.Resources.getEntity(conversation, 'json')
+			
+			if (!Sincerity.Objects.exists(record) || !Sincerity.Objects.exists(record.message)) {
+				return Prudence.Resources.Status.ClientError.BadRequest
+			}
+			
+			// Default level
+			record.level = record.level || 'info'
+			
+			var args = [record.level, record.message]
+			if (Sincerity.Objects.exists(record.values)) {
+				args = args.concat(record.values)
+			}
+			
+			var logger = Prudence.Logging.getLogger(record.logger)
+			logger.log.apply(logger, args)
+			return null
+		}
+		
+		return Public
+	}(Public))
+
 	//
 	// Initialization
 	//
