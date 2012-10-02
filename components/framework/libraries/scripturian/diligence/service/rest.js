@@ -246,7 +246,7 @@ Diligence.REST = Diligence.REST || function() {
 	}())
 	
 	/**
-	 * A RESTful resource for structured documented represented in JSON, JSON-P,
+	 * A RESTful resource for structured documents represented in JSON, JSON-P,
 	 * XML, a human-friendly HTML representation that can be opened in a web
 	 * browser, or as a pure JVM objects (for internal requests). 
 	 * 
@@ -274,7 +274,7 @@ Diligence.REST = Diligence.REST || function() {
  			'application/json',
  			'application/javascript',
  			'application/xml',
- 			'text/html'
+ 			'text/html',
  			'application/java',
  		]
 
@@ -319,7 +319,11 @@ Diligence.REST = Diligence.REST || function() {
 					return Sincerity.JSON.to(doc, query.human)
 			
 				case 'application/xml':
-					return Sincerity.XML.to(doc, query.human)
+					var xml = Sincerity.XML.to(doc)
+					if (query.human && xml) {
+						xml = Sincerity.XML.humanize(xml)
+					}
+					return xml || ''
 
 				case 'application/javascript':
 					if (!Sincerity.Objects.exists(query.jsonp) || (query.jsonp.length == 0)) {
@@ -342,10 +346,9 @@ Diligence.REST = Diligence.REST || function() {
 	}(Public))
 
 	/**
-	 * A RESTful resource for any iterable data.
-	 * Supports representation in JSON, XML, plain JavaScript (for
-	 * internal requests) and human-friendly HTML representation
-	 * that can be opened in a web browser.
+	 * A RESTful resource for iterable structured documents represented in JSON, JSON-P,
+	 * XML, a human-friendly HTML representation that can be opened in a web
+	 * browser, or as a pure JVM objects (for internal requests). 
 	 * <p>
 	 * The instance can be constructed in 'plural mode', which means
 	 * that a GET will return an array of documents, a DELETE
@@ -394,9 +397,10 @@ Diligence.REST = Diligence.REST || function() {
 		Public.mediaTypes = [
    			'text/plain',
  			'application/json',
+ 			'application/javascript',
  			'application/xml',
- 			'application/java',
- 			'text/html'
+ 			'text/html',
+ 			'application/java'
 		]
 
 		Public.doGet = function(conversation) {
@@ -433,6 +437,9 @@ Diligence.REST = Diligence.REST || function() {
 				switch (query.format) {
 					case 'json':
 						conversation.mediaTypeName = 'application/json'
+						break
+					case 'jsonp':
+						conversation.mediaTypeName = 'application/javascript'
 						break
 					case 'xml':
 						conversation.mediaTypeName = 'application/xml'
@@ -558,7 +565,8 @@ Diligence.REST = Diligence.REST || function() {
 				format: 'string',
 				mode: 'string[]',
 				start: 'int',
-				limit: 'int'
+				limit: 'int',
+				jsonp: 'string'
 			})
 			query.human = query.human || false
 			query.limit = query.limit || minLimit
@@ -622,6 +630,10 @@ Diligence.REST = Diligence.REST || function() {
 					}
 					return Prudence.Resources.Status.ClientError.BadRequest
 
+				case 'application/json':
+				case 'text/plain':
+					return Sincerity.JSON.to(value, query.human)
+
 				case 'application/xml':
 					var xml = Sincerity.XML.to({documents: value})
 					if (query.human && xml) {
@@ -629,6 +641,14 @@ Diligence.REST = Diligence.REST || function() {
 					}
 					return xml || ''
 				
+				case 'application/javascript':
+					if (!Sincerity.Objects.exists(query.jsonp) || (query.jsonp.length == 0)) {
+						// JSON-P requires the "jsonp" query parameter
+						// TODO: should we also test the query.jsonp is a legal JavaScript function name?
+						return Prudence.Resources.Status.ClientError.BadRequest
+					}
+					return query.jsonp + '(' + Sincerity.JSON.to(value) + ')'
+
 				case 'text/html':
 					document.passThroughDocuments.add(htmlUri)
 					var html = Prudence.Resources.generateHtml(htmlUri, {
@@ -638,9 +658,11 @@ Diligence.REST = Diligence.REST || function() {
 						pathToBase: conversation.pathToBase
 					})
 					return html || '<html><body>Could not represent as HTML</body></html>'
+
+				default:
+					// Should never happen!
+					return Prudence.Resources.Status.ServerError.Internal
 			}
-			
-			return Sincerity.JSON.to(value, query.human)
 		}
 
 		function extract(doc) {
@@ -661,7 +683,7 @@ Diligence.REST = Diligence.REST || function() {
 	}(Public))
 
 	/**
-	 * A RESTful resource for an in-memory data structure.
+	 * A RESTful resource for iterable in-memory structed documents.
 	 * 
 	 * @class
 	 * @name Diligence.REST.InMemoryResource
