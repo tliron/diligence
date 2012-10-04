@@ -101,36 +101,51 @@ Ext.onReady(function() {
 		Ext.getCmp('freeze').toggle(true);
 	}
 	
-	Ext.create('Diligence.data.Store', {
-		storeId: 'programs',
+	Ext.define('Program', {
+		extend: 'Ext.data.Model',
+		fields: [
+			'_id',
+			'name',
+			'code'
+		],
+		idProperty: '_id',
 		proxy: {
+			type: 'diligence',
 			url: 'programs/'
-		},
+		}
+	});
+
+	Ext.create('Ext.data.Store', {
+		storeId: 'programs',
+		model: 'Program',
 		sorters: ['name'],
 		pageSize: pageSize,
 		autoSync: true,
-		autoLoad: {
-			params: {
-				start: 0,
-				meta: true // will cause the server to send metaData that will configure us
-			}
-		}
+		autoLoad: true
 	});
 	
 	// See: http://www.sencha.com/forum/showthread.php?131656-TextArea-with-wrap-off
 	var noWrapTextAreaTpl = Ext.create('Ext.XTemplate',
-        '<textarea id="{id}" ',
-            '<tpl if="name">name="{name}" </tpl>',
-            '<tpl if="rows">rows="{rows}" </tpl>',
-            '<tpl if="cols">cols="{cols}" </tpl>',
-            '<tpl if="tabIdx">tabIndex="{tabIdx}" </tpl>',
-            'class="{fieldCls} {typeCls}" ',
-            'autocomplete="off" spellcheck="off" wrap="off">',
-        '</textarea>',
-        {
-            compiled: true,
-            disableFormats: true
-        }
+		'<textarea id="{id}" ',
+			'<tpl if="name"> name="{name}"</tpl>',
+			'<tpl if="rows"> rows="{rows}"</tpl>',
+			'<tpl if="cols"> cols="{cols}"</tpl>',
+			'<tpl if="cols"> cols="{cols}"</tpl>',
+			'<tpl if="placeholder"> placeholder="{placeholder}"</tpl>',
+			'<tpl if="size"> size="{size}"</tpl>',
+			'<tpl if="maxLength !== undefined"> maxlength="{maxLength}"</tpl>',
+			'<tpl if="readOnly"> readonly="readonly"</tpl>',
+			'<tpl if="disabled"> disabled="disabled"</tpl>',
+			'<tpl if="tabIdx"> tabIndex="{tabIdx}"</tpl>',
+			' class="{fieldCls} {typeCls}" ',
+			'<tpl if="fieldStyle"> style="{fieldStyle}"</tpl>',
+			' autocomplete="off" spellcheck="false" wrap="off">\n',
+			'<tpl if="value">{[Ext.util.Format.htmlEncode(values.value)]}</tpl>',
+		'</textarea>',
+	    {
+	        compiled: true,
+	        disableFormats: true
+	    }
 	);
 
 	Ext.create('Ext.container.Viewport', {
@@ -393,11 +408,11 @@ Ext.onReady(function() {
 					queryMode: 'local',
 					store: {
 						fields: ['file'],
-						data: [{file: 'prudence.log'}, {file: 'web.log'}, {file: 'wrapper.log'}, {file: 'run.log'}]
+						data: [{file: 'common.log'}, {file: 'web.log'}, {file: 'wrapper.log'}, {file: 'run.log'}]
 					},
 					valueField: 'file',
 					displayField: 'file',
-					value: 'prudence.log',
+					value: 'common.log',
 					width: 150,
 					listeners: {
 						select: function(combo, model) {

@@ -1,9 +1,9 @@
 
+document.executeOnce('/diligence/feature/console/')
 document.executeOnce('/diligence/service/rest/')
 document.executeOnce('/diligence/service/rpc/')
 document.executeOnce('/diligence/service/forms/')
 document.executeOnce('/diligence/integration/frontend/sencha/')
-document.executeOnce('/prudence/resources/')
 document.executeOnce('/sincerity/jvm/')
 
 // For the REST Service example
@@ -118,7 +118,11 @@ function getTextpackNodeText(id, node) {
 // The resources
 
 resources = {
-	'log':                      new Prudence.Resources.LoggingResource(),
+	'log':                      new Diligence.REST.LoggingResource(),
+	'console.execution':        new Diligence.Console.ExecutionResource(),
+	'console.log':              new Diligence.Console.LogResource(),
+	'console.programs':         new Diligence.Console.ProgramsResource(),
+	'console.programs.plural':  new Diligence.Console.ProgramsResource({plural: true}),
 	'calc.rpc':                 new Diligence.RPC.Resource({namespaces: {Calc: Calc}}),
 	'calc.direct':              new Diligence.Sencha.DirectResource({name: 'Diligence', namespaces: {Calc: CalcDirect}}),
 	'shoppingcart.direct':      new Diligence.Sencha.DirectResource({name: 'Diligence', objects: {ShoppingCart: new ShoppingCart()}}),

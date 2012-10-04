@@ -11,6 +11,14 @@
 // at http://threecrickets.com/
 //
 
+document.executeOnce('/diligence/service/rest/')
+document.executeOnce('/prudence/resources/')
+document.executeOnce('/prudence/logging/')
+document.executeOnce('/sincerity/classes/')
+document.executeOnce('/sincerity/json/')
+document.executeOnce('/sincerity/files/')
+document.executeOnce('/sincerity/objects/')
+
 var Diligence = Diligence || {}
 
 /**
@@ -48,7 +56,15 @@ var Diligence = Diligence || {}
 Diligence.Console = Diligence.Console || function() {
 	/** @exports Public as Diligence.Console */
     var Public = {}
-    
+
+	/**
+	 * The library's logger.
+	 *
+	 * @field
+	 * @returns {Prudence.Logging.Logger}
+	 */
+	Public.logger = Prudence.Logging.getLogger('console')
+
 	/**
 	 * Installs the library's pass-throughs and REST routes.
 	 * <p>
@@ -87,6 +103,205 @@ Diligence.Console = Diligence.Console || function() {
 		router.captureAndHide(uri + 'programs/', '/diligence/feature/console/programs/')
 		router.capture(uri + 'help/', '/content/diligence/feature/console/help.html')
 	}
-    
-    return Public
+	
+	/**
+	 * Execution resource.
+	 * 
+	 * @class
+	 * @name Diligence.Console.ExecutionResource
+	 * @augments Diligence.REST.Resource
+	 */
+	Public.ExecutionResource = Sincerity.Classes.define(function(Module) {
+		/** @exports Public as Diligence.Console.ExecutionResource */
+		var Public = {}
+
+		/** @ignore */
+		Public._inherit = Diligence.REST.Resource
+		
+		/** @ignore */
+		Public._construct = function(config) {
+			arguments.callee.overridden.call(this, this)
+		}
+
+		Public.mediaTypes = [
+			'text/plain'
+		]
+
+		Public.doPost = function(conversation) {
+			var _form = Prudence.Resources.getForm(conversation, {
+				program: 'string',
+				download: 'bool'
+			})
+			
+			// 'download' means we want an attachment disposition
+			if (_form.download) {
+				conversation.disposition.type = 'attachment'
+				conversation.disposition.filename = 'console.txt'
+			}
+			
+			var representation = ''
+
+			function print(/* arguments */) {
+				for (var a = 0, length = arguments.length; a < length; a++) {
+					var arg = arguments[a]
+					if (Sincerity.Objects.exists(arg)) {
+						representation += String(arg)
+					}
+				}
+			}
+			
+			function println(/* arguments */) {
+				print.apply(this, arguments)
+				representation += '\n'
+			}
+				
+			logger.info('Executing')
+			try {
+				eval(_form.program)
+			}
+			catch (x) {
+				logger.exception(x, 'warn')
+			}
+			
+			return representation
+		}
+		
+		//
+		// Private
+		//
+
+		var logger = Module.logger
+
+		return Public
+	}(Public))
+
+	/**
+	 * Log resource.
+	 * 
+	 * @class
+	 * @name Diligence.Console.LogResource
+	 * @augments Diligence.REST.Resource
+	 */
+	Public.LogResource = Sincerity.Classes.define(function(Module) {
+		/** @exports Public as Diligence.Console.LogResource */
+		var Public = {}
+
+		/** @ignore */
+		Public._inherit = Diligence.REST.Resource
+		
+		/** @ignore */
+		Public._construct = function(config) {
+			arguments.callee.overridden.call(this, this)
+		}
+
+		Public.mediaTypes = [
+			'application/json'
+		]
+
+		Public.handleGetInfo = function(conversation) {
+			var query = Prudence.Resources.getQuery(conversation, {
+				name: 'string'
+			})
+			
+			query.name = 'logs/' + (query.name || 'common.log')
+
+			var root = java.lang.System.getProperty('sincerity.container')
+			var file = new java.io.File(new java.io.File(root), query.name)
+		    var lastModified = file.lastModified()
+		    if (lastModified != 0) {
+		    	return lastModified
+		    }
+		    
+		    return null
+		}
+
+		Public.doGet = function(conversation) {
+			var query = Prudence.Resources.getQuery(conversation, {
+				name: 'string',
+				lines: 'int',
+				position: 'int',
+				forward: 'bool',
+				pattern: 'string',
+				human: 'bool'
+			})
+			
+			query.name = 'logs/' + (query.name || 'common.log')
+			query.human = query.human == true
+			query.lines = query.lines || 20
+
+			var root = java.lang.System.getProperty('sincerity.container')
+			var file = new java.io.File(new java.io.File(root), query.name)
+			
+			var temp
+			if (query.pattern) {
+				var pattern
+				try {
+					pattern = new RegExp(query.pattern)
+				}
+				catch (x) {
+					// Bad pattern
+					return Prudence.Resources.Status.ClientError.BadRequest
+				}
+				
+				if (pattern) {
+					temp = Sincerity.Files.temporary('diligence-console-', '.log')
+					try {
+						Sincerity.Files.grep(file, temp, pattern)
+					}
+					catch (x if x.javaException instanceof java.io.FileNotFoundException) {
+						Module.logger.exception(x)
+						return Prudence.Resources.Status.ClientError.NotFound
+					}
+					file = new java.io.File(temp)
+				}
+			}
+			
+			try {
+				try {
+				    var lastModified = file.lastModified()
+				    if (lastModified != 0) {
+						conversation.modificationTimestamp = lastModified
+				    }
+					return Sincerity.JSON.to(Sincerity.Files.tail(file, query.position, query.forward, query.lines), query.human)
+				}
+				catch (x if x.javaException instanceof java.io.FileNotFoundException) {
+					Module.logger.exception(x)
+					return Prudence.Resources.Status.ClientError.NotFound
+				}
+			}
+			finally {
+				if (Sincerity.Objects.exists(temp)) {
+					Sincerity.Files.remove(temp)
+				}
+			}
+		}
+
+		return Public
+	}(Public))
+
+	/**
+	 * Programs resource.
+	 * 
+	 * @class
+	 * @name Diligence.Console.ProgramsResource
+	 * @augments Diligence.REST.MongoDbResource
+	 */
+	Public.ProgramsResource = Sincerity.Classes.define(function(Module) {
+		/** @exports Public as Diligence.Console.ProgramsResource */
+		var Public = {}
+
+		/** @ignore */
+		Public._inherit = Diligence.REST.MongoDbResource
+		
+		/** @ignore */
+		Public._construct = function(config) {
+			config = config || {}
+			config.collection = config.collection || 'programs'
+			arguments.callee.overridden.call(this, config)
+		}
+
+		return Public
+	}(Public))
+
+	return Public
 }()

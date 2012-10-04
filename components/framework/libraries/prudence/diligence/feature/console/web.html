@@ -20,7 +20,7 @@ var theme = application.globals.get('diligence.feature.console.theme') || null
 	<title>Diligence Console</title>
 	<link rel="shortcut icon" href="http://threecrickets.com/media/three-crickets/diligence.ico" />
 
-	<%= Diligence.Sencha.extJsHead(conversation, {theme: theme}) %>
+	<%= Diligence.Sencha.extJsHead(conversation, theme) %>
 
 	<!-- Ubuntu font -->
 	<link href="http://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet" type="text/css" />
@@ -30,13 +30,12 @@ var theme = application.globals.get('diligence.feature.console.theme') || null
 
 	<!-- CodeMirror -->
 	<link rel="stylesheet" href="<%= conversation.pathToBase %>/style/codemirror/codemirror.css" />
-	<link rel="stylesheet" href="<%= conversation.pathToBase %>/style/codemirror/javascript.css" />
-	<script src="<%= conversation.pathToBase %>/script/codemirror/codemirror.js"></script>
-	<script src="<%= conversation.pathToBase %>/script/codemirror/javascript.js"></script>
+	<script src="<%= conversation.pathToBase %>/scripts/codemirror/codemirror.js"></script>
+	<script src="<%= conversation.pathToBase %>/scripts/codemirror/mode/javascript.js"></script>
 
 	<!-- Diligence Console -->
 	<link rel="stylesheet" href="<%= conversation.pathToBase %>/style/diligence/feature/console.css" />
-	<script src="<%= conversation.pathToBase %>/script/diligence/feature/console.js"></script>
+	<script src="<%= conversation.pathToBase %>/scripts/diligence/feature/console.js"></script>
 
 <% if (theme == 'access') { %>
 	<style>
