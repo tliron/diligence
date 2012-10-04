@@ -100,6 +100,7 @@
 			<filterchain>
 				<replacetokens>
 					<token key="VERSION" value="${component.version}${component.version.postfix}" />
+					<token key="DEPENDENCIES" value="${dependencies.repo}" />
 					<token key="SINCERITY.MONGODB.VERSION" value="${sincerity.mongodb.version}" />
 					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
 					<token key="ROOT" value="${root}" />
@@ -131,7 +132,6 @@
 			<filterchain>
 				<replacetokens>
 					<token key="VERSION" value="${component.version}${component.version.postfix}" />
-					<token key="DEPENDENCIES" value="${dependencies.repo}" />
 					<token key="SINCERITY.VERSION" value="${sincerity.version}" />
 					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
 					<token key="DOCUMENTATION.VERSION" value="${documentation.version}" />

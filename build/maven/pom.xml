@@ -71,7 +71,7 @@
 		<dependency>
 			<groupId>net.codemirror</groupId>
 			<artifactId>codemirror</artifactId>
-			<version>[2.21,3)</version>
+			<version>[2,3)</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
