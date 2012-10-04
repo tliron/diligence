@@ -119,13 +119,19 @@ function getTextpackNodeText(id, node) {
 
 resources = {
 	'log':                      new Diligence.REST.LoggingResource(),
+	
+	// Console feature
 	'console.execution':        new Diligence.Console.ExecutionResource(),
 	'console.log':              new Diligence.Console.LogResource(),
 	'console.programs':         new Diligence.Console.ProgramsResource(),
 	'console.programs.plural':  new Diligence.Console.ProgramsResource({plural: true}),
+	
+	// RPC service
 	'calc.rpc':                 new Diligence.RPC.Resource({namespaces: {Calc: Calc}}),
 	'calc.direct':              new Diligence.Sencha.DirectResource({name: 'Diligence', namespaces: {Calc: CalcDirect}}),
 	'shoppingcart.direct':      new Diligence.Sencha.DirectResource({name: 'Diligence', objects: {ShoppingCart: new ShoppingCart()}}),
+	
+	// REST service
 	'mongo.users':              new Diligence.REST.MongoDbResource({name: 'users'}),
 	'mongo.users.plural':       new Diligence.REST.MongoDbResource({name: 'users', plural: true}),
 	'mongo.textpack':           new Diligence.Sencha.MongoDbTreeResource({collection: 'textpacks', query: {locale: 'fr'}, field: 'text', getNodeText: getTextpackNodeText}),
@@ -134,6 +140,8 @@ resources = {
 	'memory.textpack':          new Diligence.Sencha.InMemoryTreeResource({tree: textpack, getNodeText: getTextpackNodeText}),
 	'distributed.users':        new Diligence.REST.DistributedResource({name: 'users', documents: users}),
 	'distributed.users.plural': new Diligence.REST.DistributedResource({name: 'users', documents: users, plural: true}),
+	
+	// Forms service
 	'form.multiply':            new Diligence.Sencha.Form(multiplyForm)
 }
 

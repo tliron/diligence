@@ -19,6 +19,10 @@ document.executeOnce('/sincerity/json/')
 document.executeOnce('/sincerity/files/')
 document.executeOnce('/sincerity/objects/')
 
+document.executeOnce('/diligence/')
+// Yes, we added just about everything in Diligence to
+// make it easily available to the console
+
 var Diligence = Diligence || {}
 
 /**
@@ -41,8 +45,7 @@ var Diligence = Diligence || {}
  * at /web/static/script/diligence/feature/console.js if you're interested.
  * 
  * <h1>Installation</h1>
- * To install this feature, you will need to call {@link Diligence.Console#settings} in your application's
- * settings.js and {@link Diligence.Console#routing} from your routing.js.
+ * TODO
  * 
  * <h1>MongoDB Requirements</h1>
  * This feature will use the 'programs' collection in the default MongoDB database for your
@@ -65,45 +68,6 @@ Diligence.Console = Diligence.Console || function() {
 	 */
 	Public.logger = Prudence.Logging.getLogger('console')
 
-	/**
-	 * Installs the library's pass-throughs and REST routes.
-	 * <p>
-	 * To work properly, {@link Diligence.REST#settings} should be called <i>after</i> calling this.
-	 * <p>
-	 * Can only be called from Prudence configuration scripts!
-	 */
-	Public.settings = function() {
-		resourcesPassThrough.push('/diligence/feature/console/log/')
-		resourcesPassThrough.push('/diligence/feature/console/execution/')
-		dynamicWebPassThrough.push('/diligence/feature/console/')
-		
-		var routes = predefinedGlobals['diligence.service.rest.routes'] = (predefinedGlobals['diligence.service.rest.routes'] || {})
-		routes['/diligence/feature/console/programs/'] = function() {
-			document.executeOnce('/diligence/integration/frontend/sencha/')
-			return new Diligence.Sencha.MongoDbResource({
-				collection: 'programs',
-				fields: ['_id', 'name', 'code']
-			})
-		}
-	}
-	
-	/**
-	 * Installs the library's captures.
-	 * <p>
-	 * Can only be called from Prudence configuration scripts!
-	 * 
-	 * @param {String} [uri='/console/'] The URI under which to install the console
-	 */
-	Public.routing = function(uri) {
-		uri = uri || '/console/'
-		
-		router.captureAndHide(uri, '/diligence/feature/console/')
-		router.captureAndHide(uri + 'execution/', '/diligence/feature/console/execution/')
-		router.captureAndHide(uri + 'log/', '/diligence/feature/console/log/')
-		router.captureAndHide(uri + 'programs/', '/diligence/feature/console/programs/')
-		router.capture(uri + 'help/', '/content/diligence/feature/console/help.html')
-	}
-	
 	/**
 	 * Execution resource.
 	 * 

@@ -17,9 +17,8 @@
  * @author Tal Liron
  * @version 1.0
  */
-var Diligence = {}
+var Diligence = Diligence || {}
 
 document.executeOnce('/diligence/feature/')
-document.executeOnce('/diligence/foundation/')
 document.executeOnce('/diligence/integration/')
 document.executeOnce('/diligence/service/')

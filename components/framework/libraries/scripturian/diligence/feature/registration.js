@@ -11,6 +11,7 @@
 // at http://threecrickets.com/
 //
 
+document.executeOnce('/diligence/service/forms/')
 document.executeOnce('/diligence/service/authentication/')
 document.executeOnce('/diligence/service/notification/')
 document.executeOnce('/diligence/service/internationalization/')
@@ -232,14 +233,14 @@ Diligence.Registration = Diligence.Registration || function() {
      * 
 	 * @class
 	 * @name Diligence.Registration.Form
-     * @augments Prudence.Resources.Form
+     * @augments Diligence.Forms.Form
 	 */
     Public.Form = Sincerity.Classes.define(function(Module) {
     	/** @exports Public as Diligence.Registration.Form */
         var Public = {}
 
 	    /** @ignore */
-	    Public._inherit = Prudence.Resources.Form
+	    Public._inherit = Diligence.Forms.Form
 
 	    /** @ignore */
 	    Public._configure = ['conversation']

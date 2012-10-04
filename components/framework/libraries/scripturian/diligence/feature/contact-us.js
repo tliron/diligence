@@ -13,6 +13,7 @@
 
 // simple form with recaptcha for sending us email
 
+document.executeOnce('/diligence/service/forms/')
 document.executeOnce('/diligence/service/notification/')
 document.executeOnce('/diligence/service/authentication/')
 document.executeOnce('/diligence/service/nonces/')
@@ -82,14 +83,14 @@ Diligence.ContactUs = Diligence.ContactUs || function() {
      * 
      * @class
      * @name Diligence.ContactUs.Form
-     * @augments Prudence.Resources.Form
+     * @augments Diligence.Forms.Form
      */
 	Public.Form = Sincerity.Classes.define(function(Module) {
 		/** @exports Public as Diligence.ContactUs.Form */
 	    var Public = {}
 
 	    /** @ignore */
-	    Public._inherit = Prudence.Resources.Form
+	    Public._inherit = Diligence.Forms.Form
 	    
 	    /** @ignore */
 	    Public._configure = ['hasUser', 'conversation']

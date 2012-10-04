@@ -103,11 +103,7 @@ Ext.onReady(function() {
 	
 	Ext.define('Program', {
 		extend: 'Ext.data.Model',
-		fields: [
-			'_id',
-			'name',
-			'code'
-		],
+		fields: ['_id', 'name', 'code'],
 		idProperty: '_id',
 		proxy: {
 			type: 'diligence',
