@@ -1,0 +1,2 @@
+
+sincerity.run('diligence:worker')
