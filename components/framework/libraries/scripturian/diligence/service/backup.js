@@ -198,7 +198,7 @@ Diligence.Backup = Diligence.Backup || function() {
     	
     	if (!Sincerity.Objects.exists(params.name) || !Sincerity.Objects.exists(params.gzip)) {
 	    	var name = String(new java.io.File(params.file).name)
-	    	if (name.endsWith('.gz')) {
+	    	if (name.endsWith('.json.gz')) {
 	    		if (!Sincerity.Objects.exists(params.gzip)) { 
 	    			params.gzip = true
 	    		}
@@ -216,16 +216,41 @@ Diligence.Backup = Diligence.Backup || function() {
     	if (params.drop) {
     		collection.drop()
     	}
+    	
+    	Public.logger.info('Importing from "{0}"', params.file, params.name)
 
     	var iterator = new Sincerity.Iterators.JsonArray({file: params.file, gzip: params.gzip})
+    	var count = 0
     	try {
     		while (iterator.hasNext()) {
     			var doc = iterator.next()
     			collection.insert(doc)
+    			count++
     		}
     	}
     	finally {
     		iterator.close()
+    	}
+    	
+    	Public.logger.info('{0} documents imported to "{1}"', Sincerity.Localization.formatNumber(count), params.name)
+    }
+
+    /**
+     * Imports a whole directory.
+     * 
+     * @param {String|File} [dir=fixtures] Directory; defaults to "fixtures" directory in current application
+     */
+    Public.importMongoDbCollections = function(dir) {
+    	dir = Sincerity.Objects.ensure(dir, new java.io.File(document.source.basePath, '../fixtures'))
+		dir = (Sincerity.Objects.isString(dir) ? new java.io.File(dir) : dir).canonicalFile
+
+    	var files = dir.listFiles()
+    	for (var f in files) {
+    		var file = files[f]
+    		var name = String(file.name)
+    		if (name.endsWith('.json') || name.endsWith('.json.gz')) {
+    			Public.importMongoDbCollection({file: file})
+    		}
     	}
     }
 
