@@ -404,7 +404,7 @@ Ext.onReady(function() {
 					queryMode: 'local',
 					store: {
 						fields: ['file'],
-						data: [{file: 'common.log'}, {file: 'web.log'}, {file: 'wrapper.log'}, {file: 'run.log'}]
+						data: [{file: 'common.log'}, {file: 'web.log'}, {file: 'wrapper.log'}]
 					},
 					valueField: 'file',
 					displayField: 'file',
