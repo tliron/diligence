@@ -169,8 +169,7 @@ Diligence.Console = Diligence.Console || function() {
 			
 			query.name = 'logs/' + (query.name || 'common.log')
 
-			var root = java.lang.System.getProperty('sincerity.container')
-			var file = new java.io.File(new java.io.File(root), query.name)
+			var file = new java.io.File(application.containerRoot, query.name)
 		    var lastModified = file.lastModified()
 		    if (lastModified != 0) {
 		    	return lastModified
@@ -193,45 +192,36 @@ Diligence.Console = Diligence.Console || function() {
 			query.human = query.human == true
 			query.lines = query.lines || 20
 
-			var root = java.lang.System.getProperty('sincerity.container')
-			var file = new java.io.File(new java.io.File(root), query.name)
+			var file = new java.io.File(application.containerRoot, query.name)
 			
 			var temp
-			if (query.pattern) {
-				var pattern
-				try {
-					pattern = new RegExp(query.pattern)
-				}
-				catch (x) {
-					// Bad pattern
-					return Prudence.Resources.Status.ClientError.BadRequest
-				}
-				
-				if (pattern) {
-					temp = Sincerity.Files.temporary('diligence-console-', '.log')
-					try {
-						Sincerity.Files.grep(file, temp, pattern)
-					}
-					catch (x if x.javaException instanceof java.io.FileNotFoundException) {
-						Module.logger.exception(x)
-						return Prudence.Resources.Status.ClientError.NotFound
-					}
-					file = new java.io.File(temp)
-				}
-			}
-			
 			try {
-				try {
-				    var lastModified = file.lastModified()
-				    if (lastModified != 0) {
-						conversation.modificationTimestamp = lastModified
-				    }
-					return Sincerity.JSON.to(Sincerity.Files.tail(file, query.position, query.forward, query.lines), query.human)
+				if (query.pattern) {
+					var pattern
+					try {
+						pattern = new RegExp(query.pattern)
+					}
+					catch (x) {
+						// Bad pattern
+						return Prudence.Resources.Status.ClientError.BadRequest
+					}
+					
+					if (pattern) {
+						temp = Sincerity.Files.temporary('diligence-console-', '.log')
+						Sincerity.Files.grep(file, temp, pattern)
+						file = new java.io.File(temp)
+					}
 				}
-				catch (x if x.javaException instanceof java.io.FileNotFoundException) {
-					Module.logger.exception(x)
-					return Prudence.Resources.Status.ClientError.NotFound
-				}
+
+				var lastModified = file.lastModified()
+			    if (lastModified != 0) {
+					conversation.modificationTimestamp = lastModified
+			    }
+
+				return Sincerity.JSON.to(Sincerity.Files.tail(file, query.position, query.forward, query.lines), query.human)
+			}
+			catch (x if x.javaException instanceof java.io.FileNotFoundException) {
+				return Prudence.Resources.Status.ClientError.NotFound
 			}
 			finally {
 				if (Sincerity.Objects.exists(temp)) {
