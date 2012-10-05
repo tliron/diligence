@@ -1,0 +1,4 @@
+[
+{"_id":{"$oid":"4e08259606a0d8c2b37d99c5"},"uri":"riap://component/savory/about/service/linkback/index.html/"},
+{"_id":{"$oid":"4e0cf933c0d03f47b7afaff9"},"uri":"http://localhost:8080/savory/about/service/linkback/"}
+]

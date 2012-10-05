@@ -1,0 +1,4 @@
+[
+{"_id":{"$oid":"4d74884227261fd5864ee36a"},"name":"main","subscriptions":[{"service":"Email","address":"address@mys2222ite.org","mode":"daily"},{"service":"Email","address":"tal.liron@gmail.com"}]},
+{"_id":{"$oid":"4d7e72f4e799619172ba06fe"},"name":"contactUs","subscriptions":[{"service":"Email","address":"address@mysite.org"}]}
+]

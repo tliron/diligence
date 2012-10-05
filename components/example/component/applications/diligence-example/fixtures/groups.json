@@ -1,0 +1,5 @@
+[
+{"_id":{"$oid":"4d44a7efeee356acd3f876be"},"name":"default","authorization":{"entities":[{"type":"group","name":"all"}],"permissions":{"read":true}}},
+{"_id":{"$oid":"4d44aaa800e699e75c833c4b"},"name":"all","authorization":{"permissions":{"all":true}}},
+{"_id":{"$oid":"4d4e0729fe5c99e7c4ff298f"},"name":"admins","authorization":{"permissions":{"savory":{"module":{"pages":{"edit":true}}}}}}
+]

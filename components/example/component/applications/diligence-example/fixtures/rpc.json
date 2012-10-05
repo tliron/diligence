@@ -1,0 +1,4 @@
+[
+{"_id":{"$oid":"4dfb0ed7ace68edbc22a5021"},"dependencies":["/about/integration/sencha/shopping-cart/"],"name":"Savory","namespaces":{"ShoppingCart":[{"name":"addItem","arity":1,"object":"ShoppingCart"},{"name":"getItems","arity":0,"object":"ShoppingCart"}]}},
+{"_id":{"$oid":"4dfb0ed7ace68edbc22a5022"},"dependencies":["/savory/service/linkback/"],"name":"Pingback","namespaces":{"pingback":[{"name":"ping","arity":2,"object":"Savory.Linkback.Pingback"}]}}
+]

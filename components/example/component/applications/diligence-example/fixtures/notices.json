@@ -1,0 +1,5 @@
+[
+{"_id":{"$oid":"4fbfd1f4e4b095c5fcc569b1"},"direct":{"service":"Email","address":"tal.liron@gmail.com"},"notice":{"subject":"A Test Message from the Savory Example Application","text":"Hello!!!!"},"sentImmediate":{"$date":1337971200049},"timestamp":{"$date":1337971188560}},
+{"_id":{"$oid":"4fc30012e4b0d12cdedf0c89"},"direct":{"service":"Email","address":"tal.liron@gmail.com"},"notice":{"subject":"A Test Message from the Savory Example Application","text":"Lalala..."},"sentImmediate":{"$date":1338179640039},"timestamp":{"$date":1338179602626}},
+{"_id":{"$oid":"4fd33edbe4b0842e234f6e36"},"direct":{"service":"Email","address":"tal.liron@gmail.com"},"notice":{"subject":"A Test Message from the Savory Example Application","text":"asdasd"},"sentImmediate":{"$date":1339244280121},"timestamp":{"$date":1339244251964}}
+]

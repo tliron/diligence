@@ -1,0 +1,3 @@
+[
+{"_id":{"$oid":"4dd44aef6332f964c1cee1ff"},"listeners":[{"fn":"\nfunction (name, context) {\n    Prudence.Logging.getLogger().info(\"User {0} has paid us {1}!\", context.username, context.amount);\n}\n","id":"example","dependencies":"/prudence/logging/"}],"name":"payments.successful"}
+]

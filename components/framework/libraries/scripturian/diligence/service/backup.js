@@ -241,7 +241,7 @@ Diligence.Backup = Diligence.Backup || function() {
      * @param {String|File} [dir=fixtures] Directory; defaults to "fixtures" directory in current application
      */
     Public.importMongoDbCollections = function(dir) {
-    	dir = Sincerity.Objects.ensure(dir, new java.io.File(document.source.basePath, '../fixtures'))
+    	dir = Sincerity.Objects.ensure(dir, new java.io.File(application.root, 'fixtures'))
 		dir = (Sincerity.Objects.isString(dir) ? new java.io.File(dir) : dir).canonicalFile
 
     	var files = dir.listFiles()

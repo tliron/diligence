@@ -1,0 +1,3 @@
+[
+{"_id":{"$oid":"4d8128f256d5747ea6c707cd"},"name":"news","title":"My Feed","subtitle":{"type":"html","_content":"<p>An important feed</p>"},"uri":"http://threecrickets.com/savory/syndication/","webUri":"http://threecrickets/savory/","author":{"_children":{"_tag":"name","_content":"Three Crickets"}},"entries":[]}
+]
