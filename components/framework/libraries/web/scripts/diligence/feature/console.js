@@ -178,7 +178,7 @@ Ext.onReady(function() {
 							});
 						},
 						resize: function(cmp, width, height) {
-							Ext.fly(this.codemirror.getWrapperElement()).setSize(width, height);
+							this.codemirror.setSize(width, height);
 						}
 					}
 				},
