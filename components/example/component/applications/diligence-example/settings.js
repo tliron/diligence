@@ -70,6 +70,10 @@ app.globals = {
 					document.executeOnce('/diligence/service/events/')
 					return new Diligence.Events.MongoDbCollectionStore() 				
 				}]
+			},
+			
+			backup: {
+				importFixtures: true
 			}
 		}
 	}

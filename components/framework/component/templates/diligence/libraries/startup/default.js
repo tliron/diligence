@@ -1,4 +1,7 @@
 
 document.executeOnce('/diligence/service/backup/')
 
-Diligence.Backup.importMongoDbCollections()
+// Import fixtures
+if (application.globals.get('diligence.service.backup.importFixtures') == true) {
+	Diligence.Backup.importMongoDbCollections()
+}

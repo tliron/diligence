@@ -39,5 +39,13 @@ app.globals = {
 		defaultServers: '127.0.0.1',
 		defaultSwallow: true,
 		defaultDb: '${APPLICATION}'
+	},
+	
+	diligence: {
+		service: {
+			backup: {
+				importFixtures: true
+			}
+		}
 	}
 }

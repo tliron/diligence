@@ -64,14 +64,14 @@ Diligence.Backup = Diligence.Backup || function() {
 		params.directory = (Sincerity.Objects.isString(params.directory) ? new java.io.File(params.directory) : params.directory).canonicalFile
 		params.timeout = params.timeout || (5*60*1000)
 		
-		Public.logger.time('MongoDB export ({0} threads)'.cast(params.threads), function() {
+		Public.logger.time('export ({threads} threads)...'.cast(params), function() {
 			if (!Sincerity.Files.remove(params.directory, true)) {
-				Module.logger.severe('Failed to delete output directory "{0}"', params.directory)
+				Module.logger.severe('Failed to delete output directory "{directory}"', params)
 				return false
 			}
 	    	
 	    	if (!params.directory.mkdirs()) {
-				Public.logger.severe('Failed to create output directory "{0}"', params.directory)
+				Public.logger.severe('Failed to create output directory "{directory}"', params)
 				return false
 	    	}
 
@@ -110,7 +110,6 @@ Diligence.Backup = Diligence.Backup || function() {
 				}))
 				
 				if (futures.length == params.threads) {
-					//Public.logger.info('Waiting')
 					// Wait for tasks to finish
 					for (var f in futures) {
 						futures[f].get(params.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
@@ -146,7 +145,7 @@ Diligence.Backup = Diligence.Backup || function() {
     	var collection = new MongoDB.Collection(params.collection, {db: params.db})
     	params.iterator = collection.find(params.query || {})
 		
-		Public.logger.info('Exporting MongoDB collection "{0}"', params.collection)
+		Public.logger.info('Exporting collection "{0}"...', params.collection)
 		
 		Public.exportIterator(params)
 	}
@@ -161,7 +160,7 @@ Diligence.Backup = Diligence.Backup || function() {
     Public.exportIterator = function(params) {
     	var writer = Sincerity.Files.openForTextWriting(params.file, params.gzip || false)
     	var count = 0
-		Public.logger.info('Exporting iterator to "{0}"', params.file)
+		Public.logger.info('Exporting iterator to "{file}"...', params)
     	try {
 			writer.println('[')
     		while (params.iterator.hasNext()) {
@@ -181,7 +180,7 @@ Diligence.Backup = Diligence.Backup || function() {
     		}
     		catch (x) {}
     		writer.close()
-    		Public.logger.info('{0} documents written to "{1}"', Sincerity.Localization.formatNumber(count), params.file)
+    		Public.logger.info('{0} document{1} written to "{2}"', Sincerity.Localization.formatNumber(count), count == 1 ? '' : 's', params.file)
     	}
     }
     
@@ -217,7 +216,7 @@ Diligence.Backup = Diligence.Backup || function() {
     		collection.drop()
     	}
     	
-    	Public.logger.info('Importing from "{0}"', params.file, params.name)
+    	Public.logger.info('Importing collection from "{file}"...', params)
 
     	var iterator = new Sincerity.Iterators.JsonArray({file: params.file, gzip: params.gzip})
     	var count = 0
@@ -232,26 +231,58 @@ Diligence.Backup = Diligence.Backup || function() {
     		iterator.close()
     	}
     	
-    	Public.logger.info('{0} documents imported to "{1}"', Sincerity.Localization.formatNumber(count), params.name)
+    	Public.logger.info('{0} document{1} imported to collection "{2}"', Sincerity.Localization.formatNumber(count), count == 1 ? '' : 's', params.name)
     }
 
     /**
      * Imports a whole directory.
      * 
-     * @param {String|File} [dir=fixtures] Directory; defaults to "fixtures" directory in current application
+     * @param [params] Params to send to importMongoDbCollection
+     * @param {String|File} [params.directory=fixtures] Directory; defaults to "fixtures" directory in current application
+	 * @param {Number} [params.threads=5] How many threads (and thus MongoDB connections) to use at once
+	 * @param {Number} [params.timeout=5*60*1000] Maximum time allowed for exporting per collection in milliseconds (the default is 5 minutes)
      */
-    Public.importMongoDbCollections = function(dir) {
-    	dir = Sincerity.Objects.ensure(dir, new java.io.File(application.root, 'fixtures'))
-		dir = (Sincerity.Objects.isString(dir) ? new java.io.File(dir) : dir).canonicalFile
+    Public.importMongoDbCollections = function(params) {
+		params = Sincerity.Objects.exists(params) ? Sincerity.Objects.clone(params) : {}
 
-    	var files = dir.listFiles()
-    	for (var f in files) {
-    		var file = files[f]
-    		var name = String(file.name)
-    		if (name.endsWith('.json') || name.endsWith('.json.gz')) {
-    			Public.importMongoDbCollection({file: file})
-    		}
-    	}
+    	params.directory = Sincerity.Objects.ensure(params.directory, new java.io.File(application.root, 'fixtures'))
+		params.directory = (Sincerity.Objects.isString(params.directory) ? new java.io.File(params.directory) : params.directory).canonicalFile
+    	params.threads = params.threads || 5
+		params.timeout = params.timeout || (5*60*1000)
+		
+		Public.logger.time('import from directory "{directory}" ({threads} threads)'.cast(params), function() {
+			var futures = []
+
+			var files = params.directory.listFiles()
+	    	for (var f in files) {
+	    		var file = files[f]
+	    		var name = String(file.name)
+	    		if (name.endsWith('.json') || name.endsWith('.json.gz')) {
+	    			params.file = file
+	    			
+					futures.push(Prudence.Tasks.task({
+						fn: function(params) {
+							document.executeOnce('/diligence/service/backup/')
+							Diligence.Backup.importMongoDbCollection(params)
+						},
+						context: params
+					}))
+					
+					if (futures.length == params.threads) {
+						// Wait for tasks to finish
+						for (var f in futures) {
+							futures[f].get(params.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
+						}
+						futures = []
+					}
+	    		}
+	    	}
+			
+			// Wait for tasks to finish
+			for (var f in futures) {
+				futures[f].get(params.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
+			}
+		})
     }
 
 	return Public

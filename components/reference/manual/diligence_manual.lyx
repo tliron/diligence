@@ -145,8 +145,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Authentication"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Authentication"
+name "API documentation for Diligence.Authentication"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Authentication"
 
 \end_inset
 
@@ -306,8 +306,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Authorization"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Authorizaion"
+name "API documentation for Diligence.Authorization"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Authorizaion"
 
 \end_inset
 
@@ -479,8 +479,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Backup"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Backup"
+name "API documentation for Diligence.Backup"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Backup"
 
 \end_inset
 
@@ -498,12 +498,12 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/backup/')
+document.executeOnce('/diligence/service/backup/')
 \end_layout
 
 \begin_layout Plain Layout
 
-Diligence.Backup.exportMongoDb({directory: '/tmp/savory-backup/'})
+Diligence.Backup.exportMongoDb({directory: '/tmp/diligence-backup/'})
 \end_layout
 
 \end_inset
@@ -545,8 +545,8 @@ status open
 
 \begin_layout Plain Layout
 
-* 6 * * * <% document.executeOnce('/savory/service/backup/'); Diligence.Backup.expo
-rtMongoDb({directory: '/tmp/savory-backup/', gzip: true}); %>
+* 6 * * * <% document.executeOnce('/diligence/service/backup/'); Diligence.Backup.e
+xportMongoDb({directory: '/tmp/diligence-backup/', gzip: true}); %>
 \end_layout
 
 \end_inset
@@ -565,7 +565,8 @@ status open
 
 \begin_layout Plain Layout
 
-Diligence.Backup.importMongoDbCollection({file: '/tmp/savory-backup/users.json'})
+Diligence.Backup.importMongoDbCollection({file: '/tmp/diligence-backup/users.json'}
+)
 \end_layout
 
 \end_inset
@@ -588,7 +589,7 @@ The collection name will be parsed from the filename.
 \begin_inset Quotes eld
 \end_inset
 
-/tmp/savory-backup/users.json.gz
+/tmp/diligence-backup/users.json.gz
 \begin_inset Quotes erd
 \end_inset
 
@@ -751,8 +752,8 @@ revision numbers per that site.
 Note the markup rendering is handled by a lower-level library, 
 \begin_inset CommandInset href
 LatexCommand href
-name "Savory.HTML"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.HTML"
+name "Diligence.HTML"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.HTML"
 
 \end_inset
 
@@ -768,8 +769,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Documents"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Documents"
+name "API documentation for Diligence.Documents"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Documents"
 
 \end_inset
 
@@ -822,7 +823,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/documents/')
+document.executeOnce('/diligence/service/documents/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -1179,7 +1180,7 @@ app.globals = {
 
 \begin_layout Plain Layout
 
-	savory: {
+	diligence: {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1334,8 +1335,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Events"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Events"
+name "API documentation for Diligence.Events"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Events"
 
 \end_inset
 
@@ -1987,8 +1988,8 @@ You can also store events inside a specific, arbitrary MongoDB document,
  using 
 \begin_inset CommandInset href
 LatexCommand href
-name "Savory.Events.MongoDbDocumentStore"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Events.MongoDbDocumentStore"
+name "Diligence.Events.MongoDbDocumentStore"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Events.MongoDbDocumentStore"
 
 \end_inset
 
@@ -2038,7 +2039,7 @@ app.globals = {
 
 \begin_layout Plain Layout
 
-	savory: {
+	diligence: {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2068,7 +2069,7 @@ app.globals = {
 
 \begin_layout Plain Layout
 
-					document.executeOnce('/savory/service/events/')
+					document.executeOnce('/diligence/service/events/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -2250,8 +2251,8 @@ Setup
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Forms"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Forms"
+name "API documentation for Diligence.Forms"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Forms"
 
 \end_inset
 
@@ -2377,7 +2378,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/forms/')
+document.executeOnce('/diligence/service/forms/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -4067,7 +4068,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/forms/')
+document.executeOnce('/diligence/service/forms/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -4317,7 +4318,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/forms/')
+document.executeOnce('/diligence/service/forms/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -4832,7 +4833,7 @@ form div.error {
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/forms/')
+document.executeOnce('/diligence/service/forms/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -4901,19 +4902,24 @@ HTML Service
 \end_layout
 
 \begin_layout Standard
-This straightforward service generates unique integers in a series, using
- MongoDB atomic operations.
- No number in a specific series will ever be generated again.
- This service is thus useful for generating integer IDs.
+This service supports two uses:
 \end_layout
 
-\begin_layout Standard
-Note that uniqueness is only guaranteed by the intactness of the MongoDB
- database.
- If you somehow lose it and have to start over, there's a chance you would
- regenerate IDs that have already been used.
- If you need unique IDs that don't have this limitation, you'll want to
- use GUIDs instead.
+\begin_layout Enumerate
+Generating structured, internationalized, sanitized HTML code.
+\end_layout
+
+\begin_layout Enumerate
+Consuming HTML and parsing it using a jQuery-like syntax.
+ For this we rely internally on the 
+\begin_inset CommandInset href
+LatexCommand href
+name "jsoup library"
+target "http://jsoup.org/"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
@@ -4924,12 +4930,160 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.HTML"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.HTML"
+name "API documentation for Diligence.HTML"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.HTML"
 
 \end_inset
 
 .
+ Also useful is the 
+\begin_inset CommandInset href
+LatexCommand href
+name "API documentation for Sincerity.XML"
+target "http://threecrickets.com/javascript-api/?namespace=Sincerity.XML"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+From JSON to HTML
+\end_layout
+
+\begin_layout Standard
+The most general API is 
+\begin_inset Quotes eld
+\end_inset
+
+build
+\begin_inset Quotes erd
+\end_inset
+
+, which accepts a JSON structure and turns it into HTML:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<%
+\end_layout
+
+\begin_layout Plain Layout
+
+print(Diligence.HTML.build({
+\end_layout
+
+\begin_layout Plain Layout
+
+	_tag: 'div',
+\end_layout
+
+\begin_layout Plain Layout
+
+	_children: [
+\end_layout
+
+\begin_layout Plain Layout
+
+	]
+\end_layout
+
+\begin_layout Plain Layout
+
+}))
+\end_layout
+
+\begin_layout Plain Layout
+
+%>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The generated HTML is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<div>
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+All text is properly escaped as appropriate for HTML content and HTML tag
+ attributes.
+ Note that keys beginning with 
+\begin_inset Quotes eld
+\end_inset
+
+_
+\begin_inset Quotes erd
+\end_inset
+
+ are treated specially, as explained below.
+\end_layout
+
+\begin_layout Standard
+The library also contains shortcuts for simple HTML elements, like so:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<%= Diligence.HTML.img({src: 'http://threecrickets.com/media/three-crickets/prudenc
+e-small.png'}) %>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Special Attributes
+\end_layout
+
+\begin_layout Paragraph
+Internationalization
+\end_layout
+
+\begin_layout Subsubsection
+Parsing HTML
+\end_layout
+
+\begin_layout Subsubsection
+Other Utilities
+\end_layout
+
+\begin_layout Standard
+Sanitizing
 \end_layout
 
 \begin_layout Section
@@ -5384,8 +5538,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Internationalization"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Internationalization"
+name "API documentation for Diligence.Internationalization"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Internationalization"
 
 \end_inset
 
@@ -5405,7 +5559,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/internationalization/')
+document.executeOnce('/diligence/service/internationalization/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -5505,7 +5659,7 @@ In many cases, you would not want to specify the locale explicitly, but
 \begin_inset Quotes eld
 \end_inset
 
-savory.service.internationalization.pack
+diligence.service.internationalization.pack
 \begin_inset Quotes erd
 \end_inset
 
@@ -5585,7 +5739,7 @@ app.globals = {
 
 \begin_layout Plain Layout
 
-	savory: {
+	diligence: {
 \end_layout
 
 \begin_layout Plain Layout
@@ -5716,8 +5870,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Cache"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Cache"
+name "API documentation for Diligence.Cache"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Cache"
 
 \end_inset
 
@@ -5735,7 +5889,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/cache/')
+document.executeOnce('/diligence/service/cache/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -5909,8 +6063,8 @@ status open
 
 \begin_layout Plain Layout
 
-*/15 * * * * <% document.executeOnce('/savory/service/cache/'); new Diligence.Cach
-e('result').prune(); %>
+*/15 * * * * <% document.executeOnce('/diligence/service/cache/'); new Diligence.C
+ache('result').prune(); %>
 \end_layout
 
 \end_inset
@@ -5990,8 +6144,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Linkback"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Linkback"
+name "API documentation for Diligence.Linkback"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Linkback"
 
 \end_inset
 
@@ -6174,8 +6328,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Nonces"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Nonces"
+name "API documentation for Diligence.Nonces"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Nonces"
 
 \end_inset
 
@@ -6194,7 +6348,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/nonces/')
+document.executeOnce('/diligence/service/nonces/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -6296,8 +6450,8 @@ status open
 
 \begin_layout Plain Layout
 
-*/15 * * * * <% document.executeOnce('/savory/service/nonces/'); Diligence.Nonces.p
-rune(); %>
+*/15 * * * * <% document.executeOnce('/diligence/service/nonces/'); Diligence.Nonc
+es.prune(); %>
 \end_layout
 
 \end_inset
@@ -6400,8 +6554,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Notification"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Notification"
+name "API documentation for Diligence.Notification"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Notification"
 
 \end_inset
 
@@ -6420,7 +6574,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/notification/') 
+document.executeOnce('/diligence/service/notification/') 
 \end_layout
 
 \begin_layout Plain Layout
@@ -6619,7 +6773,7 @@ app.globals = {
 
 \begin_layout Plain Layout
 
-	savory: {
+	diligence: {
 \end_layout
 
 \begin_layout Plain Layout
@@ -6649,7 +6803,7 @@ app.globals = {
 
 \begin_layout Plain Layout
 
-							dependencies: '/savory/service/notification/service/email/',
+							dependencies: '/diligence/service/notification/service/email/',
 \end_layout
 
 \begin_layout Plain Layout
@@ -6800,20 +6954,20 @@ status open
 
 \begin_layout Plain Layout
 
-* * * * * <% document.executeOnce('/savory/service/notification/'); Diligence.Noti
-fication.sendQueuedNotices(); %>
+* * * * * <% document.executeOnce('/diligence/service/notification/'); Diligence.N
+otification.sendQueuedNotices(); %>
 \end_layout
 
 \begin_layout Plain Layout
 
-* 4 * * * <% document.executeOnce('/savory/service/notification/'); Diligence.Noti
-fication.sendQueuedDigests('daily'); %>
+* 4 * * * <% document.executeOnce('/diligence/service/notification/'); Diligence.N
+otification.sendQueuedDigests('daily'); %>
 \end_layout
 
 \begin_layout Plain Layout
 
-* 5 * * 0 <% document.executeOnce('/savory/service/notification/'); Diligence.Noti
-fication.sendQueuedDigests('weekly'); %> 
+* 5 * * 0 <% document.executeOnce('/diligence/service/notification/'); Diligence.N
+otification.sendQueuedDigests('weekly'); %> 
 \end_layout
 
 \end_inset
@@ -6918,8 +7072,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Progress"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Progress"
+name "API documentation for Diligence.Progress"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Progress"
 
 \end_inset
 
@@ -6941,7 +7095,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/progress/')
+document.executeOnce('/diligence/service/progress/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -7025,7 +7179,7 @@ please wait
 \begin_inset Quotes eld
 \end_inset
 
-/savory/service/progress/wait/
+/diligence/service/progress/wait/
 \begin_inset Quotes erd
 \end_inset
 
@@ -7151,7 +7305,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/processing/')
+document.executeOnce('/diligence/service/processing/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -7494,7 +7648,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/progress/')
+document.executeOnce('/diligence/service/progress/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -7698,8 +7852,8 @@ Setup
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.REST"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.REST"
+name "API documentation for Diligence.REST"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.REST"
 
 \end_inset
 
@@ -7806,7 +7960,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/rest/')
+document.executeOnce('/diligence/service/rest/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -7889,7 +8043,7 @@ document.execute('/mongo-db/')
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/rest/')
+document.executeOnce('/diligence/service/rest/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -7952,7 +8106,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/rest/')
+document.executeOnce('/diligence/service/rest/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -9791,7 +9945,7 @@ All your resources support the HTML format, so you can easily access them
  For example, this link: 
 \begin_inset CommandInset href
 LatexCommand href
-target "http://localhost:8080/savory-example/data/users/4e057e94e799a23b0f581d7d/"
+target "http://localhost:8080/diligence-example/data/users/4e057e94e799a23b0f581d7d/"
 
 \end_inset
 
@@ -9809,7 +9963,7 @@ You can customize this view as you please: just create
 \begin_inset Quotes eld
 \end_inset
 
-/savory/service/rest/singular.html
+/diligence/service/rest/singular.html
 \begin_inset Quotes erd
 \end_inset
 
@@ -9817,7 +9971,7 @@ You can customize this view as you please: just create
 \begin_inset Quotes eld
 \end_inset
 
-/savory/service/rest/plural.html
+/diligence/service/rest/plural.html
 \begin_inset Quotes erd
 \end_inset
 
@@ -10437,8 +10591,8 @@ Setup
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.RPC"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.RPC"
+name "API documentation for Diligence.RPC"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.RPC"
 
 \end_inset
 
@@ -10531,7 +10685,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/rpc/')
+document.executeOnce('/diligence/service/rpc/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -11336,7 +11490,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/rpc/')
+document.executeOnce('/diligence/service/rpc/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -11654,8 +11808,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Search"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Search"
+name "API documentation for Diligence.Search"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Search"
 
 \end_inset
 
@@ -11690,8 +11844,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Serials"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Serials"
+name "API documentation for Diligence.Serials"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Serials"
 
 \end_inset
 
@@ -11709,7 +11863,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/serials/')
+document.executeOnce('/diligence/service/serials/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -11748,8 +11902,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Syndication"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Syndication"
+name "API documentation for Diligence.Syndication"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Syndication"
 
 \end_inset
 
@@ -11826,8 +11980,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Gravatar"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Gravatar"
+name "API documentation for Diligence.Gravatar"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Gravatar"
 
 \end_inset
 
@@ -11855,8 +12009,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.PayPal"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.PayPal"
+name "API documentation for Diligence.PayPal"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.PayPal"
 
 \end_inset
 
@@ -11909,8 +12063,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Sencha"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Sencha"
+name "API documentation for Diligence.Sencha"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
 
 \end_inset
 
@@ -11949,7 +12103,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -12061,7 +12215,7 @@ This also includes Diligence's Ext JS client-side helper library.
 \begin_inset Quotes eld
 \end_inset
 
-/libraries/web/scripts/savory/integration/ext-js.js
+/libraries/web/scripts/diligence/integration/ext-js.js
 \begin_inset Quotes erd
 \end_inset
 
@@ -12129,8 +12283,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "server-side API documentation for Savory.Sencha"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Sencha"
+name "server-side API documentation for Diligence.Sencha"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
 
 \end_inset
 
@@ -12225,7 +12379,7 @@ target "http://docs.sencha.com/ext-js/4-1/#!/api/Ext.data.proxy.Proxy"
 \begin_inset Quotes eld
 \end_inset
 
-savory
+diligence
 \begin_inset Quotes erd
 \end_inset
 
@@ -12245,7 +12399,7 @@ ajax
 \begin_inset Quotes eld
 \end_inset
 
-savory
+diligence
 \begin_inset Quotes erd
 \end_inset
 
@@ -12392,7 +12546,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -12491,7 +12645,7 @@ Ext.onReady(function() {
 
 \begin_layout Plain Layout
 
-			type: 'savory',
+			type: 'diligence',
 \end_layout
 
 \begin_layout Plain Layout
@@ -12762,8 +12916,8 @@ Setup
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "server-side API documentation for Savory.Sencha"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Sencha"
+name "server-side API documentation for Diligence.Sencha"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
 
 \end_inset
 
@@ -12906,7 +13060,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -13761,7 +13915,7 @@ target "http://docs.sencha.com/ext-js/4-1/#!/api/Ext.data.proxy.Proxy"
 \begin_inset Quotes eld
 \end_inset
 
-savory
+diligence
 \begin_inset Quotes erd
 \end_inset
 
@@ -13781,7 +13935,7 @@ ajax
 \begin_inset Quotes eld
 \end_inset
 
-savory
+diligence
 \begin_inset Quotes erd
 \end_inset
 
@@ -13845,7 +13999,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -13900,7 +14054,7 @@ Ext.onReady(function() {
 
 \begin_layout Plain Layout
 
-			type: 'savory',
+			type: 'diligence',
 \end_layout
 
 \begin_layout Plain Layout
@@ -14081,7 +14235,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -14155,7 +14309,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/forms/')
+document.executeOnce('/diligence/service/forms/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -14302,7 +14456,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -14342,7 +14496,7 @@ Diligence.Sencha.extJsHead(conversation)
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/forms/')
+document.executeOnce('/diligence/service/forms/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -14597,7 +14751,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/service/forms/')
+document.executeOnce('/diligence/service/forms/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -14699,7 +14853,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -15054,16 +15208,16 @@ Setup
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "server-side API documentation for Savory.Sencha"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Sencha"
+name "server-side API documentation for Diligence.Sencha"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
 
 \end_inset
 
  and 
 \begin_inset CommandInset href
 LatexCommand href
-name "Savory.RPC"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.RPC"
+name "Diligence.RPC"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.RPC"
 
 \end_inset
 
@@ -15122,7 +15276,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -15339,7 +15493,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/integration/frontend/sencha/')
+document.executeOnce('/diligence/integration/frontend/sencha/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -15693,8 +15847,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Blog"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Blog"
+name "API documentation for Diligence.Blog"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Blog"
 
 \end_inset
 
@@ -15713,8 +15867,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Console"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Console"
+name "API documentation for Diligence.Console"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Console"
 
 \end_inset
 
@@ -15754,8 +15908,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.ContactUs"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.ContactUs"
+name "API documentation for Diligence.ContactUs"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.ContactUs"
 
 \end_inset
 
@@ -15801,8 +15955,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Discussion"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Discussion"
+name "API documentation for Diligence.Discussion"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Discussion"
 
 \end_inset
 
@@ -15940,8 +16094,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Registration"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Registration"
+name "API documentation for Diligence.Registration"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Registration"
 
 \end_inset
 
@@ -15984,8 +16138,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.SEO"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.SEO"
+name "API documentation for Diligence.SEO"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.SEO"
 
 \end_inset
 
@@ -16177,7 +16331,7 @@ predefinedGlobals = Sincerity.Objects.flatten({
 
 \begin_layout Plain Layout
 
-	savory: {
+	diligence: {
 \end_layout
 
 \begin_layout Plain Layout
@@ -16237,12 +16391,13 @@ predefinedGlobals = Sincerity.Objects.flatten({
 
 \begin_layout Plain Layout
 
-					exclusions: ['/savory/media/', '/savory/style/', '/savory/script/'],
+					exclusions: ['/diligence/media/', '/diligence/style/', '/diligence/script/'
+],
 \end_layout
 
 \begin_layout Plain Layout
 
-					inclusions: ['/savory/media/name/'],
+					inclusions: ['/diligence/media/name/'],
 \end_layout
 
 \begin_layout Plain Layout
@@ -16329,7 +16484,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/feature/seo/')
+document.executeOnce('/diligence/feature/seo/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -16429,7 +16584,7 @@ predefinedGlobals = Sincerity.Objects.flatten({
 
 \begin_layout Plain Layout
 
-	savory: {
+	diligence: {
 \end_layout
 
 \begin_layout Plain Layout
@@ -16618,8 +16773,8 @@ status open
 
 \begin_layout Plain Layout
 
-0 4 * * * /savory/eval/ document.executeOnce('/savory/feature/seo/'); SEO.getDomai
-n('http://localhost:8080').generateStatic();
+0 4 * * * /diligence/eval/ document.executeOnce('/diligence/feature/seo/');
+ SEO.getDomain('http://localhost:8080').generateStatic();
 \end_layout
 
 \end_inset
@@ -16638,7 +16793,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/feature/seo/')
+document.executeOnce('/diligence/feature/seo/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -16688,7 +16843,7 @@ status open
 
 \begin_layout Plain Layout
 
-document.executeOnce('/savory/feature/seo/')
+document.executeOnce('/diligence/feature/seo/')
 \end_layout
 
 \begin_layout Plain Layout
@@ -16717,8 +16872,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.ShoppingCart"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.ShoppingCart"
+name "API documentation for Diligence.ShoppingCart"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.ShoppingCart"
 
 \end_inset
 
@@ -16737,8 +16892,8 @@ Usage
 Make sure to check out the 
 \begin_inset CommandInset href
 LatexCommand href
-name "API documentation for Savory.Wiki"
-target "http://threecrickets.com/javascript-api/?namespace=Savory.Wiki"
+name "API documentation for Diligence.Wiki"
+target "http://threecrickets.com/javascript-api/?namespace=Diligence.Wiki"
 
 \end_inset
 
