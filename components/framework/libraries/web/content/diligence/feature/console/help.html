@@ -1,7 +1,7 @@
 
-<h1>Log Window</h1>
+<h1>Log Panel</h1>
 <p>
-	This window at the bottom of the screen usually shows you the last lines of the log file
+	This panel at the bottom of the screen usually shows you the last lines of the log file
 	and refreshes its view every 3 seconds.
 </p>
 <p>
@@ -15,26 +15,25 @@
 <p>
 	Looking for something in particular in the log? Use the "Grep" area to enter a regular expression
 	with which to filter the log file. (This works by grepping the log file into the server's temporary
-	directory.) Grep stays active while auto-refreshing. Live grep!
+	directory.) Grep stays active while auto-refreshing. It's live grep!
 </p>
 <p>
-	Switch to a different log file using the combo box to the right, either choosing one of the
-	available options or typing in your own. The path is relative to the Prudence's /logs/ directory
-	on the server.
+	Switch to a different log file using the combo box at the bottom right, either choosing one of the
+	available options or typing in your own. The path is relative to your container's "/logs/" directory.
 </p>
 
-<h1>Program Window</h1>
+<h1>Code Panel</h1>
 <p>
 	Type in your JavaScript code with friendly syntax coloring, and click "Execute" to evaluate
 	your code on the server. 
 </p>
 <p>
-	By default much of Diligence is already available to you, so you can use APIs
-	such as Tasks, Resources and MongoDB without having to document.execute them first.
+	By default all of the Diligence, Prudence, Sincerity and MongoDB namespaces are already available to you,
+	so you can use APIs having to "document.execute" the libraries first.
 </p>
 <p>
-	The "logger" variable is initialized using Diligence's logging library, providing you with
-	a quick way to see the results of your code right in the console's log window:
+	The "logger" variable is initialized using Prudence's logging library, providing you with
+	a quick way to see the results of your code right in the console's log panel:
 </p>
 <pre>
 var name = 'World'
@@ -49,8 +48,8 @@ logger.info('Hello, {0}', name)
 representation = 'Hello, World!\nHello, other world!'
 </pre>
 <p>
-	As a shortcut, use the print() and println() functions to append anything, after stringifying it,
-	to the representation.
+	As shortcuts, you can use the print() and println() functions to append anything to the representation.
+	Arguments will be implicitly stringified.
 </p>
 <p>
 	Click "Execute and Download" to download this representation via your browser. By default, it is
@@ -68,12 +67,12 @@ conversation.disposition.filename = 'transactions.csv'
 <h1>Saved Programs Window</h1>
 <p>
 	Click "Save Program" to store your program for later. Programs are stored in MongoDB's "programs"
-	collection. [Note that using the same program name again will override your stored program.] 
+	collection. Note that using the same program name again will override your stored program. 
 </p>
 <p>
-	Double-click on a program name in the "Saved Programs" window in order to load it into your
-	program window.
+	Double-click on a program name in the "Saved Programs" panel in order to load it into your
+	code panel.
 </p>
 <p>
-	Click "Rename" to rename it, or "Delete" to delete it.
+	Click "Rename" to rename it. Click "Delete" to delete it.
 </p>
