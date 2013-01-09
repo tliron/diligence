@@ -48,7 +48,7 @@ Diligence.Gravatar = Diligence.Gravatar || Sincerity.Classes.define(function() {
 	 */
     Public.getHash = function() {
 		if (!this.hash) {
-			this.hash = this.email ? Sincerity.Cryptography.md5(email.trim().toLowerCase()) : ''
+			this.hash = this.email ? Sincerity.Cryptography.md5(this.email.trim().toLowerCase()) : ''
 		}
 		return this.hash
 	}
