@@ -41,7 +41,7 @@ app.routes = {
 	
 	// Forms service
 	'/form/multiply/':                 'form.multiply',
-	'/example/service/forms/results/': 'hidden'
+	'/example/service/forms/results/': '!'
 }
 
 //Sincerity.Objects.merge(app.routes, Diligence.REST.createMongoDbRoutes({prefix: '/mongo/'}))
