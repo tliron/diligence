@@ -51,6 +51,10 @@ Diligence.Sencha = Diligence.Sencha || function() {
     	println('<script type="text/javascript" src="{pathToBase}/scripts/diligence/integration/ext-js.js"></script>'.cast(filler));
     }
 
+	/**
+	 * @class
+	 * @name Diligence.Sencha.Form
+	 */
 	Public.Form = Sincerity.Classes.define(function(Module) {
 		/** @exports Public as Diligence.Sencha.Form */
 		var Public = {}
@@ -75,8 +79,8 @@ Diligence.Sencha = Diligence.Sencha || function() {
 		 * See {@link Sincerity.JSON#to}. 
 		 * 
 		 * @param conversation The Diligence conversation
-		 * @param [results] The results from a call to {@link Prudence.Resources.Form#handle}, used it initialize field
-		 *         values
+		 * @param [results] The results from a call to {@link Diligence.Forms.Form#handle}, used it initialize field
+		 *        values
 		 * @param {Boolean} [clientValidation=form.clientValidation] True to include validator
 		 * @param {Boolean} [clientMasking=true] True to include maskRe
 		 * @returns {Array}

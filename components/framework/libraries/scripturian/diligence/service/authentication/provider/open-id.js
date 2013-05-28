@@ -127,14 +127,14 @@ Diligence.Authentication.OpenIdProvider = Diligence.Authentication.Provider.Open
 /**
  * @class
  * @name Diligence.Authentication.OpenIdProviderForm
- * @augments Prudence.Resources.Form
+ * @augments Diligence.Forms.Form
  */
 Diligence.Authentication.OpenIdProviderForm = Diligence.Authentication.OpenIdProviderForm || Sincerity.Classes.define(function() {
 	/** @exports Public as Diligence.Authentication.OpenIdProviderForm */
     var Public = {}
 
     /** @ignore */
-    Public._inherit = Prudence.Resources.Form
+    Public._inherit = Diligence.Forms.Form
 
     /** @ignore */
     Public._configure = ['provider', 'conversation']

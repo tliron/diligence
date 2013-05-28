@@ -5119,7 +5119,7 @@ every single key
 \emph default
 .
  This is crucial, because you may have to render left-to-right and right-to-left
- text on the same page, on you want to make sure that each key is rendered
+ text on the same page, and you want to make sure that each key is rendered
  correctly.
 \end_layout
 
