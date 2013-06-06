@@ -1,0 +1,48 @@
+<%& '/site/header/' %>
+<% exampleHeader('Cache', 'Service'); %>
+
+<%
+
+document.executeOnce('/diligence/service/cache/')
+document.executeOnce('/sincerity/json/')
+document.executeOnce('/sincerity/localization/')
+document.executeOnce('/sincerity/jvm/')
+document.executeOnce('/sincerity/xml/')
+
+var cache = new Diligence.Cache({name: 'result', logLevel: 'info'})
+
+var getResult = function(userId) {
+	Sincerity.JVM.sleep(1000)
+	return {userId: userId, randomValue: Math.random()}
+}
+.cache(cache, 10000, 'result.')
+
+var start = java.lang.System.currentTimeMillis()
+var result = getResult(123)
+var duration = Sincerity.Localization.formatDuration(java.lang.System.currentTimeMillis() - start)
+
+%>
+
+<p>
+	In this example we cache the results of a function that purposely delays for a second to return its data
+	(the page will load slowly on purpose, not because Diligence is slow!) and set the cache duration to 10 seconds.
+</p>
+<p>
+	This means that if you keep refreshing this page, only once every
+	10 seconds will the function be called, and you will see a duration below of "1s" for calling the function.
+	Otherwise, the call will simply retrieve the last result from the cache, which should take about 1 or 2 milliseconds,
+	depending on your MongoDB performance.
+</p>
+<p>	
+	Take a look at the "results" collection in MongoDB if you are curious as to
+	how the cached data is stored.
+</p>
+<pre>
+<%= Sincerity.JSON.to(result, true).escapeElements() %>
+</pre>
+<p>
+	It took <b><%= duration %></b> to fetch this data.
+</p>
+
+<% exampleFooter('Cache', 'Service'); %>
+<%& '/site/footer/' %>

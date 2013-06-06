@@ -8,7 +8,7 @@ app.hosts = {
 app.routes = {
 	'/*': [
 		'manual',
-		'textual',
+		'scriptlet',
 		{type: 'zuss', next: [
 			'static',
 			{type: 'static', root: sincerity.container.getLibrariesFile('web')}]}

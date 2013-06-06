@@ -1,0 +1,43 @@
+<%& '/site/header/' %>
+<% exampleHeader('Nonces', 'Service'); %>
+
+<%
+
+document.executeOnce('/diligence/service/nonces/')
+document.executeOnce('/prudence/resources/')
+document.executeOnce('/sincerity/templates/')
+
+if (conversation.request.method.name == 'POST') {
+	var form = Prudence.Resources.getForm(conversation, {nonce: 'string'})
+	var valid = Diligence.Nonces.check(form.nonce)
+	if (valid) {
+		print('<p class="note">The nonce <b>{0}</b> was checked successfully. You will not be able to check it again.</p>'.cast(form.nonce))
+	}
+	else {
+		print('<p class="note">The nonce <b>{0}</b> is invalid.</p>'.cast(form.nonce))
+	}
+}
+
+var nonce = Diligence.Nonces.create(60 * 1000)
+
+%>
+
+<p>
+	In this example we'll issue a 60-second nonce every time the page is loaded. In the form, you can enter any nonce to check.
+	If you copy and paste the last nonce within 60 seconds, you should see it checked successfully.
+</p>
+<p class="note">
+	Last issued nonce: <b><%= nonce %></b><br />
+	(Decimal representation is <%= new java.math.BigInteger(nonce, 16) %>)
+</p>
+
+<form method="post">
+	<p>
+		Nonce to check:
+		<input name="nonce" />
+		<input type="submit" value="Check" />
+	</p>
+</form>
+
+<% exampleFooter('Nonces', 'Service'); %>
+<%& '/site/footer/' %>

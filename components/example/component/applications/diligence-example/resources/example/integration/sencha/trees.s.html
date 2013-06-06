@@ -1,0 +1,85 @@
+<%{{ head %>
+<%
+document.executeOnce('/diligence/integration/frontend/sencha/')
+Diligence.Sencha.extJsHead(conversation, 'ext-all-gray')
+%>
+<%}}%>
+<%& '/site/header/' %>
+<% exampleHeader('Sencha', 'Integration', 'Trees'); %>
+
+<p>
+	We've connected this tree widget to a document in the "textpacks" MongoDB collection.
+	Note that the XXX node in the tree is a MongoDB DBRef, so that opening it will trigger
+	an extra fetch of another document, seamlessly integrating it into the tree.
+	The relevant source code is in "routing.js" and "/libraries/resources.js".
+</p>
+<p>
+	To appreciate what's going on in this demo, we recommend
+	using <a href="http://getfirebug.com/">Firebug</a> to see all the communication with the server.	
+</p>
+<p>
+	Use the "Resource" combo box to switch to the in-memory tree resource.
+</p>
+<div id="tree"></div>
+
+<%{{ foot %>
+<script type="text/javascript">
+Ext.onReady(function() {
+	var store = Ext.create('Ext.data.TreeStore', {
+		proxy: {
+			type: 'diligence',
+			url: '<%= conversation.pathToBase %>/mongo/textpack/'
+		},
+		defaultRootId: '/',
+		autoLoad: true
+	});
+
+	var uris = Ext.create('Ext.data.Store', {
+		fields: ['uri', 'text'],
+		data : [
+			{uri: 'mongo', text: 'MongoDB'},
+			{uri: 'memory', text: 'in-memory'}
+		]
+	});
+	
+	Ext.create('Ext.tree.Panel', {
+		store: store,
+		autoScroll: true,
+		useArrows: true,
+		rootVisible: false,
+		dockedItems: [{
+			dock: 'bottom',
+			xtype: 'toolbar',
+			items: [{
+				text: 'Resource:'
+			}, {
+				xtype: 'combobox',
+				width: 150,
+				store: uris,
+				valueField: 'uri',
+				value: 'mongo',
+				queryMode: 'local',
+				editable: false,
+				listeners: {
+					'select': function(combo, records) {
+						var uri = records[0].get('uri');
+						var proxy = store.getProxy();
+						proxy.url = '<%= conversation.pathToBase %>/' + uri + '/textpack/';
+						store.load();
+					}
+				}
+			}]
+		}],
+		renderTo: 'tree',
+		style: {
+			margin: 'auto'
+		},
+		width: 500,
+		height: 400
+	});
+});
+</script>
+<%}}%>
+
+<% exampleFooter('Sencha', 'Integration', 'Trees'); %>
+<%& '/site/footer/' %>

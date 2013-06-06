@@ -1,0 +1,66 @@
+<%& '/site/header/' %>
+<% exampleHeader('Events', 'Service'); %>
+
+<%
+
+document.executeOnce('/diligence/service/events/')
+document.executeOnce('/prudence/resources/')
+document.executeOnce('/prudence/logging/')
+document.executeOnce('/sincerity/templates/')
+
+Diligence.Events.subscribe({
+	name: 'payments.successful',
+	id: 'example',
+	dependencies: '/prudence/logging/',
+	fn: function(name, context) {
+		Prudence.Logging.getLogger().info('User {0} has paid us {1}!', context.username, context.amount)
+	}
+})
+
+if (conversation.request.method.name == 'POST') {
+	var form = Prudence.Resources.getForm(conversation, {
+		async: 'bool',
+		distributed: 'bool'
+	})
+	form.async = form.async || false
+	form.distributed = form.distributed || false 
+	Prudence.Logging.getLogger().info('Firing event: async={async}, distributed={distributed}', form)
+	Diligence.Events.fire({
+		name: 'payments.successful',
+		async: form.async,
+		distributed: form.distributed,
+		context: {
+			username: 'Isaac Newton',
+			amount: '$123.45'
+		}
+	})
+	print('<p class="note">The event was fired, with <b>async={async}</b> and <b>distributed={distributed}</b>! Check the logs to see it in action.</p>'.cast(form))
+}
+
+%>
+
+<p>
+	Though we're subscribing to the event every time you reload this page, we don't have to, because we've configured
+	the Events Service to use a persistent storage for listeners. Check out the "events" collection in MongoDB to
+	see its persistent storage.
+</p>
+<p>
+	If you're only running a single node, the distributed example won't be too exciting, because it will always be
+	executed locally (although it does use the distribution mechanism). Try running a cluster of nodes to get
+	a sense of its real power: the listener will be called on a different node every time it's fired.
+</p>
+
+<form method="post">
+	<p>
+		<input type="checkbox" name="async" value="true" /> Asynchronous
+	</p>
+	<p>
+		<input type="checkbox" name="distributed" value="true" /> Distributed (implies asynchronous, too)
+	</p>
+	<p>
+		<input type="submit" value="Fire the event" />
+	</p>
+</form>
+
+<% exampleFooter('Events', 'Service'); %>
+<%& '/site/footer/' %>

@@ -1,0 +1,30 @@
+<%& '/site/header/' %>
+<% exampleHeader('Backup', 'Service'); %>
+
+<h1>Backup Service</h1>
+
+<%
+
+document.executeOnce('/diligence/service/backup/')
+
+if (conversation.request.method.name == 'POST') {
+	var backupDir = new java.io.File(new java.io.File(document.source.basePath).parentFile, 'backup')
+	Diligence.Backup.exportMongoDb({directory: backupDir})
+	print('<p class="note">The export task has been submitted. See the logs for output on its progress.</p>')
+}
+
+%>
+
+<p>
+	In this example we're export all MongoDB collections in the current default database to the subdirectory "/backup/"
+	under this application's root directory.
+</p>
+
+<form method="post">
+	<p>
+		<input type="submit" value="Export" />
+	</p>
+</form>
+
+<% exampleFooter('Backup', 'Service'); %>
+<%& '/site/footer/' %>

@@ -1,0 +1,80 @@
+<%& '/site/header/' %>
+<% exampleHeader('RPC', 'Service'); %>
+
+<%
+
+document.executeOnce('/diligence/service/rpc/')
+document.executeOnce('/prudence/resources/')
+
+var form = {
+	value1: 2,
+	value2: 6,
+	protocol: 'json',
+	internal: false
+}
+
+if (conversation.request.method.name == 'POST') {
+	form = Prudence.Resources.getForm(conversation, {
+		value1: 'float',
+		value2: 'float',
+		protocol: 'string',
+		internal: 'bool'
+	})
+}
+
+var uri = form.internal ? '/rpc/calc/' : conversation.reference.baseRef + 'rpc/calc/'
+
+var result = Diligence.RPC.request({
+	uri: uri,
+	internal: form.internal,
+	name: 'Calc.multiply',
+	params: [form.value1, form.value2],
+	id: 'abc',
+	protocol: form.protocol
+})
+
+%>
+
+<p>
+	We've exposed a simple multiplication function to the world. Let's call it using RPC.
+</p>
+<p>
+	Use the magic values "1" and "2" to see a fault code.
+</p>
+
+<form method="post">
+	<p>
+		Value #1:
+		<input name="value1" value="<%= form.value1 %>" />
+	</p>
+	<p>
+		Value #2:
+		<input name="value2" value="<%= form.value2 %>" />
+	</p>
+	<p>
+		Protocol:
+		<select name="protocol">
+			<option value="json" <%= form.protocol == 'json' ? 'selected="true"' : '' %>>JSON-RPC</option>
+			<option value="xml" <%= form.protocol == 'xml' ? 'selected="true"' : '' %>>XML-RPC</option>
+		</select>
+	</p>
+	<p>
+		Internal:
+		<input type="checkbox" name="internal" value="true" <%= form.internal ? 'checked="checked"' : '' %> />
+	</p>
+	<p>
+		<input type="submit" value="Multiply" />
+	</p>
+</form>
+<% if (result) { if (result.error) { %>
+<p class="note">
+	Fault: <b><%= result.error.code %>: <%= result.error.message %></b> via <b><%= result.protocol %></b>
+</p>
+<% } else { %>
+<p class="note">
+	Result: <b><%= result.result %></b> via <b><%= result.protocol %></b> at <b><%= uri %></b>
+</p>
+<% } } %>
+
+<% exampleFooter('RPC', 'Service'); %>
+<%& '/site/footer/' %>

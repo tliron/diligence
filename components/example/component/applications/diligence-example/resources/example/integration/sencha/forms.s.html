@@ -1,0 +1,199 @@
+<%{{ head %>
+<%
+document.executeOnce('/diligence/integration/frontend/sencha/')
+Diligence.Sencha.extJsHead(conversation, 'ext-all-gray')
+%>
+<%}}%>
+<%& '/site/header/' %>
+<% exampleHeader('Sencha', 'Integration', 'Forms'); %>
+
+<%
+
+document.executeOnce('/diligence/service/forms/')
+document.executeOnce('/sincerity/xml/')
+
+var form = Diligence.Forms.getForm('/form/multiply/')
+
+var results = form.handle(conversation)
+
+%>
+
+<h3>AJAX Forms</h3>
+<p>
+	These are the default, and make most sense for the kind of UI that Ext JS implies: the form does
+	a <i>background</i> (AJAX) POST to a URL, in the same format as standard HTML form. The difference is that
+	the response is not a regular web page seen by the user, but JSON data used by Ext JS to manage
+	errors, and also your own data as is necessary for your application. The whole page is not reloaded
+	(unless you explicitly do so in your code).  
+</p>
+<p>
+	<button id="ajax-form" class="open-form">Validation and masking</button>
+	<button id="ajax-form-half" class="open-form">With validation, without masking</button>
+	<button id="ajax-form-bare" class="open-form">No validation nor masking</button>
+</p>
+
+<h3>Ext Direct Forms</h3>
+<p>
+	These work similarly to AJAX forms, but the Ext Direct protocol is used instead of a generic HTML form post.
+	The advantages of using Ext Direct are that 1) you can simulate the form submit from your code, via an elegant and simple
+	function call, and 2) if you're using Ext Direct lot already, you can handle all client access, including forms, uniformly.
+</p>
+<p>
+	See Diligence's <a href="../direct/">Ext Direct</a> page for more dicussion.
+</p>
+<p>
+	<button id="direct-form" class="open-form">Validation and masking</button>
+	<button id="direct-form-half" class="open-form">With validation, without masking</button>
+	<button id="direct-form-bare" class="open-form">No validation nor masking</button>
+</p>
+
+<h3>Standard Forms</h3>
+<p>
+	These work the same way as HTML's &lt;form&gt; tag (and in fact use it behind the scenes): the browser
+	does a regular POST to a URL with data formatted as a "application/x-www-form-urlencoded" MIME type.
+	Because it is a regular browser POST, the whole page is reloaded.
+</p>
+<p>
+	For the purposes of this demo, we will re-open the form on page reload upon failed submission,
+	so that the user (you!) can try again. Obviously, the better solution for this particular use case
+	would be to use an AJAX form (see below). Still, you'll get to see the standard form in action.
+</p>
+<p>
+	<button id="standard-form" class="open-form">Validation and masking</button>
+	<button id="standard-form-half" class="open-form">With validation, without masking</button>
+	<button id="standard-form-bare" class="open-form">No validation nor masking</button>
+</p>
+<% if (results) { %>
+<h3>Results from Last Standard Submission</h3>
+<div class="note">
+	<%= results.msg %>
+<% if (!results.success && results.errors && results.errors.length) { %>
+	<ul>
+<% for (var name in results.errors) { %>
+		<li style="list-style-type: disc; margin-left: 20px;"><%= name %>: <%= results.errors[name] %></li>
+<% } %>
+	</ul>
+<% } %>
+</div>
+<%{{ foot %>
+<script type="text/javascript">
+Ext.onReady(function() {
+	//openForm(null, Ext.get('<%= conversation.query.get("form") %>'));
+	Ext.Msg.alert('<%= results.success ? "Success!" : "Failure!" %>', '<%= results.msg.escapeSingleQuotes() %>');
+});
+</script>
+<%}}%>
+<% } %>
+
+<%{{ foot %>
+<script type="text/javascript">
+var fieldsWithValues = <%= form.toExtJs(conversation, {results: results}) %>;	
+
+var fieldsWithValuesWithValidationWithoutMasking = <%= form.toExtJs(conversation, {results: results, clientMasking: false}) %>;
+
+var fieldsWithValuesBare = <%= form.toExtJs(conversation, {results: results, clientValidation: false, clientMasking: false}) %>;
+
+var fields = <%= form.toExtJs(conversation) %>;
+
+var fieldsWithValidationWithoutMasking = <%= form.toExtJs(conversation, {clientMasking: false}) %>;
+
+var fieldsBare = <%= form.toExtJs(conversation, {clientValidation: false, clientMasking: false}) %>;
+
+var titles = {
+	'standard-form': 'Standard Form Multiplier',
+	'standard-form-half': 'Standard Form Multiplier (with validation, without masking)',
+	'standard-form-bare': 'Standard Form Multiplier (without validation or masking)',
+	'ajax-form': 'AJAX Multiplier',
+	'ajax-form-half': 'AJAX Multiplier (with validation, without masking)',
+	'ajax-form-bare': 'AJAX Multiplier (without validation or masking)',
+	'direct-form': 'Ext Direct Multiplier',
+	'direct-form-half': 'Ext Direct Multiplier (with validation, without masking)',
+	'direct-form-bare': 'Ext Direct Multiplier (without validation or masking)'
+};
+
+var fields = {
+	'standard-form': fieldsWithValues,
+	'standard-form-half': fieldsWithValuesWithValidationWithoutMasking,
+	'standard-form-bare': fieldsWithValuesBare,
+	'ajax-form': fields,
+	'ajax-form-half': fieldsWithValidationWithoutMasking,
+	'ajax-form-bare': fieldsBare,
+	'direct-form': fields,
+	'direct-form-half': fieldsWithValidationWithoutMasking,
+	'direct-form-bare': fieldsBare
+};
+
+function openForm(event, el) {
+	var config = {
+		xtype: 'form',
+		border: false,
+		bodyCls: 'x-border-layout-ct', // Uses the neutral background color
+		bodyPadding: 10,
+		layout: 'anchor',
+		defaults: {
+			anchor: '100%'
+		},
+		defaultType: 'textfield',
+		items: fields[el.id],
+		buttons: [{
+			text: 'Submit',
+			disabled: true,
+			formBind: true,
+			handler: function() {
+				var form = this.up('form').getForm();
+				if (form.isValid()) {
+					form.submit({
+						success: function(form, action) {
+							Ext.Msg.alert('Success!', action.result.msg);
+						},
+						failure: function(form, action) {
+							Ext.Msg.alert('Failure!', action.result.msg);
+						}
+					});
+				}
+			}
+		}]
+	};
+	
+	if (el.id.substring(0, 8) == 'standard') {
+		config.standardSubmit = true;
+		config.url = '?form=' + el.id;
+	}
+	else if (el.id.substring(0, 4) == 'ajax') {
+		config.url = '<%= conversation.pathToBase %>/form/multiply/';
+	}
+	else if (el.id.substring(0, 6) == 'direct') {
+		config.api = {
+			submit: Diligence.Calc.multiply
+		};
+	}
+	
+	Ext.create('Ext.window.Window', {
+		title: titles[el.id],
+		width: 350,
+		items: config
+	}).show();
+}
+
+Ext.onReady(function() {
+	Ext.select('.open-form').on('click', openForm);
+
+	Ext.Ajax.request({
+		url: '<%= conversation.pathToBase %>/direct/calc/',
+		method: 'GET',
+		disableCaching: false,
+		success: function(response) {
+			var provider = Ext.decode(response.responseText);
+			Ext.Direct.addProvider(provider);
+			Ext.select('.ext-direct').set({disabled: null}, false);
+		},
+		failure: function(response) {
+			console.log(response);
+		}
+	});
+});
+</script>
+<%}}%>
+
+<% exampleFooter('Sencha', 'Integration', 'Forms'); %>
+<%& '/site/footer/' %>
