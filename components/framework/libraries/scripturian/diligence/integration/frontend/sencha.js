@@ -42,13 +42,13 @@ Diligence.Sencha = Diligence.Sencha || function() {
     
     Public.extJsHead = function(conversation, theme) {
     	var filler = {
-    		pathToBase: conversation.pathToBase,
-    		theme: theme || 'ext-all'
+    		base: conversation.base,
+    		theme: theme || 'ext-theme-classic'
     	}
     	println('<!-- Ext JS -->');
-    	println('<link rel="stylesheet" type="text/css" href="{pathToBase}/style/ext-js/style/css/{theme}.css" id="ext-theme" />'.cast(filler));
-    	println('<script type="text/javascript" src="{pathToBase}/scripts/ext-js/ext-all.js"></script>'.cast(filler));
-    	println('<script type="text/javascript" src="{pathToBase}/scripts/diligence/integration/ext-js.js"></script>'.cast(filler));
+    	println('<link rel="stylesheet" type="text/css" href="{base}/style/ext-js/{theme}/{theme}-all.css" id="ext-theme" />'.cast(filler));
+    	println('<script type="text/javascript" src="{base}/scripts/ext-js/ext-all.js"></script>'.cast(filler));
+    	println('<script type="text/javascript" src="{base}/scripts/diligence/integration/ext-js.js"></script>'.cast(filler));
     }
 
 	/**

@@ -47,5 +47,5 @@ app.routes = {
 //Sincerity.Objects.merge(app.routes, Diligence.REST.createMongoDbRoutes({prefix: '/mongo/'}))
 
 app.dispatchers = {
-	javascript: {library: '/resources/'}
+	javascript: '/resources/'
 }
