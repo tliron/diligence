@@ -60,7 +60,7 @@ Diligence.Authorization = Diligence.Authorization || function() {
 		
 		var group = validateGroup(cacheById.get(String(id)), now)
 		if (!group) {
-			group = groupsCollection.findOne({
+			group = getGroupsCollection().findOne({
 				_id: id
 			})
 			cacheGroup(group, now)
@@ -77,7 +77,7 @@ Diligence.Authorization = Diligence.Authorization || function() {
 		
 		var group = validateGroup(cacheByName.get(name), now)
 		if (!group) {
-			group = groupsCollection.findOne({
+			group = getGroupsCollection().findOne({
 				name: name
 			})
 			cacheGroup(group, now)
@@ -259,13 +259,20 @@ Diligence.Authorization = Diligence.Authorization || function() {
 		
 		return group
 	}
-	
+
+	function getGroupsCollection() {
+		if (!Sincerity.Objects.exists(groupsCollection)) {
+			groupsCollection = new MongoDB.Collection('groups')
+			groupsCollection.ensureIndex({name: 1}, {unique: true})
+		}
+		return groupsCollection
+	}
+
 	//
 	// Initialization
 	//
 	
-	var groupsCollection = new MongoDB.Collection('groups')
-	groupsCollection.ensureIndex({name: 1}, {unique: true})
+	var groupsCollection
 	
 	var cacheDuration = application.globals.get('diligence.service.authorization.cacheDuration') || 10000
 	var cacheById = application.getGlobal('diligence.service.authorization.cacheById', Sincerity.JVM.newMap(true))

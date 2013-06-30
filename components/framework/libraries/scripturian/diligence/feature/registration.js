@@ -146,7 +146,7 @@ Diligence.Registration = Diligence.Registration || function() {
 		}
 		
 		try {
-			usersCollection.insert(user, 1)
+			getUsersCollection().insert(user, 1)
 			
 			var textPack = Diligence.Internationalization.getCurrentPack(conversation)
 			var registrationMessageTemplate = new Sincerity.Mail.MessageTemplate(textPack, 'diligence.feature.registration.message.registration')
@@ -172,7 +172,7 @@ Diligence.Registration = Diligence.Registration || function() {
      * @param conversation The Prudence conversation
      */
     Public.confirm = function(id, conversation) {
-		var result = usersCollection.update({
+		var result = getUsersCollection().update({
 			_id: id,
 			confirmed: {$exists: false}
 		}, {
@@ -321,17 +321,22 @@ Diligence.Registration = Diligence.Registration || function() {
 	Public.form = new Public.Form()
     
     //
+    // Private
+    //
+
+	function getUsersCollection() {
+		if (!Sincerity.Objects.exists(usersCollection)) {
+			usersCollection = new MongoDB.Collection('users')
+			usersCollection.ensureIndex({name: 1}, {unique: true})
+		}
+		return usersCollection
+	}
+
+    //
     // Initialization
     //
 	
 	var usersCollection
-	try {
-		usersCollection = new MongoDB.Collection('users')
-		usersCollection.ensureIndex({name: 1}, {unique: true})
-	}
-	catch (x) {
-		// MongoDB has not been initialized, and that's OK!
-	}
 
 	var from = application.globals.get('diligence.feature.registration.from')
 	var siteName = application.globals.get('diligence.feature.registration.site')

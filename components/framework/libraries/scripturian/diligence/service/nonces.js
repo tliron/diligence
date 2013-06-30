@@ -41,7 +41,7 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	/**
 	 * Creates a nonce.
 	 * 
-	 * @param {Number} [duration=application.globals.get('diligence.foundation.nonces.defaultDuration')] Duration in milliseconds after which the nonce will expire
+	 * @param {Number} [duration=application.globals.get('diligence.service.nonces.defaultDuration')] Duration in milliseconds after which the nonce will expire
 	 *        (use 0 to create a nonce that immediately expires)
 	 * @param {Date} [now=new Date()] Used to calculate the expiration
 	 * @return {String} The nonce
@@ -53,7 +53,7 @@ Diligence.Nonces = Diligence.Nonces || function() {
 		if (duration > 0) {
 			var expiration = now ? new Date(now.getTime()) : new Date()
 			expiration.setMilliseconds(expiration.getMilliseconds() + duration)
-			noncesCollection.insert({_id: nonce, expiration: expiration})
+			getNoncesCollection().insert({_id: nonce, expiration: expiration})
 		}
 		
 		nonce = String(nonce)
@@ -74,7 +74,7 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	 * @returns {Boolean}
 	 */
 	Public.check = function(nonce, now) {
-		var entry = nonce ? noncesCollection.findAndRemove({_id: MongoDB.id(nonce)}, 1) : null
+		var entry = nonce ? getNoncesCollection().findAndRemove({_id: MongoDB.id(nonce)}, 1) : null
 
 		if (entry) {
 			now = now || new Date()
@@ -95,7 +95,7 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	 */
 	Public.prune = function(now) {
 		now = now || new Date()
-		var result = noncesCollection.remove({expiration: {$lte: now}}, 1)
+		var result = getNoncesCollection().remove({expiration: {$lte: now}}, 1)
 		
 		if (result && result.n) {
 			Public.logger.info('Removed {0} stale {1}', result.n, result.n > 1 ? 'nonces' : 'nonce')
@@ -103,12 +103,23 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	}
 	
 	//
+	// Private
+	//
+	
+	function getNoncesCollection() {
+		if (!Sincerity.Objects.exists(noncesCollection)) {
+			noncesCollection = new MongoDB.Collection('nonces')
+		}
+		return noncesCollection
+	}
+	
+	//
 	// Initialization
 	//
 	
-	var noncesCollection = new MongoDB.Collection('nonces')
+	var noncesCollection
 
-	var defaultDuration = application.globals.get('diligence.foundation.nonces.defaultDuration') || (15 * 60 * 1000)
+	var defaultDuration = application.globals.get('diligence.service.nonces.defaultDuration') || (15 * 60 * 1000)
 	
 	return Public	
 }()

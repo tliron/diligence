@@ -37,26 +37,37 @@ Diligence.Serials = Diligence.Serials || function() {
 	 * @returns {Number} The next available number, or null if the series does not exist and doNotCreate=true
 	 */
 	Public.next = function(series, doNotCreate) {
-		var serial = serialsCollection.findAndModify({series: series}, {$inc: {nextSerial: 1}})
-		if (serial) {
+		var serial = getSerialsCollection().findAndModify({series: series}, {$inc: {nextSerial: 1}})
+		if (Sincerity.Objects.exists(serial)) {
 			return serial.nextSerial
 		}
 		else {
 			if (!doNotCreate) {
-				serialsCollection.insert({series: series, nextSerial: 1})
+				getSerialsCollection().insert({series: series, nextSerial: 1})
 				return Public.next(series, true)
 			}
 		}
 		
 		return null
 	}
-	
+    
+    //
+    // Private
+    //
+
+	function getSerialsCollection() {
+		if (!Sincerity.Objects.exists(serialsCollection)) {
+			serialsCollection = new MongoDB.Collection('serials')
+			serialsCollection.ensureIndex({series: 1}, {unique: true})
+		}
+		return serialsCollection
+	}
+
 	//
 	// Initialization
 	//
 	
-	var serialsCollection = new MongoDB.Collection('serials')
-	serialsCollection.ensureIndex({series: 1}, {unique: true})
+	var serialsCollection
 	
 	return Public
 }()

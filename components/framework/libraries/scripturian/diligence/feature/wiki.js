@@ -80,7 +80,7 @@ Diligence.Wiki = Diligence.Wiki || function() {
 	 * @returns {Diligence.Wiki.Page}
 	 */
 	Public.getPageByName = function(name, revision) {
-		var page = pagesCollection.findOne({name: name})
+		var page = getPagesCollection().findOne({name: name})
 		return page ? new Public.Page(page, revision) : null
 	}
 	
@@ -107,7 +107,7 @@ Diligence.Wiki = Diligence.Wiki || function() {
 	 */
 	Public.getPages = function() {
 		var array = []
-		var cursor = pagesCollection.find()
+		var cursor = getPagesCollection().find()
 		while (cursor.hasNext()) {
 			array.push(new Public.Page(cursor.next()))
 		}
@@ -190,7 +190,7 @@ Diligence.Wiki = Diligence.Wiki || function() {
 				if (Sincerity.Objects.exists(page.document)) {
 					update.$push = {history: page.document}
 				}
-				pagesCollection.update({_id: page._id}, update)
+				getPagesCollection().update({_id: page._id}, update)
 			}*/
 		}
 		
@@ -243,17 +243,22 @@ Diligence.Wiki = Diligence.Wiki || function() {
 		return Public
 	}(Public))
 	
+    //
+    // Private
+    //
+
+	function getPagesCollection() {
+		if (!Sincerity.Objects.exists(pagesCollection)) {
+			pagesCollection = new MongoDB.Collection('pages')
+		}
+		return pagesCollection
+	}
+
 	//
 	// Initialization
 	//
 	
 	var pagesCollection
-	try {
-		pagesCollection = new MongoDB.Collection('pages')
-	}
-	catch (x) {
-		// MongoDB has not been initialized, and that's OK!
-	}
 	
 	//var uriPrefix = '/page/'
 	//var uriPrefix = ''

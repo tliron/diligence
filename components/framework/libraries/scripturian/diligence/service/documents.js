@@ -46,7 +46,7 @@ Diligence.Documents = Diligence.Documents || function() {
 	 * @returns {Diligence.Documents.Site} The site or null if not found
 	 */
 	Public.getSite = function(id) {
-		var site = sitesCollection.findOne({_id: {$oid: id}})
+		var site = getSitesCollection().findOne({_id: {$oid: id}})
 		return site ? new Public.Site(site) : null
 	}
 	
@@ -58,7 +58,7 @@ Diligence.Documents = Diligence.Documents || function() {
 	 * @returns {Object} The document or null if not found
 	 */
 	Public.getDocument = function(id) {
-		return documentsCollection.findOne({_id: {$oid: id}})
+		return getDocumentsCollection().findOne({_id: {$oid: id}})
 	}
 
 	/**
@@ -78,14 +78,14 @@ Diligence.Documents = Diligence.Documents || function() {
 			var fields = {name: 1, site: 1}
 			fields['drafts.' + key] = 1
 
-			var document = documentsCollection.findOne({_id: {$oid: documentId}}, fields)
+			var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, fields)
 			var draft = document && document.drafts ? document.drafts[key] : null
 			return draft ? new Public.Draft(draft, revision, document) : null
 		}
 		else {
 			var fields = {name: 1, activeDraft: 1, site: 1}
 
-			var document = documentsCollection.findOne({_id: {$oid: documentId}}, fields)
+			var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, fields)
 			return document ? new Public.Draft(document.activeDraft || {source: ''}, document.activeDraft ? document.activeDraft.revision : null, document) : null
 		}
 	}
@@ -104,7 +104,7 @@ Diligence.Documents = Diligence.Documents || function() {
 			return Public.getDraft(documentId)
 		}
 		
-		var document = documentsCollection.findOne({_id: {$oid: documentId}}, {revisions: 1})
+		var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, {revisions: 1})
 
 		var latestRevision = null
 		if (document && document.revisions) {
@@ -174,7 +174,7 @@ Diligence.Documents = Diligence.Documents || function() {
 				source: source
 			}
 			
-			documentsCollection.insert(document)
+			getDocumentsCollection().insert(document)
 			
 			return new Public.Draft(document.activeDraft, revision, document)
 		}
@@ -186,7 +186,7 @@ Diligence.Documents = Diligence.Documents || function() {
 		 */
 	    Public.revise = function(now) {
 			now = now || new Date()
-			this.site = sitesCollection.findAndModify({_id: this.site._id}, {$inc: {nextRevision: 1}, $set: {lastRevised: now}})
+			this.site = getSitesCollection().findAndModify({_id: this.site._id}, {$inc: {nextRevision: 1}, $set: {lastRevised: now}})
 			return this.site.nextRevision
 		}
 		
@@ -318,7 +318,7 @@ Diligence.Documents = Diligence.Documents || function() {
 			update.$set['drafts.r' + this.revision + '.source'] = this.draft.source
 			update.$set['drafts.r' + this.revision + '.language'] = this.draft.language
 
-			documentsCollection.update({_id: this.document._id}, update)
+			getDocumentsCollection().update({_id: this.document._id}, update)
 		}
 		
 		/**
@@ -357,11 +357,11 @@ Diligence.Documents = Diligence.Documents || function() {
 				// Update our draft
 				var update = {$set: {}}
 				update.$set['drafts.r' + this.revision + '.rendered'] = this.draft.rendered
-				documentsCollection.update({_id: this.document._id}, update)
+				getDocumentsCollection().update({_id: this.document._id}, update)
 
 				// Update active draft, if we are it
 				update = {$set: {'activeDraft.rendered': this.draft.rendered}}
-				documentsCollection.update({_id: this.document._id, 'activeDraft.revision': this.revision}, update)
+				getDocumentsCollection().update({_id: this.document._id, 'activeDraft.revision': this.revision}, update)
 			}
 
 			return this.draft.rendered || ''
@@ -430,11 +430,29 @@ Diligence.Documents = Diligence.Documents || function() {
 	}())
 	
 	//
+	// Private
+	//
+
+	function getDocumentsCollection() {
+		if (!Sincerity.Objects.exists(documentsCollection)) {
+			documentsCollection = new MongoDB.Collection('documents')
+		}
+		return documentsCollection
+	}
+
+	function getSitesCollection() {
+		if (!Sincerity.Objects.exists(sitesCollection)) {
+			sitesCollection = new MongoDB.Collection('sites')
+		}
+		return sitesCollection
+	}
+
+	//
 	// Initialization
 	//
 
-	var documentsCollection = new MongoDB.Collection('documents')
-	var sitesCollection = new MongoDB.Collection('sites')
+	var documentsCollection
+	var sitesCollection
 	
 	var defaultLanguage = application.globals.get('diligence.service.documents.defaultLanguage') || 'textile'
 	

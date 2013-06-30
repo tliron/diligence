@@ -270,18 +270,25 @@ Diligence.Internationalization = Diligence.Internationalization || function() {
 		}
 		
 		if (!textPack) {
-			textPack = textPacksCollection.findOne({locale: locale})
+			textPack = getTextPacksCollection().findOne({locale: locale})
 		}
 		
 		return textPack
+	}
+	
+	function getTextPacksCollection() {
+		if (!Sincerity.Objects.exists(textPacksCollection)) {
+			textPacksCollection = new MongoDB.Collection('textpacks')
+			textPacksCollection.ensureIndex({locale: 1}, {unique: true})
+		}
+		return textPacksCollection
 	}
 	
 	//
 	// Initialization
 	//
 	
-	var textPacksCollection = new MongoDB.Collection('textpacks')
-	textPacksCollection.ensureIndex({locale: 1}, {unique: true})
+	var textPacksCollection
 
 	var defaultLocale = application.globals.get('diligence.service.internationalization.defaultLocale')
 	if (Sincerity.Objects.isString(defaultLocale)) {

@@ -70,7 +70,7 @@ Diligence.Progress = Diligence.Progress || function() {
 		}
 
 		key = MongoDB.id(key)
-		var process = Sincerity.Objects.exists(key) ? processesCollection.findOne({_id: key}) : null
+		var process = Sincerity.Objects.exists(key) ? getProcessesCollection().findOne({_id: key}) : null
 		return process ? new Public.Process(process, context) : null
 	}
 	
@@ -110,7 +110,7 @@ Diligence.Progress = Diligence.Progress || function() {
 			process.expiration = new Date(now.getTime()).setMilliseconds(now.getMilliseconds() + params.maxDuration)
 		}
 
-		processesCollection.insert(process, 1)
+		getProcessesCollection().insert(process, 1)
 		
 		var context
 		if (params.task) {
@@ -147,7 +147,7 @@ Diligence.Progress = Diligence.Progress || function() {
 	    Public._construct = function(process, context) {
 			this.milestones = null
 			this.process = process
-			this.events = new Diligence.Events.MongoDbDocumentStore(processesCollection, process._id, process)
+			this.events = new Diligence.Events.MongoDbDocumentStore(getProcessesCollection(), process._id, process)
 	    }
 
 	    Public.getKey = function() {
@@ -248,7 +248,7 @@ Diligence.Progress = Diligence.Progress || function() {
 		
 		Public.addMilestone = function(milestone) {
 			milestone.timestamp = milestone.timestamp || new Date()
-			processesCollection.update({_id: this.process._id}, {
+			getProcessesCollection().update({_id: this.process._id}, {
 				$addToSet: {
 					milestones: milestone
 				}
@@ -264,7 +264,7 @@ Diligence.Progress = Diligence.Progress || function() {
 		}
 		
 		Public.remove = function() {
-			processesCollection.remove({_id: this.process._id})
+			getProcessesCollection().remove({_id: this.process._id})
 		}
 
 		Public.redirectWait = function(conversation, application) {
@@ -376,11 +376,18 @@ Diligence.Progress = Diligence.Progress || function() {
 		return m2.timestamp - m1.timestamp
 	}
 	
+	function getProcessesCollection() {
+		if (!Sincerity.Objects.exists(processesCollection)) {
+			var processesCollection = new MongoDB.Collection('processes')
+		}
+		return processesCollection
+	}
+	
 	//
 	// Initialization
 	//
 	
-    var processesCollection = new MongoDB.Collection('processes')
+    var processesCollection
 	
 	return Public
 }()

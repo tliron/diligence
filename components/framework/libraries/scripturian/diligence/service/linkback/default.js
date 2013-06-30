@@ -84,12 +84,12 @@ Diligence.Linkback = Diligence.Linkback || function() {
     	uri = String(uri)
     	var id = '#error#'
 
-		var linkback = linkbacks.findOne({uri: uri}, {_id: 1})
+		var linkback = getLinkbacksCollection().findOne({uri: uri}, {_id: 1})
 		if (linkback) {
 			id = String(linkback._id)
 		}
 		else {
-	    	var result = linkbacks.upsert({uri: uri}, {$set: {uri: uri}}, false, true)
+	    	var result = getLinkbacksCollection.upsert({uri: uri}, {$set: {uri: uri}}, false, true)
 	    	if (result && Sincerity.Objects.exists(result.upserted)) {
 	    		id = String(result.upserted)
 	    	}
@@ -148,14 +148,14 @@ Diligence.Linkback = Diligence.Linkback || function() {
 			delete params.id
 		}
 		else {
-			linkbacks.upsert({uri: params.uri}, {$set: {uri: params.uri}}, false, true)
+			getLinkbacksCollection.upsert({uri: params.uri}, {$set: {uri: params.uri}}, false, true)
 			query.uri = params.uri
 			delete params.uri
 		}
 		params.timestamp = new Date()
 		var update = {$addToSet: {links: params}}
 		
-		var result = linkbacks.update(query, update, false, 1)
+		var result = getLinkbacksCollection.update(query, update, false, 1)
 		if (result && (result.n == 1)) {
 			Public.logger.info('{method} from {sourceUri}', params)
 		}
@@ -169,7 +169,7 @@ Diligence.Linkback = Diligence.Linkback || function() {
 	 * 
 	 */
 	Public.getLinkbacks = function(uri) {
-		uri = linkbacks.findOne({uri: String(uri)}, {links: 1})
+		uri = getLinkbacksCollection.findOne({uri: String(uri)}, {links: 1})
 		//Public.logger.dump(uri)
 		return uri ? uri.links : []
 	}
@@ -388,6 +388,18 @@ Diligence.Linkback = Diligence.Linkback || function() {
 	}
 	
 	//
+	// Private
+	//
+
+	function getLinkbacksCollection() {
+		if (!Sincerity.Objects.exists(linkbacksCollection)) {
+			linkbacksCollection = new MongoDB.Collection('linkbacks')
+			linkbacksCollection.ensureIndex({uri: 1}, {unique: true})
+		}
+		return linkbacksCollection
+	}
+
+	//
 	// Initialization
 	//
 	
@@ -401,8 +413,7 @@ Diligence.Linkback = Diligence.Linkback || function() {
    	var trackbackUri = Sincerity.Objects.string(application.globals.get('diligence.service.linkback.trackbackUri'))
    	var pingbackUri = Sincerity.Objects.string(application.globals.get('diligence.service.linkback.pingbackUri'))
 
-	var linkbacks = new MongoDB.Collection('linkbacks')
-	linkbacks.ensureIndex({uri: 1}, {unique: true})
+	var linkbacksCollection
 
 	return Public
 }()

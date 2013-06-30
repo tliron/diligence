@@ -70,7 +70,7 @@ Diligence.Notification = Diligence.Notification || function() {
 		if (origin) {
 			notice.origin = origin
 		}
-		noticesCollection.insert(notice)
+		getNoticesCollection().insert(notice)
 	}
 
 	Public.queueForReference = function(service, reference, notice, origin) {
@@ -78,7 +78,7 @@ Diligence.Notification = Diligence.Notification || function() {
 		if (origin) {
 			notice.origin = origin
 		}
-		noticesCollection.insert(notice)
+		getNoticesCollection().insert(notice)
 	}
 	
 	Public.queueForChannel = function(channel, notice, origin) {
@@ -86,25 +86,25 @@ Diligence.Notification = Diligence.Notification || function() {
 		if (origin) {
 			notice.origin = origin
 		}
-		noticesCollection.insert(notice)
+		getNoticesCollection().insert(notice)
 	}
 	
 	Public.subscribe = function(channel, subscription) {
-		channelsCollection.upsert({name: channel}, {$addToSet: {subscriptions: subscription}})
+		getChannelsCollection().upsert({name: channel}, {$addToSet: {subscriptions: subscription}})
 	}
 	
 	Public.unsubscribe = function(channel, subscription) {
 		// TODO
-		//channelsCollection.insert({name: channel}, {$addToSet: {subscriptions: subscription}})
+		//getChannelsCollection().insert({name: channel}, {$addToSet: {subscriptions: subscription}})
 	}
 	
 	Public.getChannel = function(name) {
-		return channelsCollection.findOne({name: name})
+		return getChannelsCollection().findOne({name: name})
 	}
 	
 	Public.getSubscriptionsForAddress = function(service, address) {
 		var subscriptions = []
-		for (var cursor = channelsCollection.find({name: channel, subscriptions: {$elemMatch: {service: service, address: address}}}); cursor.hasNext(); ) {
+		for (var cursor = getChannelsCollection().find({name: channel, subscriptions: {$elemMatch: {service: service, address: address}}}); cursor.hasNext(); ) {
 			var channel = cursor.next()
 			for (var s in channel.subscriptions) {
 				var subscription = channel.subscriptions[s]
@@ -119,7 +119,7 @@ Diligence.Notification = Diligence.Notification || function() {
 	
 	Public.getSubscriptionsForReference = function(reference) {
 		var subscriptions = []
-		for (var cursor = channelsCollection.find({name: channel, 'subscriptions.reference': reference}); cursor.hasNext(); ) {
+		for (var cursor = getChannelsCollection().find({name: channel, 'subscriptions.reference': reference}); cursor.hasNext(); ) {
 			var channel = cursor.next()
 			for (var s in channel.subscriptions) {
 				var subscription = channel.subscriptions[s]
@@ -187,7 +187,7 @@ Diligence.Notification = Diligence.Notification || function() {
 		var update = {$set: {sentImmediate: new Date()}}
 		
 		var count = 0
-		var notice = noticesCollection.findAndModify(query, update)
+		var notice = getNoticesCollection().findAndModify(query, update)
 		while (notice) {
 			if (notice.direct) {
 				Public.send(notice.direct, notice.notice, notice.origin)
@@ -206,7 +206,7 @@ Diligence.Notification = Diligence.Notification || function() {
 			}
 
 			update.$set.sentImmediate = new Date()
-			notice = noticesCollection.findAndModify(query, update)
+			notice = getNoticesCollection().findAndModify(query, update)
 
 			if (maxCount && (count > maxCount)) {
 				break
@@ -228,7 +228,7 @@ Diligence.Notification = Diligence.Notification || function() {
 		var update = {$set: {}}
 		update.$set[sentProperty] = new Date()
 
-		var notice = noticesCollection.findAndModify(query, update)
+		var notice = getNoticesCollection().findAndModify(query, update)
 		while (notice) {
 			if (notice.channel) {
 				var channel = Public.getChannel(notice.channel)
@@ -236,25 +236,25 @@ Diligence.Notification = Diligence.Notification || function() {
 					for (var s in channel.subscriptions) {
 						var subscription = channel.subscriptions[s]
 						if (subscription.mode == mode) {
-							digestsCollection.upsert({subscription: subscription}, {$push: {entries: {channel: channel.name, notice: notice.notice, origin: notice.origin, timestamp: notice.timestamp}}})
+							getDigestsCollection().upsert({subscription: subscription}, {$push: {entries: {channel: channel.name, notice: notice.notice, origin: notice.origin, timestamp: notice.timestamp}}})
 						}
 					}
 				}
 			}
 
 			update.$set[sentProperty] = new Date()
-			notice = noticesCollection.findAndModify(query, update)
+			notice = getNoticesCollection().findAndModify(query, update)
 		}
 		
 		query = {'subscription.mode': mode}
 
 		var count = 0
-		var digest = digestsCollection.findAndRemove(query)
+		var digest = getDigestsCollection().findAndRemove(query)
 		while (digest) {
 			Public.sendDigest(digest.subscription, digest.entries, mode, digest.origin)
 			count++
 			
-			digest = digestsCollection.findAndRemove(query)
+			digest = getDigestsCollection().findAndRemove(query)
 		}
 
 		if (count > 0) {
@@ -321,17 +321,38 @@ Diligence.Notification = Diligence.Notification || function() {
 			return null
 		}
 	}
-	
+
+	function getChannelsCollection() {
+		if (!Sincerity.Objects.exists(channelsCollection)) {
+			channelsCollection = new MongoDB.Collection('channels')
+			channelsCollection.ensureIndex({name: 1}, {unique: true})
+		}
+		return channelsCollection
+	}
+
+	function getNoticesCollection() {
+		if (!Sincerity.Objects.exists(noticesCollection)) {
+			noticesCollection = new MongoDB.Collection('notices')
+			noticesCollection.ensureIndex({channel: 1})
+		}
+		return noticesCollection
+	}
+
+	function getDigestsCollection() {
+		if (!Sincerity.Objects.exists(digestsCollection)) {
+			digestsCollection = new MongoDB.Collection('digests')
+			digestsCollection.ensureIndex({'subscription.mode': 1})
+		}
+		return digestsCollection
+	}
+
 	//
 	// Initialization
 	//
 
-	var channelsCollection = new MongoDB.Collection('channels')
-	channelsCollection.ensureIndex({name: 1}, {unique: true})
-	var noticesCollection = new MongoDB.Collection('notices')
-	noticesCollection.ensureIndex({channel: 1})
-	var digestsCollection = new MongoDB.Collection('digests')
-	digestsCollection.ensureIndex({'subscription.mode': 1})
+	var channelsCollection
+	var noticesCollection
+	var digestsCollection
 	
 	return Public
 }()

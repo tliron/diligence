@@ -174,7 +174,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 			}
 		}
 
-		var user = usersCollection.findOne(query)
+		var user = getUsersCollection().findOne(query)
 		if (user && Sincerity.Objects.exists(password)) {
 			password = Public.encryptPassword(password, user.passwordSalt)
 			if (password != user.password) {
@@ -189,13 +189,13 @@ Diligence.Authentication = Diligence.Authentication || function() {
 	 * @returns {Diligence.Authentication.User}
 	 */
 	Public.getUserById = function(id) {
-		var user = usersCollection.findOne({_id: id})
+		var user = getUsersCollection().findOne({_id: id})
 		return user ? new Public.User(user) : null
 	}
 	
 	Public.userLastSeen = function(id, now) {
 		now = now || new Date()
-		usersCollection.update({
+		getUsersCollection().update({
 			_id: id
 		}, {
 			$set: {
@@ -207,7 +207,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 	Public.maintenance = function() {
 		var limit = new Date()
 		limit.setMinutes(limit.getMinutes() - maxSessionIdleMinutes)
-		var result = sessionsCollection.remove({lastSeen: {$lt: limit}}, 1)
+		var result = getSessionsCollection().remove({lastSeen: {$lt: limit}}, 1)
 		
 		if (result && result.n) {
 			Public.logger.info('Removed {0} stale {1}', result.n, result.n > 1 ? 'sessions' : 'session')
@@ -215,7 +215,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 
 		limit = new Date()
 		limit.setDate(limit.getDate() - maxUserUnconfirmedDays)
-		result = usersCollection.remove({confirmed: {$exists: false}, created: {$lt: limit}}, 1)
+		result = getUsersCollection().remove({confirmed: {$exists: false}, created: {$lt: limit}}, 1)
 
 		if (result && result.n) {
 			Public.logger.info('Removed {0} abandoned user {1}', result.n, result.n > 1 ? 'registrations' : 'registration')
@@ -248,7 +248,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		}
 		
 		if (Sincerity.Objects.exists(sessionId)) {
-			session = sessionsCollection.findOne({_id: sessionId})
+			session = getSessionsCollection().findOne({_id: sessionId})
 		}
 		
 		//Public.logger.info('Session: ' + Sincerity.JSON.to(session))
@@ -276,7 +276,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 				lastSeen: now
 			}
 			
-			sessionsCollection.insert(session)
+			getSessionsCollection().insert(session)
 			
 			var cookie = createCookie(session, conversation)
 			
@@ -311,12 +311,12 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		
 		var userId
 		
-		var result = usersCollection.upsert(query, update, false, 1)
+		var result = getUsersCollection().upsert(query, update, false, 1)
 		if (result && (result.n == 1) && result.upserted) {
 			userId = MongoDB.id(result.upserted)
 		}
 		else {
-			userId = usersCollection.findOne(query)._id
+			userId = getUsersCollection().findOne(query)._id
 		}
 		
 		if (!Sincerity.Objects.exists(userId)) {
@@ -337,7 +337,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 				'authorization.entities': 'provider.' + provider
 			}
 		}
-		usersCollection.update(query, update)
+		getUsersCollection().update(query, update)
 		
 		var session = {
 			_id: MongoDB.newId(),
@@ -346,7 +346,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 			lastSeen: now
 		}
 		
-		sessionsCollection.insert(session)
+		getSessionsCollection().insert(session)
 		
 		var cookie = createCookie(session, conversation)
 		
@@ -375,7 +375,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		Public.logout = function() {
 			var user = this.getUser()
 
-			var result = sessionsCollection.remove({_id: this.session._id}, 1)
+			var result = getSessionsCollection().remove({_id: this.session._id}, 1)
 			if (result && (result.n == 1)) {
 				Module.logger.info('{0} logged out', user ? 'User ' + user.getName() : 'Unknown user')
 			}
@@ -392,7 +392,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		
 		Public.keepAlive = function() {
 			this.session.lastSeen = new Date()
-			sessionsCollection.update({_id: this.session._id}, {$set: {lastSeen: this.session.lastSeen}})
+			getSessionsCollection().update({_id: this.session._id}, {$set: {lastSeen: this.session.lastSeen}})
 			
 			var user = this.getUser()
 			if (user) {
@@ -420,7 +420,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 			var update = {$set: {}}
 			update.$set['values.' + key] = value
 
-			sessionsCollection.update({_id: this.session._id}, update)
+			getSessionsCollection().update({_id: this.session._id}, update)
 		}
 		
 		return Public
@@ -594,14 +594,28 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		cookie.save()
 		return cookie
 	}
-	
+
+	function getUsersCollection() {
+		if (!Sincerity.Objects.exists(usersCollection)) {
+			usersCollection = new MongoDB.Collection('users')
+			usersCollection.ensureIndex({name: 1}, {unique: true})
+		}
+		return usersCollection
+	}
+
+	function getSessionsCollection() {
+		if (!Sincerity.Objects.exists(sessionsCollection)) {
+			sessionsCollection = new MongoDB.Collection('sessions')
+		}
+		return sessionsCollection
+	}
+
 	//
 	// Initialization
 	//
 	
-	var usersCollection = new MongoDB.Collection('users')
-	usersCollection.ensureIndex({name: 1}, {unique: true})
-	var sessionsCollection = new MongoDB.Collection('sessions')
+	var usersCollection
+	var sessionsCollection
 	
 	var maxSessionIdleMinutes = application.globals.get('diligence.service.authentication.maxSessionIdleMinutes') || 15
 	var maxUserUnconfirmedDays = application.globals.get('diligence.service.authentication.maxUserUnconfirmedDays') || 7
