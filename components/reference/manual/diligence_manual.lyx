@@ -2322,7 +2322,7 @@ app.routes = {
 
 \begin_layout Plain Layout
 
-	'/multiply/': {type: 'implicit', id: 'multiply'}
+	'/multiply/': '@multiply'
 \end_layout
 
 \begin_layout Plain Layout
@@ -2346,12 +2346,12 @@ app.dispatchers = {
 
 \begin_layout Plain Layout
 
-	javascript: {library: '/resources/'}
+	javascript: '/manual-resources/'
 \end_layout
 
 \begin_layout Plain Layout
 
-} 
+}
 \end_layout
 
 \end_inset
@@ -2364,7 +2364,7 @@ We can now configure our resources in
 \begin_inset Quotes eld
 \end_inset
 
-/libraries/resources.js
+/libraries/manual-resources.js
 \begin_inset Quotes erd
 \end_inset
 
@@ -7899,12 +7899,12 @@ app.routes = {
 
 \begin_layout Plain Layout
 
-	'/data/users/{id}/': {type: 'implicit', id: 'users'},
+	'/data/users/{id}/': '@users',
 \end_layout
 
 \begin_layout Plain Layout
 
-	'/data/users/':      {type: 'implicit', id: 'users.plural'}
+	'/data/users/':      '@users.plural'
 \end_layout
 
 \begin_layout Plain Layout
@@ -7928,12 +7928,12 @@ app.dispatchers = {
 
 \begin_layout Plain Layout
 
-	javascript: {library: '/resources/'}
+	javascript: '/manual-resources/'
 \end_layout
 
 \begin_layout Plain Layout
 
-} 
+}
 \end_layout
 
 \end_inset
@@ -7946,7 +7946,7 @@ We can now configure our resources in
 \begin_inset Quotes eld
 \end_inset
 
-/libraries/resources.js
+/libraries/manual-resources.js
 \begin_inset Quotes erd
 \end_inset
 
@@ -10629,7 +10629,7 @@ app.routes = {
 
 \begin_layout Plain Layout
 
-	'/calc/': {type: 'implicit', id: 'calc'}
+	'/calc/': '@calc'
 \end_layout
 
 \begin_layout Plain Layout
@@ -10653,12 +10653,12 @@ app.dispatchers = {
 
 \begin_layout Plain Layout
 
-	javascript: {library: '/resources/'}
+	javascript: '/manual-resources/'
 \end_layout
 
 \begin_layout Plain Layout
 
-} 
+}
 \end_layout
 
 \end_inset
@@ -10671,7 +10671,7 @@ We can now configure our resources in
 \begin_inset Quotes eld
 \end_inset
 
-/libraries/resources.js
+/libraries/manual-resources.js
 \begin_inset Quotes erd
 \end_inset
 
@@ -12983,7 +12983,7 @@ app.routes = {
 
 \begin_layout Plain Layout
 
-	'/data/textpack/{id}/': {type: 'implicit', id: 'textpack'}
+	'/data/textpack/{id}/': '@textpack'
 \end_layout
 
 \begin_layout Plain Layout
@@ -13007,12 +13007,12 @@ app.dispatchers = {
 
 \begin_layout Plain Layout
 
-	javascript: {library: '/resources/'}
+	javascript: '/manual-resources/'
 \end_layout
 
 \begin_layout Plain Layout
 
-} 
+}
 \end_layout
 
 \end_inset
@@ -13046,7 +13046,7 @@ MongoDbTreeResource
 \begin_inset Quotes eld
 \end_inset
 
-/libraries/resources.js
+/libraries/manual-resources.js
 \begin_inset Quotes erd
 \end_inset
 

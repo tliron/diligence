@@ -89,6 +89,11 @@
 		<antcall target="manual-elyxer" />
 		<copy todir="${cache.example}/programs">
 			<fileset dir="${manual}" includes="*.js" />
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${component.version}${component.version.postfix}" />
+				</replacetokens>
+			</filterchain>
 		</copy>
 		<mkdir dir="${cache.example}/.sincerity" />
 		<exec executable="${sincerity}">
