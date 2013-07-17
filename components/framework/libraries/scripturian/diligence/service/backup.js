@@ -223,7 +223,14 @@ Diligence.Backup = Diligence.Backup || function() {
     	try {
     		while (iterator.hasNext()) {
     			var doc = iterator.next()
-    			collection.insert(doc)
+    			try {
+    				collection.insert(doc)
+    			}
+    			catch (e) {
+    				if (e.code != MongoDB.Error.DuplicateKey) {
+    					throw e
+    				}
+    			}
     			count++
     		}
     	}

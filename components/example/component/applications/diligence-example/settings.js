@@ -49,8 +49,8 @@ app.settings = {
 
 app.globals = {
 	mongoDb: {
-		defaultServers: '127.0.0.1',
 		defaultSwallow: true,
+		defaultUris: 'localhost',
 		defaultDb: 'diligence'
 	},
 
@@ -90,6 +90,3 @@ app.globals = {
 		}
 	}
 }
-
-MongoDB = null
-document.execute('/mongo-db/')

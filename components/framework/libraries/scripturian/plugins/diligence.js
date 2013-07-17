@@ -40,7 +40,7 @@ function worker(command) {
 	// Properties
 	command.parse = true
 	var properties = command.properties
-	var connection = properties.get('connection')
+	var uri = properties.get('uri')
 	var username = properties.get('username')
 	var password = properties.get('password')
 	var db = properties.get('db')
@@ -52,8 +52,8 @@ function worker(command) {
 	}
 
 	// Connect
-	var connection = MongoDB.connect(connection, null, username, password)
-	collection = new MongoDB.Collection(collection, {connection: connection, db: db})
+	var client = MongoDB.connect(uri, {username: username, password: password})
+	collection = new MongoDB.Collection(collection, {client: client, db: db})
 	collection.ensureIndex({created: 1})
 	
 	while (true) {

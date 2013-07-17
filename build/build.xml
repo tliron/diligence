@@ -78,7 +78,7 @@
 	<target name="manual-overwrite" description="Create manual" unless="manual-present">
 		<mkdir dir="${cache.manual}" />
 		<copy todir="${cache.manual}">
-			<fileset dir="${manual}" excludes="*~, *.js" />
+			<fileset dir="${manual}" excludes="**/*~, *.js" />
 			<filterchain>
 				<replacetokens>
 					<token key="VERSION" value="${component.version}${component.version.postfix}" />
@@ -199,7 +199,7 @@
 		<delete dir="${cache.maven.pom}" />
 		<delete dir="${cache.maven.build}" />
 		<copy todir="${cache.maven.pom}">
-			<fileset dir="${root}/build/maven" excludes="*~" />
+			<fileset dir="${root}/build/maven" excludes="**/*~" />
 			<filterchain>
 				<replacetokens>
 					<token key="VERSION" value="${component.version}${component.version.postfix}" />

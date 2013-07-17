@@ -2,16 +2,15 @@
 document.executeOnce('/diligence/service/rest/')
 
 app.hosts = {
-	'default': '/diligence-example/'
+	'default': '/diligence-example/',
+	internal: '/diligence-example/'
 }
 
 app.routes = {
 	'/*': [
 		'manual',
 		'scriptlet',
-		{type: 'zuss', next: [
-			'static',
-			{type: 'static', root: sincerity.container.getLibrariesFile('web')}]}
+		{type: 'zuss', next: 'static'}
 	],
 	
 	'/log/':                           'log',
