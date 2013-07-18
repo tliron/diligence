@@ -2,15 +2,27 @@
 document.executeOnce('/diligence/service/rest/')
 
 app.hosts = {
-	'default': '/diligence-example/',
-	internal: '/diligence-example/'
+	'default': '/diligence-example/'
 }
 
 app.routes = {
 	'/*': [
 		'manual',
 		'scriptlet',
-		{type: 'zuss', next: 'static'}
+		{
+			type: 'cacheControl',
+			mediaTypes: {
+				'image/png': 'farFuture',
+				'image/gif': 'farFuture',
+				'image/jpeg': 'farFuture',
+				'text/css': 'farFuture',
+				'application/x-javascript': 'farFuture'
+			},
+			next: {
+				type: 'zuss',
+				next: 'static'
+			}
+		}
 	],
 	
 	'/log/':                           'log',
@@ -46,5 +58,5 @@ app.routes = {
 //Sincerity.Objects.merge(app.routes, Diligence.REST.createMongoDbRoutes({prefix: '/mongo/'}))
 
 app.dispatchers = {
-	javascript: '/resources/'
+	javascript: '/manual-resources/'
 }

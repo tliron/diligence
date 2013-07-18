@@ -1,17 +1,26 @@
 
 app.hosts = {
-	'default': '/${APPLICATION}/',
-	internal: '/${APPLICATION}/' // If not provided will default to the application subdirectory name
+	'default': '/${APPLICATION}/'
 }
 
 app.routes = {
 	'/*': [
 		'manual',
 		'scriptlet',
-		// For our static files we'll cache all images on the client for the far future, and enable on-the-fly ZUSS support and JavaScript compression:
-		{type: 'cacheControl', mediaTypes: {'image/png': 'farFuture', 'image/jpeg': 'farFuture', 'image/gif': 'farFuture'}, next:
-			{type: 'javaScriptUnifyMinify', next:
-				{type: 'zuss', next: 'static'}}}
+		{
+			type: 'cacheControl',
+			mediaTypes: {
+				'image/png': 'farFuture',
+				'image/gif': 'farFuture',
+				'image/jpeg': 'farFuture',
+				'text/css': 'farFuture',
+				'application/x-javascript': 'farFuture'
+			},
+			next: {
+				type: 'zuss',
+				next: 'static'
+			}
+		}
 	],
 	
 	'/log/':                   '@log',
