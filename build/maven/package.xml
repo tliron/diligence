@@ -13,16 +13,6 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>@ROOT@/components/framework</directory>
-			<outputDirectory>.</outputDirectory>
-			<includes>
-				<include>**</include>
-			</includes>
-			<excludes>
-				<exclude>**/.gitignore</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
 			<directory>@ROOT@/build/cache/framework</directory>
 			<outputDirectory>.</outputDirectory>
 			<includes>

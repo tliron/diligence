@@ -11,7 +11,8 @@
 	<property name="example" location="${root}/components/example" />
 	
 	<property name="cache" location="${root}/build/cache" />
-	<property name="cache.manual" location="${cache}/framework/reference/manuals/${component.group}/${component.artifact}/${component.version}${component.version.postfix}" />
+	<property name="cache.framework" location="${cache}/framework" />
+	<property name="cache.manual" location="${cache.framework}/reference/manuals/${component.group}/${component.artifact}/${component.version}${component.version.postfix}" />
 	<property name="cache.example" location="${cache}/example" />
 	<property name="cache.maven.pom" location="${cache}/maven/pom" />
 	<property name="cache.maven.build" location="${cache}/maven/build" />
@@ -208,6 +209,17 @@
 					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
 					<token key="ROOT" value="${root}" />
 					<token key="CACHE" value="${cache.maven.build}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<copy todir="${cache.framework}">
+			<fileset dir="${framework}" excludes="**/*~, **/*.js" />
+		</copy>
+		<copy todir="${cache.framework}">
+			<fileset dir="${framework}" includes="**/*.js" />
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${component.version}${component.version.postfix}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
