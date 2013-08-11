@@ -2,6 +2,7 @@
 <%
 document.include('/example/header/')
 document.include('/example/footer/')
+var version = application.sharedGlobals.get('com.threecrickets.diligence.version')
 %>
 <html>
 <head>
@@ -12,8 +13,8 @@ document.include('/example/footer/')
 	<link rel="shortcut icon" href="http://threecrickets.com/media/three-crickets/diligence.ico" />
 	<%== head %>
 	<% if(null !== conversation.locals.get('extJs')) { document.executeOnce('/diligence/integration/frontend/sencha/'); print(Diligence.Sencha.extJsHead(conversation)); } %>
-	<!--  Soft Crickets (needs to be *after* Ext JS CSS, if you're using it) -->
-	<link rel="stylesheet" type="text/css" href="<%= conversation.base %>/style/three-crickets/soft-cricket.css" />
+	<!--  Dark Cricket (needs to be *after* Ext JS CSS, if you're using it) -->
+	<link rel="stylesheet" type="text/css" href="<%= conversation.base %>/style/three-crickets/dark-cricket/dark-cricket.min.css" />
 
 	<!-- Ubuntu font -->
 	<link href="http://fonts.googleapis.com/css?family=Ubuntu|Ubuntu:italic|Ubuntu:bold|Ubuntu:bolditalic" rel="stylesheet" type="text/css" />
@@ -25,80 +26,73 @@ document.include('/example/footer/')
 	<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script><% } %>
 </head>
 <body>
-	<table class="soft" width="100%">
-		<tr valign="top">
-			<td width="25%">
+<div style="float: left; margin-bottom: 12px;">
+	<a href="<%= conversation.base %>">
+		<h2 style="margin-top: 12px;">Diligence Examples<br /><span style="font-size: 13px;">Version <%= version %></span></h2>
+	</a>
 
-				<a href="<%= conversation.base %>/" class="neutral">
-					<table class="soft"><tr>
-						<td><h1>Diligence<br /><span style="font-size: 12px;">The Scalable Prudence/MongoDB<br />Web Development Framework</span></h1></td>
-						<td><img src="<%= conversation.base %>/media/diligence/diligence-small.png" border="0" style="margin-left: 10px;"></td>
-					</tr></table>
-				</a>
-
-				<div class="navigation">
-					<ul>
-						<li><a href="<%= conversation.base %>">About</a></li>
-						<li><a href="http://code.google.com/p/diligence-prudence/">Community and Support</a></li>
-						<li><a href="<%= conversation.base %>/api/">API Documentation</a></li>
-						<li><span class="heading">Drop-In Features</span>
-							<ul style="text-decoration:line-through">
-								<li><a href="<%= conversation.base %>/example/feature/blog/">Blog</a></li>
-								<li><a href="<%= conversation.base %>/example/feature/console/">Console</a></li>
-								<li><a href="<%= conversation.base %>/example/feature/contact-us/">Contact Us</a></li>
-								<li><a href="<%= conversation.base %>/example/feature/discussion/">Discussion</a></li>
-								<li><a href="<%= conversation.base %>/example/feature/registration/">Registration</a></li>
-								<li><a href="<%= conversation.base %>/example/feature/seo/">SEO</a></li>
-								<li><a href="<%= conversation.base %>/example/feature/shopping-cart/">Shopping Cart</a></li>
-								<li><a href="<%= conversation.base %>/example/feature/wiki/">Wiki</a></li>
-							</ul>
-						</li>
-						<li><span class="heading">Application Services</span>
-							<ul>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/authentication/">Authentication</a></li>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/authorization/">Authorization</a></li>
-								<li><a href="<%= conversation.base %>/example/service/backup/">Backup</a></li>
-								<li><a href="<%= conversation.base %>/example/service/cache/">Cache</a></li>
-								<li><a href="<%= conversation.base %>/example/service/documents/">Documents</a></li>
-								<li><a href="<%= conversation.base %>/example/service/events/">Events</a></li>
-								<li><a href="<%= conversation.base %>/example/service/forms/">Forms</a></li>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/html/">HTML</a></li>
-								<li><a href="<%= conversation.base %>/example/service/internationalization/">Internationalization</a></li>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/linkback/">Linkback</a></li>
-								<li><a href="<%= conversation.base %>/example/service/nonces/">Nonces</a></li>
-								<li><a href="<%= conversation.base %>/example/service/notification/">Notification</a></li>
-								<li><a href="<%= conversation.base %>/example/service/progress/">Progress</a></li>
-								<li><a href="<%= conversation.base %>/example/service/rpc/">RPC</a></li>
-								<li><a href="<%= conversation.base %>/example/service/rest/">REST</a></li>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/search/">Search</a></li>
-								<li><a href="<%= conversation.base %>/example/service/serials/">Serials</a></li>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/syndication/">Syndication</a></li>
-							</ul>
-						</li>
-						<li><span class="heading">Integrations</span>
-							<ul style="text-decoration:line-through">
-								<li><a href="<%= conversation.base %>/example/integration/gravatar/">Gravatar</a></li>
-								<li><a href="<%= conversation.base %>/example/integration/pay-pal/">PayPal</a></li>
-							</ul>
-						</li>
-						<li><span class="heading">Sencha Integration</span>
-							<ul>
-								<li><a href="<%= conversation.base %>/example/integration/sencha/">General Information</a></li>
-								<li><a href="<%= conversation.base %>/example/integration/sencha/grids/">Ext JS Grids</a></li>
-								<li><a href="<%= conversation.base %>/example/integration/sencha/trees/">Ext JS Trees</a></li>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/integration/sencha/charts/">Ext JS Charts</a></li>
-								<li><a href="<%= conversation.base %>/example/integration/sencha/forms/">Ext JS Forms</a></li>
-								<li><a href="<%= conversation.base %>/example/integration/sencha/direct/">Ext Direct</a></li>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/integration/sencha/touch/">Sencha Touch</a></li>
-							</ul>
-						</li>
-						<li><span class="heading">Tools</span>
-							<ul>
-								<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/tool/js-doc/" class="closed">JsDoc Template</a></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
+	<div class="navigation">
+		<ul>
+			<li><a href="<%= conversation.base %>">About</a></li>
+			<li><a href="http://code.google.com/p/diligence-prudence/">Community and Support</a></li>
+			<li><a href="<%= conversation.base %>/api/">API Documentation</a></li>
+			<li><span class="heading">Drop-In Features</span>
+				<ul style="text-decoration:line-through">
+					<li><a href="<%= conversation.base %>/example/feature/blog/">Blog</a></li>
+					<li><a href="<%= conversation.base %>/example/feature/console/">Console</a></li>
+					<li><a href="<%= conversation.base %>/example/feature/contact-us/">Contact Us</a></li>
+					<li><a href="<%= conversation.base %>/example/feature/discussion/">Discussion</a></li>
+					<li><a href="<%= conversation.base %>/example/feature/registration/">Registration</a></li>
+					<li><a href="<%= conversation.base %>/example/feature/seo/">SEO</a></li>
+					<li><a href="<%= conversation.base %>/example/feature/shopping-cart/">Shopping Cart</a></li>
+					<li><a href="<%= conversation.base %>/example/feature/wiki/">Wiki</a></li>
+				</ul>
+			</li>
+			<li><span class="heading">Application Services</span>
+				<ul>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/authentication/">Authentication</a></li>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/authorization/">Authorization</a></li>
+					<li><a href="<%= conversation.base %>/example/service/backup/">Backup</a></li>
+					<li><a href="<%= conversation.base %>/example/service/cache/">Cache</a></li>
+					<li><a href="<%= conversation.base %>/example/service/documents/">Documents</a></li>
+					<li><a href="<%= conversation.base %>/example/service/events/">Events</a></li>
+					<li><a href="<%= conversation.base %>/example/service/forms/">Forms</a></li>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/html/">HTML</a></li>
+					<li><a href="<%= conversation.base %>/example/service/internationalization/">Internationalization</a></li>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/linkback/">Linkback</a></li>
+					<li><a href="<%= conversation.base %>/example/service/nonces/">Nonces</a></li>
+					<li><a href="<%= conversation.base %>/example/service/notification/">Notification</a></li>
+					<li><a href="<%= conversation.base %>/example/service/progress/">Progress</a></li>
+					<li><a href="<%= conversation.base %>/example/service/rpc/">RPC</a></li>
+					<li><a href="<%= conversation.base %>/example/service/rest/">REST</a></li>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/search/">Search</a></li>
+					<li><a href="<%= conversation.base %>/example/service/serials/">Serials</a></li>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/service/syndication/">Syndication</a></li>
+				</ul>
+			</li>
+			<li><span class="heading">Integrations</span>
+				<ul style="text-decoration:line-through">
+					<li><a href="<%= conversation.base %>/example/integration/gravatar/">Gravatar</a></li>
+					<li><a href="<%= conversation.base %>/example/integration/pay-pal/">PayPal</a></li>
+				</ul>
+			</li>
+			<li><span class="heading">Sencha Integration</span>
+				<ul>
+					<li><a href="<%= conversation.base %>/example/integration/sencha/">General Information</a></li>
+					<li><a href="<%= conversation.base %>/example/integration/sencha/grids/">Ext JS Grids</a></li>
+					<li><a href="<%= conversation.base %>/example/integration/sencha/trees/">Ext JS Trees</a></li>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/integration/sencha/charts/">Ext JS Charts</a></li>
+					<li><a href="<%= conversation.base %>/example/integration/sencha/forms/">Ext JS Forms</a></li>
+					<li><a href="<%= conversation.base %>/example/integration/sencha/direct/">Ext Direct</a></li>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/integration/sencha/touch/">Sencha Touch</a></li>
+				</ul>
+			</li>
+			<li><span class="heading">Tools</span>
+				<ul>
+					<li style="text-decoration:line-through"><a href="<%= conversation.base %>/example/tool/js-doc/" class="closed">JsDoc Template</a></li>
+				</ul>
+			</li>
+		</ul>
 <%
 var textPack = conversation.locals.get('diligence.service.internationalization.text')
 var permissions = conversation.locals.get('diligence.service.authorization.permissions')
@@ -117,7 +111,7 @@ if (permissions) {
 %>
 				<%# '/diligence/service/authentication/info/' %>
 
-			</td>
-			<td id="main-column" width="50%">
-				<div id="main">
-					<div id="main-content">
+	</div>
+</div>
+<div id="main"><div id="main-content">
+	<img style="float: right; padding: 6px 6px 6px 6px;" src="<%= conversation.base %>/media/three-crickets/diligence-small.png" alt="Diligence logo: sleeping monkey" />

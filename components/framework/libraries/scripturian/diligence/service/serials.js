@@ -11,6 +11,7 @@
 // at http://threecrickets.com/
 //
 
+document.executeOnce('/sincerity/objects/')
 document.executeOnce('/mongo-db/')
 
 var Diligence = Diligence || {}

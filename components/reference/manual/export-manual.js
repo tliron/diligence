@@ -140,6 +140,7 @@ manual.generate('diligence', {
 	'Authentication Service': [diligenceBase + 'manual/service/authentication.s.html'],
 	'Authorization Service': [diligenceBase + 'manual/service/authorization.s.html'],
 	'Backup Service': [diligenceBase + 'manual/service/backup.s.html'],
+	'Cache Service': [diligenceBase + 'manual/service/cache.s.html'],
 	'Documents Service': [diligenceBase + 'manual/service/documents.s.html'],
 	'Events Service': [diligenceBase + 'manual/service/events.s.html'],
 	'Forms Service': [diligenceBase + 'manual/service/forms.s.html'],
