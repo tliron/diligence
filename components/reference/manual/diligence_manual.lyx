@@ -146,7 +146,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Authentication"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Authentication"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Authentication"
 
 \end_inset
 
@@ -307,7 +307,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Authorization"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Authorizaion"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Authorizaion"
 
 \end_inset
 
@@ -480,7 +480,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Backup"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Backup"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Backup"
 
 \end_inset
 
@@ -753,7 +753,7 @@ Note the markup rendering is handled by a lower-level library,
 \begin_inset CommandInset href
 LatexCommand href
 name "Diligence.HTML"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.HTML"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.HTML"
 
 \end_inset
 
@@ -770,7 +770,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Documents"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Documents"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Documents"
 
 \end_inset
 
@@ -1314,7 +1314,7 @@ The point of an event-driven architecture is that you're relinquishing some
 \begin_inset CommandInset href
 LatexCommand href
 name "Prudence.Task API"
-target "http://threecrickets.com/javascript-api/?namespace=Prudence.Task"
+target "http://threecrickets.com/api/javascript/?namespace=Prudence.Task"
 
 \end_inset
 
@@ -1336,7 +1336,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Events"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Events"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Events"
 
 \end_inset
 
@@ -1989,7 +1989,7 @@ You can also store events inside a specific, arbitrary MongoDB document,
 \begin_inset CommandInset href
 LatexCommand href
 name "Diligence.Events.MongoDbDocumentStore"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Events.MongoDbDocumentStore"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Events.MongoDbDocumentStore"
 
 \end_inset
 
@@ -2252,7 +2252,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Forms"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Forms"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Forms"
 
 \end_inset
 
@@ -4931,7 +4931,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.HTML"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.HTML"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.HTML"
 
 \end_inset
 
@@ -4940,7 +4940,7 @@ target "http://threecrickets.com/javascript-api/?namespace=Diligence.HTML"
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Sincerity.XML"
-target "http://threecrickets.com/javascript-api/?namespace=Sincerity.XML"
+target "http://threecrickets.com/api/javascript/?namespace=Sincerity.XML"
 
 \end_inset
 
@@ -5539,7 +5539,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Internationalization"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Internationalization"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Internationalization"
 
 \end_inset
 
@@ -5871,7 +5871,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Cache"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Cache"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Cache"
 
 \end_inset
 
@@ -6145,7 +6145,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Linkback"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Linkback"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Linkback"
 
 \end_inset
 
@@ -6329,7 +6329,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Nonces"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Nonces"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Nonces"
 
 \end_inset
 
@@ -6555,7 +6555,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Notification"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Notification"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Notification"
 
 \end_inset
 
@@ -7073,7 +7073,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Progress"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Progress"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Progress"
 
 \end_inset
 
@@ -7214,7 +7214,7 @@ You can launch a task from within startProcess, which in turns call the
 \begin_inset CommandInset href
 LatexCommand href
 name "Prudence.Tasks API"
-target "http://threecrickets.com/javascript-api/?namespace=Prudence.Tasks"
+target "http://threecrickets.com/api/javascript/?namespace=Prudence.Tasks"
 
 \end_inset
 
@@ -7853,7 +7853,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.REST"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.REST"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.REST"
 
 \end_inset
 
@@ -8995,7 +8995,7 @@ goDbResource class using the
 \begin_inset CommandInset href
 LatexCommand href
 name "Sincerity.Classes API"
-target "http://threecrickets.com/javascript-api/?namespace=Sincerity.Classes"
+target "http://threecrickets.com/api/javascript/?namespace=Sincerity.Classes"
 
 \end_inset
 
@@ -10004,7 +10004,7 @@ The
 \begin_inset CommandInset href
 LatexCommand href
 name "Prudence.Resources API"
-target "http://threecrickets.com/javascript-api/?namespace=Prudence.Resources"
+target "http://threecrickets.com/api/javascript/?namespace=Prudence.Resources"
 
 \end_inset
 
@@ -10067,7 +10067,7 @@ Again, we'll emphasize that when accessing the API internally neither HTTP
 \begin_inset CommandInset href
 LatexCommand href
 name "MongoDB API"
-target "http://threecrickets.com/javascript-api/?namespace=MongoDB"
+target "http://threecrickets.com/api/javascript/?namespace=MongoDB"
 
 \end_inset
 
@@ -10592,7 +10592,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.RPC"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.RPC"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.RPC"
 
 \end_inset
 
@@ -11469,7 +11469,7 @@ Diligence.RPC.request
 \begin_inset CommandInset href
 LatexCommand href
 name "Prudence.Resources API"
-target "http://threecrickets.com/javascript-api/?namespace=Prudence.Resources"
+target "http://threecrickets.com/api/javascript/?namespace=Prudence.Resources"
 
 \end_inset
 
@@ -11809,7 +11809,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Search"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Search"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Search"
 
 \end_inset
 
@@ -11845,7 +11845,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Serials"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Serials"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Serials"
 
 \end_inset
 
@@ -11903,7 +11903,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Syndication"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Syndication"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Syndication"
 
 \end_inset
 
@@ -11981,7 +11981,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Gravatar"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Gravatar"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Gravatar"
 
 \end_inset
 
@@ -12010,7 +12010,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.PayPal"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.PayPal"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.PayPal"
 
 \end_inset
 
@@ -12064,7 +12064,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Sencha"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Sencha"
 
 \end_inset
 
@@ -12284,7 +12284,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "server-side API documentation for Diligence.Sencha"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Sencha"
 
 \end_inset
 
@@ -12917,7 +12917,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "server-side API documentation for Diligence.Sencha"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Sencha"
 
 \end_inset
 
@@ -15209,7 +15209,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "server-side API documentation for Diligence.Sencha"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Sencha"
 
 \end_inset
 
@@ -15217,7 +15217,7 @@ target "http://threecrickets.com/javascript-api/?namespace=Diligence.Sencha"
 \begin_inset CommandInset href
 LatexCommand href
 name "Diligence.RPC"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.RPC"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.RPC"
 
 \end_inset
 
@@ -15848,7 +15848,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Blog"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Blog"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Blog"
 
 \end_inset
 
@@ -15868,7 +15868,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Console"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Console"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Console"
 
 \end_inset
 
@@ -15909,7 +15909,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.ContactUs"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.ContactUs"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.ContactUs"
 
 \end_inset
 
@@ -15956,7 +15956,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Discussion"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Discussion"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Discussion"
 
 \end_inset
 
@@ -16095,7 +16095,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Registration"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Registration"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Registration"
 
 \end_inset
 
@@ -16139,7 +16139,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.SEO"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.SEO"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.SEO"
 
 \end_inset
 
@@ -16873,7 +16873,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.ShoppingCart"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.ShoppingCart"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.ShoppingCart"
 
 \end_inset
 
@@ -16893,7 +16893,7 @@ Make sure to check out the
 \begin_inset CommandInset href
 LatexCommand href
 name "API documentation for Diligence.Wiki"
-target "http://threecrickets.com/javascript-api/?namespace=Diligence.Wiki"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Wiki"
 
 \end_inset
 

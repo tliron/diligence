@@ -134,19 +134,19 @@ Diligence.Notification = Diligence.Notification || function() {
 	
 	Public.send = function(subscription, notice, origin) {
 		var service = Public.getServices()[subscription.service]
-		if (service) {
+		if (Sincerity.Objects.exists(service)) {
 			var address
 			if (Sincerity.Objects.exists(subscription.address)) {
 				address = subscription.address
 			}
 			else if (Sincerity.Objects.exists(subscription.reference)) {
 				var reference = getReference(subscription.reference)
-				if (reference) {
+				if (Sincerity.Objects.exists(reference)) {
 					address = service.getAddress(reference.value, reference.type)
 				}
 			}
 			
-			if (address) {
+			if (Sincerity.Objects.exists(address)) {
 				try {
 					service.send(origin, address, notice)
 				}

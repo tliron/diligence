@@ -58,7 +58,8 @@ Diligence.Documents = Diligence.Documents || function() {
 	 * @returns {Object} The document or null if not found
 	 */
 	Public.getDocument = function(id) {
-		return getDocumentsCollection().findOne({_id: {$oid: id}})
+		var doc = getDocumentsCollection().findOne({_id: {$oid: id}})
+		return doc ? new Public.Document(doc) : null
 	}
 
 	/**
@@ -156,7 +157,7 @@ Diligence.Documents = Diligence.Documents || function() {
 				return null
 			}
 			
-			var document = {
+			var doc = {
 				_id: MongoDB.newId(),
 				created: now,
 				lastUpdated: now,
@@ -170,13 +171,13 @@ Diligence.Documents = Diligence.Documents || function() {
 				revisions: [revision]
 			}
 			
-			document.drafts[revision] = {
+			doc.drafts['r' + revision] = {
 				source: source
 			}
 			
-			getDocumentsCollection().insert(document)
+			getDocumentsCollection().insert(doc)
 			
-			return new Public.Draft(document.activeDraft, revision, document)
+			return new Diligence.Documents.Draft(document.activeDraft, revision, doc)
 		}
 		
 		/**
@@ -188,6 +189,36 @@ Diligence.Documents = Diligence.Documents || function() {
 			now = now || new Date()
 			this.site = getSitesCollection().findAndModify({_id: this.site._id}, {$inc: {nextRevision: 1}, $set: {lastRevised: now}})
 			return this.site.nextRevision
+		}
+		
+		return Public
+	}())
+	
+	Public.Document = Sincerity.Classes.define(function() {
+		/** @exports Public as Diligence.Documents.Document */
+	    var Public = {}
+
+	    /** @ignore */
+	    Public._construct = function(doc) {
+			this.document = doc
+		}
+		
+		Public.cleanAllRendered = function() {
+			var update = {
+				$unset: {'activeDraft.rendered': 1},
+				$set: {}
+			}
+
+			if (this.document.drafts) {
+				for (var d in this.document.drafts) {
+					if (this.document.drafts[d].rendered) {
+						update.$unset['drafts.' + d + '.rendered'] = 1
+					}
+					update.$set['drafts.' + d + '.source'] = this.document.activeDraft.source
+				}
+			}
+			
+			getDocumentsCollection().update({_id: this.document._id}, update)
 		}
 		
 		return Public
@@ -209,10 +240,10 @@ Diligence.Documents = Diligence.Documents || function() {
 	    var Public = {}
 	    
 	    /** @ignore */
-	    Public._construct = function(draft, revision, document) {
+	    Public._construct = function(draft, revision, doc) {
 	    	this.draft = draft
 	    	this.revision = revision
-	    	this.document = document
+	    	this.document = doc
 			this.site = null
 			this.renderer = null
 	    }
@@ -329,9 +360,13 @@ Diligence.Documents = Diligence.Documents || function() {
 		 * @param params
 		 * @param {Function} params.codes An array of or a single custom code processor, in the form
 		 *                                 of {start: '', end: '', fn: function(text) {} }
+		 * @params {Boolean} [cache=true] Whether to cache the rendered HTML
 		 * @returns {String} The rendered HTML
 		 */
 	    Public.render = function(params) {
+			params = params || {}
+			params.cache = Sincerity.Objects.ensure(params.cache, true)
+
 			if (!this.draft.rendered && this.draft.source) {
 				this.draft.rendered = getRenderer.call(this, params).render({source: this.draft.source})
 				
@@ -342,7 +377,7 @@ Diligence.Documents = Diligence.Documents || function() {
 						var re = Sincerity.Objects.escapeRegExp(code.start) + '(.*?)' + Sincerity.Objects.escapeRegExp(code.end)
 						var me = this
 						this.draft.rendered = this.draft.rendered.replace(new RegExp(re, 'g'), function(whole, text) {
-							java.lang.System.out.println(whole)
+							//java.lang.System.out.println(whole)
 							return code.fn.call(me, text)
 						})
 					}
@@ -353,15 +388,17 @@ Diligence.Documents = Diligence.Documents || function() {
 				this.draft.rendered = this.draft.rendered.replace(wikiLinkRegExp, function(anchor, title, href, text) {
 					return params.renderWikiLinkFn({title: title, href: href, text: text})
 				})*/
+				
+				if (params.cache) {
+					// Update our draft
+					var update = {$set: {}}
+					update.$set['drafts.r' + this.revision + '.rendered'] = this.draft.rendered
+					getDocumentsCollection().update({_id: this.document._id}, update)
 
-				// Update our draft
-				var update = {$set: {}}
-				update.$set['drafts.r' + this.revision + '.rendered'] = this.draft.rendered
-				getDocumentsCollection().update({_id: this.document._id}, update)
-
-				// Update active draft, if we are it
-				update = {$set: {'activeDraft.rendered': this.draft.rendered}}
-				getDocumentsCollection().update({_id: this.document._id, 'activeDraft.revision': this.revision}, update)
+					// Update active draft, if we are it
+					update = {$set: {'activeDraft.rendered': this.draft.rendered}}
+					getDocumentsCollection().update({_id: this.document._id, 'activeDraft.revision': this.revision}, update)
+				}
 			}
 
 			return this.draft.rendered || ''
