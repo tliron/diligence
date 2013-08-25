@@ -33,12 +33,10 @@ Diligence.Notification.EmailService = Diligence.Notification.EmailService || Sin
     Public._inherit = Diligence.Notification.Service
 
     /** @ignore */
-    Public._configure = ['smtp']
-
-    /** @ignore */
-    Public._construct = function() {
+    Public._construct = function(config) {
     	this.name = this.name || 'Email'
     	this.smtp = new Sincerity.Mail.SMTP()
+    	arguments.callee.overridden.call(this, this)
     }
 
     Public.send = function(from, to, notice) {

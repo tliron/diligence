@@ -12,9 +12,9 @@
 //
 
 document.executeOnce('/diligence/feature/seo/')
+document.executeOnce('/prudence/resources/')
 document.executeOnce('/sincerity/json/')
 document.executeOnce('/sincerity/iterators/')
-document.executeOnce('/prudence/resources/')
 
 /** @ignore */
 function handleInit(conversation) {

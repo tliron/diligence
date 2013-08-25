@@ -16474,7 +16474,10 @@ Note the two arrays: domains and locations.
 If you don't need to support virtual hosting, ignore the domains array and
  domains parameters: it will be assumed that your locations are to be applied
  to all domains.
- </p> <p> You then route the SEO resources for the application in its routing.js:
+\end_layout
+
+\begin_layout Standard
+You then route the SEO resources for the application in its routing.js:
 \end_layout
 
 \begin_layout Standard

@@ -1,21 +1,7 @@
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"><%#
-
-This file is part of Diligence for Prudence
-
-Copyright 2011 Three Crickets LLC.
-
-The contents of this file are subject to the terms of the LGPL version 3.0:
-http:www.opensource.org/licenses/lgpl-3.0.html
-
-Alternatively, you can obtain a royalty free commercial license with less
-limitations, transferable or non-transferable, directly from Three Crickets
-at http://threecrickets.com/
-
-%><%
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"><%
 document.executeOnce('/diligence/feature/seo/')
-document.executeOnce('/diligence/foundation/localization/')
-document.executeOnce('/diligence/foundation/xml/')
+document.executeOnce('/sincerity/localization/')
+document.executeOnce('/sincerity/xml/')
 
 var sitemap = conversation.locals.get('sitemap')
 
@@ -23,7 +9,7 @@ var domain = Diligence.SEO.getCurrentDomain(conversation)
 if (domain && domain.isDynamic()) {
 	var locations = domain ? domain.getAllLocations(sitemap) : null
 	if (locations) {
-		var dateFormat = new Diligence.Localization.DateTimeFormat('yyyy-MM-dd')
+		var dateFormat = new Sincerity.Localization.DateTimeFormat('yyyy-MM-dd')
 		var rootUri = domain.getRootUri()
 
 		for (var l in locations) {

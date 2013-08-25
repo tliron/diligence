@@ -12,8 +12,8 @@
 //
 
 document.executeOnce('/diligence/feature/seo/')
-document.executeOnce('/sincerity/json/')
 document.executeOnce('/prudence/resources/')
+document.executeOnce('/sincerity/json/')
 
 /** @ignore */
 function handleInit(conversation) {

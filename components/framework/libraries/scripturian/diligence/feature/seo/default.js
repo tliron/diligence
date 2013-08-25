@@ -11,15 +11,15 @@
 // at http://threecrickets.com/
 //
 
+document.executeOnce('/prudence/lazy/')
+document.executeOnce('/prudence/logging/')
+document.executeOnce('/prudence/tasks/')
+document.executeOnce('/prudence/resources/')
 document.executeOnce('/sincerity/classes/')
 document.executeOnce('/sincerity/iterators/')
 document.executeOnce('/sincerity/files/')
 document.executeOnce('/sincerity/objects/')
 document.executeOnce('/sincerity/xml/')
-document.executeOnce('/prudence/lazy/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/prudence/tasks/')
-document.executeOnce('/prudence/resources/')
 
 var Diligence = Diligence || {}
 
@@ -70,7 +70,7 @@ var Diligence = Diligence || {}
  * Set the following application globals:
  * <ul>
  * <li><em>diligence.feature.seo.providers:</em> an array of provider instances or functions that generate
- * provider instances (see {@link Diligence.Lazy}); see {@link Diligence.SEO.Provider.Explicit} for an example provider
+ * provider instances (see {@link Prudence.Lazy}); see {@link Diligence.SEO.Provider.Explicit} for an example provider
  * implementation</li>
  * <li><em>diligence.feature.seo.domains:</em> an array of configs uses to instantiate
  * {@link Diligence.SEO.Domain} instances</li>
@@ -99,16 +99,16 @@ Diligence.SEO = Diligence.SEO || function() {
 	 * Fetches the location providers configured in the 'diligence.feature.seo.providers' application global.
 	 * 
 	 * @returns {Object} A dict of location providers by name
-	 * @see Diligence.Lazy#Map
+	 * @see Prudence.Lazy#Map
 	 */
     Public.getProviders = function() {
-		return Diligence.Lazy.getGlobalMap('diligence.feature.seo.providers', Public.logger, function(constructor) {
+		return Prudence.Lazy.getGlobalMap('diligence.feature.seo.providers', Public.logger, function(constructor) {
 			return eval(constructor)()
 		})
 	}
 
 	Public.resetProviders = function() {
-		Diligence.Lazy.getGlobalMap('diligence.feature.seo.providers', Public.logger).reset()
+		Prudence.Lazy.getGlobalMap('diligence.feature.seo.providers', Public.logger).reset()
 	}
 
 	/**
@@ -859,7 +859,7 @@ Diligence.SEO = Diligence.SEO || function() {
 	 * @version 1.0
 	 */
 	Public.ExplicitProvider = Sincerity.Classes.define(function(Module) {
-		/** @exports Public as Diligence.SEO.ExplicitProvider */
+		/** @exports Public as Diligence.SEO.ExplicitProvider */ 
 		var Public = {}
 		
 		/** @ignore */

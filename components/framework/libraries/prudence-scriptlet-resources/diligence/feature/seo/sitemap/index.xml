@@ -1,19 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<%#
-
-This file is part of Diligence for Prudence
-
-Copyright 2011 Three Crickets LLC.
-
-The contents of this file are subject to the terms of the LGPL version 3.0:
-http:www.opensource.org/licenses/lgpl-3.0.html
-
-Alternatively, you can obtain a royalty free commercial license with less
-limitations, transferable or non-transferable, directly from Three Crickets
-at http://threecrickets.com/
-
-%><%
-
+<%
+document.cacheDuration = application.globals.get('diligence.feature.seo.cacheDuration') || 0
+document.cacheTags.add('sitemap')
 var sitemap = conversation.locals.get('sitemap')
 if (sitemap) {
 	document.include('/diligence/feature/seo/sitemap/urlset/')
@@ -21,5 +9,4 @@ if (sitemap) {
 else {
 	document.include('/diligence/feature/seo/sitemap/sitemapindex/')
 }
-
 %>
