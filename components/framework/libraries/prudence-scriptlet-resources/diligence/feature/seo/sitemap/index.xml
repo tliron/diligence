@@ -1,7 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <%
-document.cacheDuration = application.globals.get('diligence.feature.seo.cacheDuration') || 0
+document.executeOnce('/diligence/feature/seo/')
+
+document.cacheDuration = Diligence.SEO.getCacheDuration()
 document.cacheTags.add('sitemap')
+
 var sitemap = conversation.locals.get('sitemap')
 if (sitemap) {
 	document.include('/diligence/feature/seo/sitemap/urlset/')

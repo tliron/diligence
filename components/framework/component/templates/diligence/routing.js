@@ -10,11 +10,11 @@ app.routes = {
 		{
 			type: 'cacheControl',
 			mediaTypes: {
-				'image/png': 'farFuture',
-				'image/gif': 'farFuture',
-				'image/jpeg': 'farFuture',
-				'text/css': 'farFuture',
-				'application/x-javascript': 'farFuture'
+				'image/png': '5m',
+				'image/gif': '5m',
+				'image/jpeg': '5m',
+				'text/css': '5m',
+				'application/x-javascript': '5m'
 			},
 			next: {
 				type: 'zuss',

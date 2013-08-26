@@ -30,7 +30,7 @@ app.settings = {
 	code: {
 		libraries: ['libraries'], // Handlers and tasks will be found here
 		defrost: true,
-		minimumTimeBetweenValidityChecks: 1000,
+		minimumTimeBetweenValidityChecks: '1s',
 		defaultDocumentName: 'default',
 		defaultExtension: 'js',
 		defaultLanguageTag: 'javascript',
@@ -58,7 +58,7 @@ app.globals = {
 		service: {
 			internationalization: {
 				locale: 'en',
-				cacheDuration: 10000,
+				cacheDuration: '1s',
 				path: Sincerity.Container.getFileFromHere('data', 'diligence', 'service', 'internationalization')
 			},
 			

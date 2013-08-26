@@ -18,6 +18,7 @@ document.executeOnce('/sincerity/templates/')
 document.executeOnce('/sincerity/jvm/')
 document.executeOnce('/sincerity/files/')
 document.executeOnce('/sincerity/json/')
+document.executeOnce('/sincerity/localization/')
 document.executeOnce('/mongo-db/')
 
 var Diligence = Diligence || {}
@@ -301,6 +302,9 @@ Diligence.Internationalization = Diligence.Internationalization || function() {
 	
 	var cache
 	var cacheDuration = application.globals.get('diligence.service.internationalization.cacheDuration')
+	if (Sincerity.Objects.isString(cacheDuration)) {
+		cacheDuration = Sincerity.Localization.toMilliseconds(cacheDuration)
+	}
 	if (cacheDuration > 0) {
 		cache = application.globals.get('diligence.service.internationalization.cache')
 		if (!Sincerity.Objects.exists(cache)) {

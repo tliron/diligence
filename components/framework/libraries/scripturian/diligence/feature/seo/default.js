@@ -20,6 +20,7 @@ document.executeOnce('/sincerity/iterators/')
 document.executeOnce('/sincerity/files/')
 document.executeOnce('/sincerity/objects/')
 document.executeOnce('/sincerity/xml/')
+document.executeOnce('/sincerity/localization/')
 
 var Diligence = Diligence || {}
 
@@ -94,6 +95,10 @@ Diligence.SEO = Diligence.SEO || function() {
 	 * @returns {Prudence.Logging.Logger}
 	 */
 	Public.logger = Prudence.Logging.getLogger('seo')
+	
+	Public.getCacheDuration = function() {
+    	return cacheDuration
+    }
 
 	/**
 	 * Fetches the location providers configured in the 'diligence.feature.seo.providers' application global.
@@ -924,8 +929,16 @@ Diligence.SEO = Diligence.SEO || function() {
     	domains.push(new Public.Domain({}))
     }
 
+	var cacheDuration = application.globals.get('diligence.feature.seo.cacheDuration')
+	if (Sincerity.Objects.exists(cacheDuration)) {
+		cacheDuration = Sincerity.Localization.toMilliseconds(cacheDuration)
+	}
+	else {
+		cacheDuration = 0
+	}
+
     // This is the standard as determined by Google. All praise Google!
 	var urlSetPageSize = 50000
-
+	
 	return Public
 }()
