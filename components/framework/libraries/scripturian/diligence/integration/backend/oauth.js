@@ -114,7 +114,7 @@ Diligence.OAuth = Diligence.OAuth || function() {
 		var payload = [method.toUpperCase(), Prudence.Resources.encodeUrlComponent(uri), Prudence.Resources.encodeUrlComponent(flatAttributes)].join('&')
 		var secret = consumerSecret + '&' + (tokenSecret || '')
 		//Public.logger.info('Payload: ' + payload)
-		attributes.oauth_signature = Sincerity.Cryptography.hmac(Sincerity.Cryptography.toBytes(payload), Sincerity.Cryptography.toBytes(secret), 'HmacSHA1')
+		attributes.oauth_signature = Sincerity.Cryptography.hmac(Sincerity.Cryptography.toByteArray(payload), Sincerity.Cryptography.toBytes(secret), 'HmacSHA1')
 
 		// List
 		flatAttributes = []

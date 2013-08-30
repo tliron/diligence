@@ -65,7 +65,7 @@ Diligence.WindowsLive = Diligence.WindowsLive || function() {
 	 * @returns {String} The decoded payload
 	 */
 	Public.decode = function(payload) {
-		return Sincerity.Cryptography.decode(Sincerity.Cryptography.toBytesFromBase64(payload), 16, Sincerity.Cryptography.toBytesFromBase64(cryptKey), 'AES/CBC/PKCS5Padding')
+		return Sincerity.Cryptography.decode(Sincerity.Cryptography.toByteArrayFromBase64(payload), 16, Sincerity.Cryptography.toByteArrayFromBase64(cryptKey), 'AES/CBC/PKCS5Padding')
 	}
 	
 	/**
@@ -75,7 +75,7 @@ Diligence.WindowsLive = Diligence.WindowsLive || function() {
 	 * @returns {String} The base64-encoded signature
 	 */
 	Public.sign = function(token) {
-		return Sincerity.Cryptography.hmac(Sincerity.Cryptography.toBytes(token), Sincerity.Cryptography.toBytesFromBase64(signKey), 'HmacSHA256', 'AES')
+		return Sincerity.Cryptography.hmac(Sincerity.Cryptography.toByteArray(token), Sincerity.Cryptography.toByteArrayFromBase64(signKey), 'HmacSHA256', 'AES')
 	}
 	
 	/**
@@ -174,7 +174,7 @@ Diligence.WindowsLive = Diligence.WindowsLive || function() {
 	function deriveKey(key) {
 		var payload = key + secretKey
 		var messageDigest = java.security.MessageDigest.getInstance('SHA-256')
-		var digest = messageDigest.digest(Sincerity.Cryptography.toBytes(payload))
+		var digest = messageDigest.digest(Sincerity.Cryptography.toByteArray(payload))
 		var derived = java.util.Arrays.copyOf(digest, 16)
 		return Sincerity.Cryptography.toBase64(derived)
 	}

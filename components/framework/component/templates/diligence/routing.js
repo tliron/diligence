@@ -10,11 +10,11 @@ app.routes = {
 		{
 			type: 'cacheControl',
 			mediaTypes: {
-				'image/png': '5m',
-				'image/gif': '5m',
-				'image/jpeg': '5m',
-				'text/css': '5m',
-				'application/x-javascript': '5m'
+				'image/png': '1m',
+				'image/gif': '1m',
+				'image/jpeg': '1m',
+				'text/css': '1m',
+				'application/x-javascript': '1m'
 			},
 			next: {
 				type: 'zuss',

@@ -158,7 +158,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 	}
 	
 	Public.encryptPassword = function(password, salt) {
-		var encrypted = Sincerity.Cryptography.digest(password, Sincerity.Cryptography.toBytesFromBase64(salt), passwordIterations, passwordAlgorithm)
+		var encrypted = Sincerity.Cryptography.digest(password, Sincerity.Cryptography.toByteArrayFromBase64(salt), passwordIterations, passwordAlgorithm)
 		Public.logger.info('Encrypted password: ' + encrypted)
 		return encrypted
 	}

@@ -124,7 +124,7 @@ Diligence.RPC = Diligence.RPC || function() {
 		var base64 = value.getElements('base64')
 		if (base64.length) {
 			var text = base64[0].getText()
-			return Sincerity.Cryptography.toBytesFromBase64(text)
+			return Sincerity.Cryptography.toByteArrayFromBase64(text)
 		}
 		
 		var dateTime = value.getElements('dateTime.iso8601')

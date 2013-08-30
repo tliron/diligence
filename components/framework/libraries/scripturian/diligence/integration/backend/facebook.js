@@ -169,7 +169,7 @@ Diligence.Facebook = Diligence.Facebook || function() {
 				signedRequest = String(signedRequest).split('.')
 				if (signedRequest > 1) {
 					var payload = signedRequest[1]
-					var data = Sincerity.JSON.from(Sincerity.Cryptography.toBytesFromBase64(payload.replace(/-/g, '+').replace(/_/g, '/')))
+					var data = Sincerity.JSON.from(Sincerity.Cryptography.toByteArrayFromBase64(payload.replace(/-/g, '+').replace(/_/g, '/')))
 					
 					// Check algorithm
 					var algorithm = data.algorithm ? String(data.algorithm).toUpperCase() : null
@@ -179,7 +179,7 @@ Diligence.Facebook = Diligence.Facebook || function() {
 					}
 
 					// Check signature
-					var expectedSignature = Sincerity.Cryptography.hmac(Sincerity.Cryptography.toBytesFromBase64(payload), Sincerity.Cryptography.toBytesFromBase64(this.appSecret), 'HmacSHA256')
+					var expectedSignature = Sincerity.Cryptography.hmac(Sincerity.Cryptography.toByteArrayFromBase64(payload), Sincerity.Cryptography.toBytesFromBase64(this.appSecret), 'HmacSHA256')
 					var signature = null // TODO Base64.decode(signedRequest[0])
 					if (signature != expectedSignature) {
 						Public.logger.warning('Payload has wrong signature: ' + signature)
