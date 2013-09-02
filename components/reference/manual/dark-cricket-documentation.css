@@ -1,0 +1,142 @@
+/*************************************
+ *  Dark Cricket Documentation 1.00  *
+ *                                   *
+ *            By Tal Liron           *
+ *************************************/
+
+body {
+    font-family: Ubuntu, Lucida Sans Unicode, Lucida Grande, Verdana, Geneva, Tahoma, Arial, Helvetica, sans;
+    font-size: 15px;
+	width: 65%;
+	margin: 0px 8px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #444;
+}
+
+div#globalWrapper {
+	background-color: #ffffff;
+	padding: 4px 28px 18px 28px;
+	margin-left: 18px;
+	margin-right: 18px;
+	border-left: 18px solid #222;
+	border-right: 18px solid #222;
+}
+
+/* Title area */
+
+h1.title {
+	text-align: center;
+}
+
+h2.author {
+	text-align: center;
+}
+
+div.center {
+	text-align: center;
+	font-size: 15px;
+	line-height: 180%;
+}
+
+/* Headings */
+
+h1 {
+	font-family: Georgia, Utopia, Palatino, Times New Roman, Times, serif;
+	font-size: 15px + 16px;
+	color: #994;
+	font-style: italic;
+	margin: 18px 0px;
+}
+
+h2 {
+	font-family: Georgia, Utopia, Palatino, Times New Roman, Times, serif;
+	font-size: 15px + 2px;
+	color: #994;
+	margin-top: 28px;
+	margin-bottom: 14px;
+}
+
+h3 {
+	font-family: Georgia, Utopia, Palatino, Times New Roman, Times, serif;
+	font-size: 15px + 2px;
+	color: #994;
+	margin-top: 28px;
+	margin-bottom: 14px;
+}
+
+div.Paragraph {
+	font-weight: bold;
+	margin-top: 24px;
+	margin-bottom: 6px;
+}
+
+/* Main text */
+
+div.Indented, div.Unindented, li {
+	margin: 12px 0px;
+	font-size: 15px;
+	line-height: 180%;
+}
+
+pre {
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
+	tab-size: 4;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	-webkit-tab-size: 4;
+	border: 1px dashed black;
+	font-size: 13px;
+	background-color: white;
+	line-height: 140%;
+	padding: 16px;
+	margin: 22px 0px;
+}
+
+blockquote.Quote {
+	border: 1px dashed black;
+	background-color: #eed;
+	padding: 16px;
+	margin: 22px 0px;
+	line-height: 180%;
+}
+
+/* Links */
+
+a {
+	text-decoration: none;
+}
+a:link {
+	color: #682;
+}
+a:visited {
+	color: #682;
+}
+a:hover {
+	color: black;
+	background-color: #9A6;
+}
+a.neutral:link {
+	color: black;
+}
+a.neutral:visited {
+	color: black;
+}
+a.neutral:hover {
+	background-color: transparent;
+}
+
+/* TOC */
+
+div.tocheader {
+	font-weight: bold;
+}
+div.toc {
+}
+div.tocindent {
+	margin-left: 28px;
+}

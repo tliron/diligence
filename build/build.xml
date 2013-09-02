@@ -70,7 +70,7 @@
 			<arg value="--title" />
 			<arg value="${documentation.title} Manual" />
 			<arg value="--css" />
-			<arg value="soft-cricket-api.css" />
+			<arg value="dark-cricket-documentation.css" />
 			<arg value="${cache.manual}/${component}_manual.lyx" />
 			<arg value="${cache.manual}/${component}_manual.html" />
 		</exec>
