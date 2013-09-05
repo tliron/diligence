@@ -122,6 +122,13 @@ LatexCommand tableofcontents
 
 \begin_layout Section
 Authentication Service
+\begin_inset CommandInset label
+LatexCommand label
+name "authentication"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -179,15 +186,34 @@ entities
 \begin_inset Quotes erd
 \end_inset
 
- by the <a href="../authorization/">authorization service</a>, such that you
- can attach permissions to user documents.
+ by the 
+\bar under
+authorization service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "authorization"
+
+\end_inset
+
+)
+\bar default
+, such that you can attach permissions to user documents.
  Users can inherit permissions from groups and from other users.
 \end_layout
 
 \begin_layout Standard
-Though you can maintain the user documents yourself, you can add the <a
- href="../../feature/registration/">registration feature</a> to allow individuals
- to create their own users.
+Though you can maintain the user documents yourself, you can add the 
+\bar under
+registration feature (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "registration"
+
+\end_inset
+
+)
+\bar default
+ to allow individuals to create their own users.
 \end_layout
 
 \begin_layout Subsubsection
@@ -202,8 +228,19 @@ When users do log in, they get a cookie with a session ID, which matches
 \end_layout
 
 \begin_layout Standard
-The <a href="../authorization/">authorization service</a> can check any operation
- against the conversation's session to make sure it's permitted.
+The 
+\bar under
+authorization service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "authorization"
+
+\end_inset
+
+)
+\bar default
+ can check any operation against the conversation's session to make sure
+ it's permitted.
 \end_layout
 
 \begin_layout Standard
@@ -282,7 +319,18 @@ facebook.
 \begin_layout Standard
 This useful feature allows your application to be especially welcoming.
  Studies have shown that typical users think twice when a site requires
- <a href="../../feature/registration/">registration</a>.
+ 
+\bar under
+registration (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "registration"
+
+\end_inset
+
+)
+\bar default
+.
  People either don't want to invest the effort in registering, or are anxious
  about yet another copy of their personal data being stored in somebody's
  database.
@@ -290,11 +338,28 @@ This useful feature allows your application to be especially welcoming.
 
 \begin_layout Section
 Authorization Service
+\begin_inset CommandInset label
+LatexCommand label
+name "authorization"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-When used with the <a href="../authentication/">authentication service</a>,
- this service lets you secure your site by allowing only authorized users
+When used with the 
+\bar under
+authentication service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "authentication"
+
+\end_inset
+
+)
+\bar default
+, this service lets you secure your site by allowing only authorized users
  to access certain resources or perform certain operations.
 \end_layout
 
@@ -327,9 +392,18 @@ entities,
 \begin_inset Quotes erd
 \end_inset
 
- which could be either individual users (from the <a href="../authentication/">aut
-hentication service</a>), or groups, which are here stores in a simple MongoDB
- collection.
+ which could be either individual user, from the 
+\bar under
+authorization service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "authorization"
+
+\end_inset
+
+)
+\bar default
+, or groups, which are here stores in a simple MongoDB collection.
 \end_layout
 
 \begin_layout Standard
@@ -379,6 +453,13 @@ cascading permissions.
 
 \begin_layout Section
 Backup Service
+\begin_inset CommandInset label
+LatexCommand label
+name "backup"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -466,9 +547,16 @@ Operations:
 \series bold
 Iterators:
 \series default
- The backup service uses Diligence <a href="../../foundation/iterators/">iterators</
-a>, so you can transform your data in various ways while backing up, or
- even include non-MongoDB data.
+ The backup service uses 
+\begin_inset CommandInset href
+LatexCommand href
+name "Iterators"
+target "http://threecrickets.com/api/javascript/?namespace=Sincerity.Iterators"
+
+\end_inset
+
+, so you can transform your data in various ways while backing up, or even
+ include non-MongoDB data.
 \end_layout
 
 \begin_layout Subsection
@@ -607,6 +695,13 @@ drop
 
 \begin_layout Section
 Documents Service
+\begin_inset CommandInset label
+LatexCommand label
+name "documents"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -749,14 +844,17 @@ revision numbers per that site.
 \end_layout
 
 \begin_layout Standard
-Note the markup rendering is handled by a lower-level library, 
-\begin_inset CommandInset href
-LatexCommand href
-name "Diligence.HTML"
-target "http://threecrickets.com/api/javascript/?namespace=Diligence.HTML"
+Note the markup rendering is handled by the 
+\bar under
+HTML service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "html"
 
 \end_inset
 
+)
+\bar default
 , which you can choose to use directly if you do not need the versioning
  system.
 \end_layout
@@ -1225,6 +1323,13 @@ app.globals = {
 
 \begin_layout Section
 Events Service
+\begin_inset CommandInset label
+LatexCommand label
+name "events"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1644,8 +1749,15 @@ How does this magic work? It's JavaScript magic:
 we're evaluating the serialized listener source code
 \emph default
 .
- The code that fires the event is called via <a href="../tasks/">Prudence's
- tasks library</a>.
+ The code that fires the event is called as a 
+\begin_inset CommandInset href
+LatexCommand href
+name "Prudence task"
+target "http://threecrickets.com/prudence/manual/tasks/"
+
+\end_inset
+
+.
  The task makes sure to run the dependencies and evaluate the JavaScript
  you stored.
  Voila.
@@ -2114,6 +2226,13 @@ Note the use of function(): this is required in order to allow the Events
 
 \begin_layout Section
 Forms Service
+\begin_inset CommandInset label
+LatexCommand label
+name "forms"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2150,8 +2269,8 @@ de framework.
 \end_layout
 
 \begin_layout Subsubsection
-Client-side validation vs.
- server-side validation
+Client-side Validation vs.
+ Server-side Validation
 \end_layout
 
 \begin_layout Standard
@@ -4899,6 +5018,13 @@ var results = form.handle(conversation)
 
 \begin_layout Section
 HTML Service
+\begin_inset CommandInset label
+LatexCommand label
+name "html"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -5088,6 +5214,13 @@ Sanitizing
 
 \begin_layout Section
 Internationalization Service
+\begin_inset CommandInset label
+LatexCommand label
+name "internationalization"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -5844,6 +5977,13 @@ defaultLocale: {.: {language: 'en', country: 'nz'}}
 
 \begin_layout Section
 Cache Service
+\begin_inset CommandInset label
+LatexCommand label
+name "cache"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -6074,6 +6214,13 @@ ache('result').prune(); %>
 
 \begin_layout Section
 Linkback Service
+\begin_inset CommandInset label
+LatexCommand label
+name "linkback"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -6200,26 +6347,114 @@ First, we need to make sure that we actually have a link to the remote site
 \end_layout
 
 \begin_layout Standard
-<form id="add" method="POST"> <p> <%= Diligence.HTML.input({name: 'addPageUri',
- size: 70}, {_content: 'Page URL:'}) %> </p>
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<form id="add" method="POST">
 \end_layout
 
-\begin_layout Standard
-<p> <%= Diligence.HTML.submit({value: 'Add Link'}) %> </p>
+\begin_layout Plain Layout
+
+<p>
 \end_layout
 
-\begin_layout Standard
-</form> <form id="clear" method="POST"> <input type="hidden" name="clearPageUris
-" value="true" /> <p>
+\begin_layout Plain Layout
+
+	<%= Diligence.HTML.input({name: 'addPageUri', size: 70}, {_content: 'Page
+ URL:'}) %>
 \end_layout
 
-\begin_layout Standard
-<%= Diligence.HTML.submit({value: 'Clear Link List'}) %> </p> </form>
+\begin_layout Plain Layout
+
+</p>
 \end_layout
 
-\begin_layout Standard
-<p> Currently linked pages: <% for (var i = links.iterator(); i.hasNext();
- ) { var link = i.next(); %> <a href="<%= link %>">link</a> <% } %> </p>
+\begin_layout Plain Layout
+
+<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<%= Diligence.HTML.submit({value: 'Add Link'}) %>
+\end_layout
+
+\begin_layout Plain Layout
+
+</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</form>
+\end_layout
+
+\begin_layout Plain Layout
+
+<form id="clear" method="POST">
+\end_layout
+
+\begin_layout Plain Layout
+
+	<input type="hidden" name="clearPageUris" value="true" />
+\end_layout
+
+\begin_layout Plain Layout
+
+	<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+		<%= Diligence.HTML.submit({value: 'Clear Link List'}) %>
+\end_layout
+
+\begin_layout Plain Layout
+
+	</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</form>
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+	Currently linked pages:
+\end_layout
+
+\begin_layout Plain Layout
+
+<% for (var i = links.iterator(); i.hasNext(); ) { var link = i.next(); %>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<a href="<%= link %>">link</a>
+\end_layout
+
+\begin_layout Plain Layout
+
+<% } %>
+\end_layout
+
+\begin_layout Plain Layout
+
+</p>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Paragraph
@@ -6231,32 +6466,124 @@ First, we need to make sure that we actually have a link to the remote site
 We support auto-discovery of trackback and pingback URLs, so you can first
  try to just enter the linked URL.
  Make sure it's one of the links you've added above! Pingback will be preferred
- if both Trackback and Pingback are supported by page.
+ if both Trackback and Pingback are supported by the page.
+\end_layout
+
+\begin_layout Paragraph
+3.
+ Or Use Explicit Linkback URLs
 \end_layout
 
 \begin_layout Standard
-<form id="linkback" method="POST"> <p> <%= Diligence.HTML.input({name: 'pageUri',
- size: 70}, {_content: 'Page URL:'}) %> </p> <h3>3.
- Or Use Explicit Linkback URLs</h3> <p> In case that doesn't work, you might
- also have to enter an explicit trackback or pingback URL posted on that
- page: </p>
+In case that doesn't work, you might also have to enter an explicit trackback
+ or pingback URL posted on that page:
 \end_layout
 
 \begin_layout Standard
-<p> <%= Diligence.HTML.input({name: 'trackbackUri', size: 70}, {_content:
- 'Trackback URL:'}) %> </p> <p> (Note that you do <i>not</i> need to enter
- the page URL with trackback, but you <i>do</i> need it it with pingback)
- </p> <p> <%= Diligence.HTML.input({name: 'pingbackUri', size: 70}, {_content:
- 'Pingback URL:'}) %> </p>
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<%= Diligence.HTML.input({name: 'trackbackUri', size: 70}, {_content: 'Trackback
+ URL:'}) %>
+\end_layout
+
+\begin_layout Plain Layout
+
+</p>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-<p> <%= Diligence.HTML.submit({value: 'Linkback'}) %> </p> </form> <% if (message)
- { %>
+(Note that you do <i>not</i> need to enter the page URL with trackback,
+ but you <i>do</i> need it it with pingback)
 \end_layout
 
 \begin_layout Standard
-<p> <span style="color: red;"><%= message %></span> </p> <% } %>
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<form>
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<%= Diligence.HTML.input({name: 'pingbackUri', size: 70}, {_content: 'Pingback
+ URL:'}) %>
+\end_layout
+
+\begin_layout Plain Layout
+
+</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<%= Diligence.HTML.submit({value: 'Linkback'}) %>
+\end_layout
+
+\begin_layout Plain Layout
+
+</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+</form>
+\end_layout
+
+\begin_layout Plain Layout
+
+<% if (message) { %>
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+<span style="color: red;"><%= message %></span>
+\end_layout
+
+\begin_layout Plain Layout
+
+</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+<% } %>
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection
@@ -6274,14 +6601,57 @@ This page contains information about its trackback and pingback URLs.
 \end_layout
 
 \begin_layout Standard
-<p> <%= Diligence.HTML.input({value: Diligence.Linkback.getTrackbackUri(conversation.
-reference), readonly: 'readonly', size: 70}, {_content: 'Trackback URL:'})
- %> </p> <p> <%= Diligence.HTML.input({value: Diligence.Linkback.getPingbackUri(),
- readonly: 'readonly', size: 70}, {_content: 'Pingback URL:'}) %> </p> 
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<%= Diligence.HTML.input({value: Diligence.Linkback.getTrackbackUri(conversation.ref
+erence), readonly: 'readonly', size: 70}, {_content: 'Trackback URL:'})
+ %>
+\end_layout
+
+\begin_layout Plain Layout
+
+</p>
+\end_layout
+
+\begin_layout Plain Layout
+
+<p>
+\end_layout
+
+\begin_layout Plain Layout
+
+	<%= Diligence.HTML.input({value: Diligence.Linkback.getPingbackUri(), readonly:
+ 'readonly', size: 70}, {_content: 'Pingback URL:'}) %>
+\end_layout
+
+\begin_layout Plain Layout
+
+</p> 
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Nonces Service
+\begin_inset CommandInset label
+LatexCommand label
+name "nonces"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -6461,6 +6831,13 @@ es.prune(); %>
 
 \begin_layout Section
 Notification Service
+\begin_inset CommandInset label
+LatexCommand label
+name "notification"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -6532,8 +6909,8 @@ If you want your application to
 \emph on
 receive
 \emph default
- email, which is quite a different task than relaying it onwards, we recommend
- the 
+ email, which is quite a different task than relaying it onward, then we
+ can recommend the 
 \begin_inset CommandInset href
 LatexCommand href
 name "SubEtha SMTP library"
@@ -6542,8 +6919,8 @@ target "http://code.google.com/p/subethasmtp/"
 \end_inset
 
 .
- If there's interest, we may incorporate into Diligence more directly in
- the future.
+ If there's interest, we may incorporate it into Diligence directly in the
+ future.
 \end_layout
 
 \begin_layout Subsection
@@ -6993,6 +7370,13 @@ crontab
 
 \begin_layout Section
 Progress Service
+\begin_inset CommandInset label
+LatexCommand label
+name "progress"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -7037,10 +7421,19 @@ milestones
 \end_inset
 
  are completed, including the final completion of the whole process.
- Processes can be associated with a user, which allows you to use the <a
- href="../authorization/">authorization service</a> to allow only that user
- access to the process' status, and also to allow the user to query all
- processes associated with them.
+ Processes can be associated with a user, which allows you to use the 
+\bar under
+authorization service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "authorization"
+
+\end_inset
+
+)
+\bar default
+ to allow only that user access to the process' status, and also to allow
+ the user to query all processes associated with them.
 \end_layout
 
 \begin_layout Standard
@@ -7057,8 +7450,18 @@ The service supports two ways of letting the user know the status of the
 \begin_layout Standard
 For longer running processes, you cannot expect the user to wait in front
  of the web browsers.
- In these cases, the Progress Service uses the <a href="../notification/">notifica
-tion service</a> to notify the user about milestones, success and failure.
+ In these cases, the Progress Service uses the 
+\bar under
+notification service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "notification"
+
+\end_inset
+
+)
+\bar default
+ to notify the user about milestones, success and failure.
  Additionally, we provide a drop-in fragment that would allow the user to
  see the current state of the process on the web, and another one that lets
  the user access all processes associated with them.
@@ -7734,6 +8137,13 @@ Reattempts are logged, to help you debug problems.
 
 \begin_layout Section
 REST Service
+\begin_inset CommandInset label
+LatexCommand label
+name "rest"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -10528,6 +10938,13 @@ Extending IterableResource
 
 \begin_layout Section
 RPC Service
+\begin_inset CommandInset label
+LatexCommand label
+name "rpc"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -11798,6 +12215,13 @@ target "https://github.com/gimmi/jsonrpcjs"
 
 \begin_layout Section
 Search Service
+\begin_inset CommandInset label
+LatexCommand label
+name "search"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -11818,6 +12242,13 @@ target "http://threecrickets.com/api/javascript/?namespace=Diligence.Search"
 
 \begin_layout Section
 Serials Service
+\begin_inset CommandInset label
+LatexCommand label
+name "serials"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -11892,6 +12323,13 @@ serials
 
 \begin_layout Section
 Syndication Service
+\begin_inset CommandInset label
+LatexCommand label
+name "syndication"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -11933,6 +12371,13 @@ de facto
 
 \begin_layout Section
 Gravatar Integration
+\begin_inset CommandInset label
+LatexCommand label
+name "gravatar"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -11959,10 +12404,30 @@ It makes site owners happy, because they can display avatars for users without
  having to store them or otherwise manage them.
  Additionally, new users would have their avatar immediately displayed without
  any effort on their part, and users do not like effort.
- If you're using the <a href="../../service/authentication/">Authentication
- Module</a> in association with the <a href="../../feature/registration/">Registrati
-on Module</a>, then you already have an email address for the user, and
- can immediately fetch their avatar from Gravatar.
+ If you're using the 
+\bar under
+authentication service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "authentication"
+
+\end_inset
+
+)
+\bar default
+ in association with the 
+\bar under
+registration feature (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "registration"
+
+\end_inset
+
+)
+\bar default
+, then you already have an email address for the user, and can immediately
+ fetch their avatar from Gravatar.
 \end_layout
 
 \begin_layout Standard
@@ -11999,6 +12464,13 @@ The avatar above is hyperlinked to their Gravatar profile page.
 
 \begin_layout Section
 PayPal Integration
+\begin_inset CommandInset label
+LatexCommand label
+name "paypal"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -12019,6 +12491,13 @@ target "http://threecrickets.com/api/javascript/?namespace=Diligence.PayPal"
 
 \begin_layout Section
 Sencha Integration
+\begin_inset CommandInset label
+LatexCommand label
+name "sencha"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -12239,6 +12718,13 @@ A data Proxy that automatically uses the extended JSON Reader and Writer,
 \end_deeper
 \begin_layout Section
 Sencha Integration: Grids
+\begin_inset CommandInset label
+LatexCommand label
+name "sencha-grids"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -12888,6 +13374,13 @@ Ext.onReady(function() {
 
 \begin_layout Section
 Sencha Integration: Trees
+\begin_inset CommandInset label
+LatexCommand label
+name "sencha-trees"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -14168,10 +14661,17 @@ Ext.onReady(function() {
 
 \begin_layout Section
 Sencha Integration: Charts
+\begin_inset CommandInset label
+LatexCommand label
+name "sencha-charts"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-Hi!
+TODO
 \end_layout
 
 \begin_layout Subsection
@@ -14179,11 +14679,18 @@ Usage
 \end_layout
 
 \begin_layout Standard
-Hi!
+TODO
 \end_layout
 
 \begin_layout Section
 Sencha Integration: Forms
+\begin_inset CommandInset label
+LatexCommand label
+name "sencha-forms"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -15143,6 +15650,13 @@ submit
 
 \begin_layout Section
 Sencha Integration: Ext Direct
+\begin_inset CommandInset label
+LatexCommand label
+name "sencha-ext-direct"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -15837,6 +16351,17 @@ The last argument for any Ext Direct method is a callback that is called
 
 \begin_layout Section
 Blog Feature
+\begin_inset CommandInset label
+LatexCommand label
+name "blog"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO
 \end_layout
 
 \begin_layout Subsection
@@ -15857,6 +16382,17 @@ target "http://threecrickets.com/api/javascript/?namespace=Diligence.Blog"
 
 \begin_layout Section
 Console Feature
+\begin_inset CommandInset label
+LatexCommand label
+name "console"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO
 \end_layout
 
 \begin_layout Subsection
@@ -15877,12 +16413,29 @@ target "http://threecrickets.com/api/javascript/?namespace=Diligence.Console"
 
 \begin_layout Section
 Contact Us Feature
+\begin_inset CommandInset label
+LatexCommand label
+name "contact-us"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 This simple feature contains a /web/fragment/ that displays an HTML form
- with a CAPTCHA that allows users to send a message on a specific <a href="../../ser
-vice/notification/">notification service</a> channel.
+ with a CAPTCHA that allows users to send a message on a specific 
+\bar under
+notification service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "notification"
+
+\end_inset
+
+)
+\bar default
+ channel.
  System administrators or others subscribing to the channel would then receive
  it.
  Straightforward!
@@ -15918,6 +16471,13 @@ target "http://threecrickets.com/api/javascript/?namespace=Diligence.ContactUs"
 
 \begin_layout Section
 Discussion Feature
+\begin_inset CommandInset label
+LatexCommand label
+name "discussion"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -16056,12 +16616,28 @@ You'll notice a rule of thumb we've applied here, useful in general when
 
 \begin_layout Section
 Registration Feature
+\begin_inset CommandInset label
+LatexCommand label
+name "registration"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-This complement to the <a href="../../service/authentication/">authentication
- service</a> uses a two-step process to allow new users to register to your
- application.
+This complement to the 
+\bar under
+authentication service (page 
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "authentication"
+
+\end_inset
+
+)
+\bar default
+ uses a two-step process to allow new users to register to your application.
  As is common, it expects users to have a personal email address, which
  will be used to both confirm the identity of the user and to communicate
  with the user when they are not logged in.
@@ -16104,6 +16680,13 @@ target "http://threecrickets.com/api/javascript/?namespace=Diligence.Registratio
 
 \begin_layout Section
 SEO Feature
+\begin_inset CommandInset label
+LatexCommand label
+name "seo"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -16256,8 +16839,15 @@ y, it means that you will occasionally have one
 \emph on
 very
 \emph default
- heavy request, breaking the ironclad rules laid out in Prudence's <a href="http
-://threecrickets.com/prudence/scaling/">Scaling Tips</a> article.
+ heavy request, breaking the ironclad rules laid out in Prudence's 
+\begin_inset CommandInset href
+LatexCommand href
+name "Scaling Tips"
+target "http://threecrickets.com/prudence/scaling/"
+
+\end_inset
+
+ article.
 \end_layout
 
 \begin_layout Standard
@@ -16554,9 +17144,16 @@ d 7-page site map for that many URLs.) It's also a good example for you to
 \end_layout
 
 \begin_layout Standard
-The key to factory success is understanding the <a href="../../foundation/iterators/
-">Diligence iterators library</a>: as long as you keep your iterator properly
- fed, you should be able to scale to site maps of scary sizes.
+The key to factory success is understanding 
+\begin_inset CommandInset href
+LatexCommand href
+name "Iterators"
+target "http://threecrickets.com/api/javascript/?namespace=Sincerity.Iterators"
+
+\end_inset
+
+: as long as you keep your iterator properly fed, you should be able to
+ scale to site maps of scary sizes.
 \end_layout
 
 \begin_layout Standard
@@ -16725,9 +17322,15 @@ workPath: '/tmp/sitemap'
 \begin_layout Standard
 Note that these paths are per domain: if you hosting multiple domains via
  virtual hosting, each site map should go to a different path.
- Via a simple <a href="http://threecrickets.com/prudence/manual/handlers/#filters
-">capturing filter</a> we make sure that each domain gets it correct site
- map.
+ Via a simple 
+\begin_inset CommandInset href
+LatexCommand href
+name "filter"
+target "http://threecrickets.com/prudence/manual/filtering/"
+
+\end_inset
+
+ we make sure that each domain gets it correct site map.
  Thus, the outside world doesn't actually see these static subdirectories:
  the URI space for the site map all appears, publicly, at the root.
 \end_layout
@@ -16764,8 +17367,15 @@ locations
 
 \begin_layout Standard
 To have your site map generated regularly, put something like the following
- in your <a href="http://threecrickets.com/prudence/manual/tasks/#toc-Subsection-
-54">application's crontab</a> (as a single line).
+ in your 
+\begin_inset CommandInset href
+LatexCommand href
+name "application's crontab"
+target "http://threecrickets.com/prudence/manual/tasks/#crontab"
+
+\end_inset
+
+ (as a single line).
  In this example, we're having our site map generator run every day at 4:00AM:
 \end_layout
 
@@ -16865,6 +17475,17 @@ And that's pretty much it!
 
 \begin_layout Section
 Shopping Cart Feature
+\begin_inset CommandInset label
+LatexCommand label
+name "shopping-cart"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO
 \end_layout
 
 \begin_layout Subsection
@@ -16885,6 +17506,17 @@ target "http://threecrickets.com/api/javascript/?namespace=Diligence.ShoppingCar
 
 \begin_layout Section
 Wiki Feature
+\begin_inset CommandInset label
+LatexCommand label
+name "wiki"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO
 \end_layout
 
 \begin_layout Subsection
