@@ -50,7 +50,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.threecrickets.prudence</groupId>
-			<artifactId>prudence-distributed</artifactId>
+			<artifactId>prudence</artifactId>
 			<version>@PRUDENCE.VERSION@</version>
 		</dependency>
 		<dependency>
