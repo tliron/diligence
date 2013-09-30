@@ -146,6 +146,9 @@
 			<arg value="repositories:detach" />
 			<arg value="public" />
 			<arg value="${component}" />
+			<arg value=":" />
+			<arg value="repositories:attach" />
+			<arg value="three-crickets" />
 		</exec>
 	</target>
 
