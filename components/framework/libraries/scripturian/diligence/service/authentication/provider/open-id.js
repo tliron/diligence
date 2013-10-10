@@ -11,10 +11,11 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/backend/open-id/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/templates/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/integration/backend/open-id/',
+	'/sincerity/classes/',
+	'/sincerity/templates/',
+	'/prudence/resources/')
 
 Diligence = Diligence || {Authentication: {}}
 

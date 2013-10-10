@@ -11,12 +11,13 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/rpc/')
-document.executeOnce('/diligence/service/html/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/templates/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/diligence/service/rpc/',
+	'/diligence/service/html/',
+	'/prudence/logging/',
+	'/sincerity/objects/',
+	'/sincerity/templates/',
+	'/mongo-db/')
 
 /**
  * @namespace
@@ -51,7 +52,7 @@ Diligence.Linkback = Diligence.Linkback || function() {
 
 		var modules = predefinedGlobals['diligence.service.rpc.modules'] = (predefinedGlobals['diligence.service.rpc.modules'] || [])
 		modules.push(function() {
-			document.executeOnce('/diligence/service/rpc/')
+			document.require('/diligence/service/rpc/')
 			Diligence.RPC.exportMethods({
 				module: 'Pingback',
 				namespace: 'pingback',

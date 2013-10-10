@@ -11,15 +11,16 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/xml/')
-document.executeOnce('/sincerity/json/')
-document.executeOnce('/sincerity/templates/')
-document.executeOnce('/sincerity/iterators/')
-document.executeOnce('/sincerity/jvm/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/prudence/resources/',
+	'/prudence/logging/',
+	'/sincerity/classes/',
+	'/sincerity/xml/',
+	'/sincerity/json/',
+	'/sincerity/templates/',
+	'/sincerity/iterators/',
+	'/sincerity/jvm/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 

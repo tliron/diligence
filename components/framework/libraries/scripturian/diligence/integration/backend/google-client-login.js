@@ -11,9 +11,10 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/prudence/logging/')
+document.require(
+	'/sincerity/classes/',
+	'/prudence/resources/',
+	'/prudence/logging/')
 
 /**
  * Support for the Google's ClientLogin authentication standard.

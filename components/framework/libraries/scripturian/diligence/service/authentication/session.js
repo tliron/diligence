@@ -11,7 +11,7 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/authentication/')
+document.require('/diligence/service/authentication/')
 
 /** @ignore */
 function handleInit(conversation) {

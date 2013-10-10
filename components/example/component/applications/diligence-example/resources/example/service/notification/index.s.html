@@ -3,8 +3,9 @@
 
 <%
 
-document.executeOnce('/diligence/service/notification/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/service/notification/',
+	'/prudence/resources/')
 
 if (conversation.request.method.name == 'POST') {
 	var form = Prudence.Resources.getForm(conversation, {

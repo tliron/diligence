@@ -3,9 +3,10 @@
 
 <%
 
-document.executeOnce('/diligence/service/documents/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/templates/')
+document.require(
+	'/diligence/service/documents/',
+	'/prudence/resources/',
+	'/sincerity/templates/')
 
 var draft = Diligence.Documents.getDraft('4fc4457ae4b030c6611c072f')
 

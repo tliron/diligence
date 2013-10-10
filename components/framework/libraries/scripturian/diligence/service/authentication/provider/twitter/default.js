@@ -11,10 +11,11 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/progress/')
-document.executeOnce('/diligence/integration/backend/twitter/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/service/progress/',
+	'/diligence/integration/backend/twitter/',
+	'/sincerity/classes/',
+	'/prudence/resources/')
 
 Diligence = Diligence || {Authentication: {}}
 
@@ -64,7 +65,7 @@ Diligence.Authentication.TwitterProvider = Diligence.Authentication.TwitterProvi
 				if (twitterSession) {
 					process.subscribeRedirect('success', function(name, context) {
 						// We need this trigger to make sure the user's cookie is set!
-						document.executeOnce('/diligence/service/authentication/')
+						document.require('/diligence/service/authentication/')
 						Diligence.Authentication.Providers.Twitter.login(this, context.conversation)
 					}, {
 						id: twitterSession.id,
@@ -101,7 +102,7 @@ Diligence.Authentication.TwitterProvider = Diligence.Authentication.TwitterProvi
 				redirect: conversation.query.get('from') || Diligence.Authentication.getUri(),
 				task: {
 					fn: function() {
-						document.executeOnce('/diligence/service/authentication/')
+						document.require('/diligence/service/authentication/')
 						Diligence.Authentication.Providers.Twitter.retry()								
 					},
 					twitter: Prudence.Resources.getQuery(conversation, {

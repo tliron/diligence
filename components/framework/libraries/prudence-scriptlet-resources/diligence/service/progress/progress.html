@@ -1,7 +1,8 @@
 <html>
 <%
-document.executeOnce('/diligence/service/html/')
-document.executeOnce('/sincerity/localization/')
+document.require(
+	'/diligence/service/html/',
+	'/sincerity/localization/')
 %>
 <head>
 	<%= Diligence.HTML.build({_content: process.getDescription(), _tag: 'title'}) %>

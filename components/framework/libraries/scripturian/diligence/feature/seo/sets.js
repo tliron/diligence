@@ -11,9 +11,10 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/feature/seo/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/json/')
+document.require(
+	'/diligence/feature/seo/',
+	'/prudence/resources/',
+	'/sincerity/json/')
 
 /** @ignore */
 function handleInit(conversation) {

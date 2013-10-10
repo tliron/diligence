@@ -3,10 +3,11 @@
 
 <%
 
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/json/')
-document.executeOnce('/sincerity/xml/')
-document.executeOnce('/sincerity/objects/')
+document.require(
+	'/prudence/resources/',
+	'/sincerity/json/',
+	'/sincerity/xml/',
+	'/sincerity/objects/')
 
 var params = {uri: 'mongo'}
 

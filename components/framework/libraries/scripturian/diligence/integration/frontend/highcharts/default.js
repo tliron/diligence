@@ -11,8 +11,9 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/svg/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/service/svg/',
+	'/prudence/resources/')
 
 var Diligence = Diligence || {}
 

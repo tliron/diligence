@@ -11,7 +11,8 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/frontend/highcharts/')
-document.executeOnce('/diligence/integration/frontend/sencha/')
-document.executeOnce('/diligence/integration/frontend/data-tables/')
-document.executeOnce('/diligence/integration/frontend/full-calendar/')
+document.require(
+	'/diligence/integration/frontend/highcharts/',
+	'/diligence/integration/frontend/sencha/',
+	'/diligence/integration/frontend/data-tables/',
+	'/diligence/integration/frontend/full-calendar/')

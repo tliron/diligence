@@ -1,8 +1,9 @@
 <%
 
-document.executeOnce('/diligence/service/html/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/json/')
+document.require(
+	'/diligence/service/html/',
+	'/prudence/resources/',
+	'/sincerity/json/')
 
 var data = Prudence.Resources.getEntity(conversation, 'object')
 if (!data) {

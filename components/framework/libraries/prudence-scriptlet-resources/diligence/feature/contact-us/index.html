@@ -17,7 +17,7 @@ conversation.locals.put('reCaptcha', true)
 <%& '/site/header/' %>
 <%
 
-document.executeOnce('/diligence/feature/contact-us/')
+document.require('/diligence/feature/contact-us/')
 var form = new Diligence.ContactUs.Form({conversation: conversation})
 form.handle({conversation: conversation, mode: 'include'})
 

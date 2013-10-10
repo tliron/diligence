@@ -11,11 +11,12 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/linkback/')
-document.executeOnce('/sincerity/xml/')
-document.executeOnce('/sincerity/rhino/')
-document.executeOnce('/sincerity/templates/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/service/linkback/',
+	'/sincerity/xml/',
+	'/sincerity/rhino/',
+	'/sincerity/templates/',
+	'/prudence/resources/')
 
 var trackbackSuccessResponse = '' +
     '<?xml version="1.0" encoding="utf-8"?>\n' +

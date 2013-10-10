@@ -11,7 +11,7 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/backend/pay-pal/')
+document.require('/diligence/integration/backend/pay-pal/')
 
 /** @ignore */
 function handleInit(conversation) {

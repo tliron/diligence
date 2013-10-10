@@ -13,15 +13,16 @@
 
 // simple form with recaptcha for sending us email
 
-document.executeOnce('/diligence/service/forms/')
-document.executeOnce('/diligence/service/notification/')
-document.executeOnce('/diligence/service/authentication/')
-document.executeOnce('/diligence/service/nonces/')
-document.executeOnce('/diligence/integration/backend/re-captcha/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/mail/')
-document.executeOnce('/sincerity/objects/')
+document.require(
+	'/diligence/service/forms/',
+	'/diligence/service/notification/',
+	'/diligence/service/authentication/',
+	'/diligence/service/nonces/',
+	'/diligence/integration/backend/re-captcha/',
+	'/prudence/resources/',
+	'/sincerity/classes/',
+	'/sincerity/mail/',
+	'/sincerity/objects/')
 
 var Diligence = Diligence || {}
 

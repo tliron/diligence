@@ -5,7 +5,7 @@
 
 <%
 
-document.executeOnce('/diligence/service/backup/')
+document.require('/diligence/service/backup/')
 
 if (conversation.request.method.name == 'POST') {
 	var backupDir = new java.io.File(new java.io.File(document.source.basePath).parentFile, 'backup')

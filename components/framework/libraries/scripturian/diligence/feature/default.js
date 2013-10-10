@@ -11,10 +11,11 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/feature/blog/')
-document.executeOnce('/diligence/feature/console/')
-document.executeOnce('/diligence/feature/contact-us/')
-document.executeOnce('/diligence/feature/discussion/')
-document.executeOnce('/diligence/feature/registration/')
-document.executeOnce('/diligence/feature/seo/')
-document.executeOnce('/diligence/feature/wiki/')
+document.require(
+	'/diligence/feature/blog/',
+	'/diligence/feature/console/',
+	'/diligence/feature/contact-us/',
+	'/diligence/feature/discussion/',
+	'/diligence/feature/registration/',
+	'/diligence/feature/seo/',
+	'/diligence/feature/wiki/')

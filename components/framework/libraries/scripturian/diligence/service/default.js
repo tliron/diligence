@@ -11,21 +11,22 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/authentication/')
-document.executeOnce('/diligence/service/authorization/')
-document.executeOnce('/diligence/service/backup/')
-document.executeOnce('/diligence/service/cache/')
-document.executeOnce('/diligence/service/documents/')
-document.executeOnce('/diligence/service/events/')
-document.executeOnce('/diligence/service/forms/')
-document.executeOnce('/diligence/service/html/')
-document.executeOnce('/diligence/service/internationalization/')
-document.executeOnce('/diligence/service/linkback/')
-document.executeOnce('/diligence/service/notification/')
-document.executeOnce('/diligence/service/nonces/')
-document.executeOnce('/diligence/service/progress/')
-document.executeOnce('/diligence/service/rest/')
-document.executeOnce('/diligence/service/rpc/')
-document.executeOnce('/diligence/service/search/')
-document.executeOnce('/diligence/service/serials/')
-document.executeOnce('/diligence/service/syndication/')
+document.require(
+	'/diligence/service/authentication/',
+	'/diligence/service/authorization/',
+	'/diligence/service/backup/',
+	'/diligence/service/cache/',
+	'/diligence/service/documents/',
+	'/diligence/service/events/',
+	'/diligence/service/forms/',
+	'/diligence/service/html/',
+	'/diligence/service/internationalization/',
+	'/diligence/service/linkback/',
+	'/diligence/service/notification/',
+	'/diligence/service/nonces/',
+	'/diligence/service/progress/',
+	'/diligence/service/rest/',
+	'/diligence/service/rpc/',
+	'/diligence/service/search/',
+	'/diligence/service/serials/',
+	'/diligence/service/syndication/')

@@ -1,6 +1,7 @@
 
-document.executeOnce('/sincerity/container/')
-document.executeOnce('/prudence/routing/')
+document.require(
+	'/sincerity/container/',
+	'/prudence/routing/')
 
 var app = new Prudence.Routing.Application()
 

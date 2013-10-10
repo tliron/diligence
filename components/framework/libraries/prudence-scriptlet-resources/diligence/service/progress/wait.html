@@ -1,7 +1,8 @@
 <%
 
-document.executeOnce('/diligence/service/progress/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/service/progress/',
+	'/prudence/resources/')
 
 var key = conversation.locals.get('process') || conversation.form.get('process')
 var process = Diligence.Progress.getProcess(key)

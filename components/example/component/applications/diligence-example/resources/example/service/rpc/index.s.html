@@ -3,8 +3,9 @@
 
 <%
 
-document.executeOnce('/diligence/service/rpc/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/service/rpc/',
+	'/prudence/resources/')
 
 var form = {
 	value1: 2,

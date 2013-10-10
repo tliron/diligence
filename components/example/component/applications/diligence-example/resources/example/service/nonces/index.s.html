@@ -3,9 +3,10 @@
 
 <%
 
-document.executeOnce('/diligence/service/nonces/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/templates/')
+document.require(
+	'/diligence/service/nonces/',
+	'/prudence/resources/',
+	'/sincerity/templates/')
 
 if (conversation.request.method.name == 'POST') {
 	var form = Prudence.Resources.getForm(conversation, {nonce: 'string'})

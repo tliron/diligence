@@ -11,11 +11,12 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/internationalization/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/xml/')
-document.executeOnce('/sincerity/classes/')
+document.require(
+	'/diligence/service/internationalization/',
+	'/prudence/resources/',
+	'/sincerity/objects/',
+	'/sincerity/xml/',
+	'/sincerity/classes/')
 
 var Diligence = Diligence || {}
 

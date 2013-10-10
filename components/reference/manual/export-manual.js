@@ -1,6 +1,7 @@
 
-document.executeOnce('/sincerity/files/')
-document.executeOnce('/sincerity/objects/')
+document.require(
+	'/sincerity/files/',
+	'/sincerity/objects/')
 
 var subsectionRE = /<a class="toc" name="toc-Subsection-(\d+)"><\/a>(.*?)(?:<a |\s<\/h2>)/g
 var subsubsectionRE = /<a class="toc" name="toc-Subsubsection-(\d+)"><\/a>(.*?)(?:<a |\s<\/h3>)/g

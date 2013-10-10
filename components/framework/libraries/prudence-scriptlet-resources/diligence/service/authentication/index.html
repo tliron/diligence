@@ -14,7 +14,7 @@ at http://threecrickets.com/
 %><%& '/site/header/' %>
 <%
 
-document.executeOnce('/diligence/service/authentication/')
+document.require('/diligence/service/authentication/')
 var session = Diligence.Authentication.getCurrentSession(conversation)
 var user = session ? session.getUser() : null
 if (user) {

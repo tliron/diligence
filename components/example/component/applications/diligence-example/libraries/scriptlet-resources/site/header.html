@@ -12,7 +12,7 @@ var version = application.sharedGlobals.get('com.threecrickets.diligence.version
 	<meta name="keywords" content="Diligence, Prudence, MongoDB, Three Crickets, Scalable, Scalability, REST, RESTful, Restlet, JVM, Java Virtual Machine, Java, JavaScript, Rhino, No-SQL, NoSQL" />
 	<link rel="shortcut icon" href="http://threecrickets.com/media/three-crickets/diligence.ico" />
 	<%== head %>
-	<% if(null !== conversation.locals.get('extJs')) { document.executeOnce('/diligence/integration/frontend/sencha/'); print(Diligence.Sencha.extJsHead(conversation)); } %>
+	<% if(null !== conversation.locals.get('extJs')) { document.require('/diligence/integration/frontend/sencha/'); print(Diligence.Sencha.extJsHead(conversation)); } %>
 	<!--  Dark Cricket (needs to be *after* Ext JS CSS, if you're using it) -->
 	<link rel="stylesheet" type="text/css" href="<%= conversation.base %>/style/three-crickets/dark-cricket/dark-cricket.min.css" />
 

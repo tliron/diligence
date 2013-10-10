@@ -1,5 +1,5 @@
 
-document.executeOnce('/diligence/service/rest/')
+document.require('/diligence/service/rest/')
 
 app.hosts = {
 	'default': '/diligence-example/'

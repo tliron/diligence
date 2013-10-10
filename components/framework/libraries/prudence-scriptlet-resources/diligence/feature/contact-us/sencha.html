@@ -12,9 +12,10 @@ limitations, transferable or non-transferable, directly from Three Crickets
 at http://threecrickets.com/
 
 %><%
-document.executeOnce('/diligence/feature/contact-us/')
-document.executeOnce('/diligence/service/internationalization/')
-document.executeOnce('/diligence/integration/frontend/sencha/')
+document.require(
+	'/diligence/feature/contact-us/',
+	'/diligence/service/internationalization/',
+	'/diligence/integration/frontend/sencha/')
 
 var textPack = Diligence.Internationalization.getCurrentPack(conversation)
 var form = form || new Diligence.ContactUs.Form({conversation: conversation})

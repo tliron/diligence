@@ -11,8 +11,9 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/backend/facebook/')
-document.executeOnce('/sincerity/classes/')
+document.require(
+	'/diligence/integration/backend/facebook/',
+	'/sincerity/classes/')
 
 Diligence = Diligence || {Authentication: {}}
 

@@ -11,14 +11,15 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/prudence/tasks/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/json/')
-document.executeOnce('/sincerity/files/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/localization/')
-document.executeOnce('/sincerity/templates/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/prudence/tasks/',
+	'/prudence/logging/',
+	'/sincerity/json/',
+	'/sincerity/files/',
+	'/sincerity/objects/',
+	'/sincerity/localization/',
+	'/sincerity/templates/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 
@@ -103,7 +104,7 @@ Diligence.Backup = Diligence.Backup || function() {
 				
 				futures.push(Prudence.Tasks.task({
 					fn: function(params) {
-						document.executeOnce('/diligence/service/backup/')
+						document.require('/diligence/service/backup/')
 						Diligence.Backup.exportMongoDbCollection(params)
 					},
 					context: params
@@ -269,7 +270,7 @@ Diligence.Backup = Diligence.Backup || function() {
 	    			
 					futures.push(Prudence.Tasks.task({
 						fn: function(params) {
-							document.executeOnce('/diligence/service/backup/')
+							document.require('/diligence/service/backup/')
 							Diligence.Backup.importMongoDbCollection(params)
 						},
 						context: params

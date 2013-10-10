@@ -11,9 +11,10 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/backend/windows-live/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/integration/backend/windows-live/',
+	'/sincerity/classes/',
+	'/prudence/resources/')
 
 Diligence = Diligence || {Authentication: {}}
 

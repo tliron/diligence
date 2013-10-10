@@ -1,6 +1,7 @@
 
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/templates/')
+document.require(
+	'/sincerity/classes/',
+	'/sincerity/templates/')
 
 SampleResource = Sincerity.Classes.define(function() {
 	var Public = {}

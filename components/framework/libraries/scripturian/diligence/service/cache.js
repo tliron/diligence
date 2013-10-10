@@ -11,10 +11,11 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/prudence/logging/',
+	'/sincerity/classes/',
+	'/sincerity/objects/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 

@@ -11,14 +11,15 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/backend/facebook/')
-document.executeOnce('/diligence/integration/backend/google-checkout/')
-document.executeOnce('/diligence/integration/backend/google-client-login/')
-document.executeOnce('/diligence/integration/backend/gravatar/')
-document.executeOnce('/diligence/integration/backend/messenger-connect/')
-document.executeOnce('/diligence/integration/backend/oauth/')
-document.executeOnce('/diligence/integration/backend/open-id/')
-document.executeOnce('/diligence/integration/backend/pay-pal/')
-document.executeOnce('/diligence/integration/backend/re-captcha/')
-document.executeOnce('/diligence/integration/backend/twitter/')
-document.executeOnce('/diligence/integration/backend/windows-live/')
+document.require(
+	'/diligence/integration/backend/facebook/',
+	'/diligence/integration/backend/google-checkout/',
+	'/diligence/integration/backend/google-client-login/',
+	'/diligence/integration/backend/gravatar/',
+	'/diligence/integration/backend/messenger-connect/',
+	'/diligence/integration/backend/oauth/',
+	'/diligence/integration/backend/open-id/',
+	'/diligence/integration/backend/pay-pal/',
+	'/diligence/integration/backend/re-captcha/',
+	'/diligence/integration/backend/twitter/',
+	'/diligence/integration/backend/windows-live/')

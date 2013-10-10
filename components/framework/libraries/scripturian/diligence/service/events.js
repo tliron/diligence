@@ -11,14 +11,15 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/nonces/')
-document.executeOnce('/prudence/lazy/')
-document.executeOnce('/prudence/tasks/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/jvm/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/diligence/service/nonces/',
+	'/prudence/lazy/',
+	'/prudence/tasks/',
+	'/prudence/logging/',
+	'/sincerity/classes/',
+	'/sincerity/objects/',
+	'/sincerity/jvm/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 
@@ -153,7 +154,7 @@ Diligence.Events = Diligence.Events || function() {
 				
 				Prudence.Tasks.task({
 					fn: function(context) {
-						document.executeOnce('/diligence/service/events/')
+						document.require('/diligence/service/events/')
 						Diligence.Events.callListener(context.event, context.listener, context.context)
 					},
 					context: {
@@ -184,7 +185,7 @@ Diligence.Events = Diligence.Events || function() {
 		if (listener.dependencies) {
 			var dependencies = Sincerity.Objects.array(listener.dependencies)
 			for (var d in dependencies) {
-				document.executeOnce(dependencies[d])
+				document.require(dependencies[d])
 			}
 		}
 		

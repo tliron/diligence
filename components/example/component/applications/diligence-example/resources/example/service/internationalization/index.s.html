@@ -2,8 +2,9 @@
 <% exampleHeader('Internationalization', 'Service'); %>
 
 <%
-document.executeOnce('/diligence/service/internationalization/')
-document.executeOnce('/sincerity/templates/')
+document.require(
+	'/diligence/service/internationalization/',
+	'/sincerity/templates/')
 var textPack = Diligence.Internationalization.getCurrentPack(conversation)
 %>
 

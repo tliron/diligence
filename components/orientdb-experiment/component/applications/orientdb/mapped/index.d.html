@@ -2,8 +2,9 @@
 
 <%
 
-document.executeOnce('/orient-db/')
-document.executeOnce('/sincerity/json/')
+document.require(
+	'/orient-db/',
+	'/sincerity/json/')
 
 try {
 OrientDB.createDatabase({uri: 'remote:localhost/scratchpad', password: 'E5976D471E5F84A53D3E9FEE000B97B10007E0007533E757CE478988C12CB53F'})

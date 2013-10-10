@@ -11,8 +11,9 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/frontend/highcharts/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/integration/frontend/highcharts/',
+	'/prudence/resources/')
 
 /** @ignore */
 function handleInit(conversation) {

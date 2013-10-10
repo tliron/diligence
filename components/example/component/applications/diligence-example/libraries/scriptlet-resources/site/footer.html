@@ -27,7 +27,7 @@
 </script>	
 <%
 if(null !== conversation.locals.get('reCaptcha')) {
-	document.executeOnce('/diligence/foundation/prudence/blocks/')
+	document.require('/diligence/foundation/prudence/blocks/')
 	var reCaptcha = application.globals.get('diligence.integration.backend.reCaptcha.publicKey')
 %>
 <script type="text/javascript">

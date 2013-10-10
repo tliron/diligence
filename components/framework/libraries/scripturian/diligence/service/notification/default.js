@@ -30,12 +30,13 @@
 //  3. hierarchical subscribe (channel startsWith)
 //  
 
-document.executeOnce('/diligence/service/authentication/')
-document.executeOnce('/prudence/lazy/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/diligence/service/authentication/',
+	'/prudence/lazy/',
+	'/prudence/logging/',
+	'/sincerity/objects/',
+	'/sincerity/classes/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 

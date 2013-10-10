@@ -17,7 +17,7 @@ conversation.locals.put('reCaptcha', true)
 <%& '/site/header/' %>
 <%
 
-document.executeOnce('/diligence/feature/registration/')
+document.require('/diligence/feature/registration/')
 if (!Diligence.Registration.handleConfirmation(conversation)) {
 	var form = new Diligence.Registration.Form({conversation: conversation})
 	form.handle({conversation: conversation, mode: 'include'})

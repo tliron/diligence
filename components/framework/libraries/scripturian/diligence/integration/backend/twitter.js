@@ -11,9 +11,10 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/backend/oauth/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/classes/')
+document.require(
+	'/diligence/integration/backend/oauth/',
+	'/sincerity/objects/',
+	'/sincerity/classes/')
 
 var Diligence = Diligence || {}
 

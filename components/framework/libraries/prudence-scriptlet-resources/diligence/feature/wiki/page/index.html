@@ -16,7 +16,7 @@ document.cacheKeyPattern = '{ri}|{dn}|{ptb}|{uid}'
 %>
 <%& '/site/header/' %>
 <%
-document.executeOnce('/diligence/feature/wiki/')
+document.require('/diligence/feature/wiki/')
 
 var form = new Diligence.Wiki.Form(document, conversation)
 

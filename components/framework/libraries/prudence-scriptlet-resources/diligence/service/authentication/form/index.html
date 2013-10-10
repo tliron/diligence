@@ -1,11 +1,12 @@
 <%
 
-document.executeOnce('/diligence/feature/registration/')
-document.executeOnce('/diligence/service/authentication/')
-document.executeOnce('/diligence/service/html/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/xml/')
-document.executeOnce('/sincerity/objects/')
+document.require(
+	'/diligence/feature/registration/',
+	'/diligence/service/authentication/',
+	'/diligence/service/html/',
+	'/prudence/resources/',
+	'/sincerity/xml/',
+	'/sincerity/objects/')
 
 var form = Diligence.Resources.getCurrentForm(conversation)
 var results = Diligence.Resources.getCurrentFormResults(conversation)

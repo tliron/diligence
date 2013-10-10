@@ -16,12 +16,13 @@
 //   /handlers/module/authorization/permissions-filter/
 //
 
-document.executeOnce('/diligence/service/authentication/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/jvm/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/diligence/service/authentication/',
+	'/prudence/logging/',
+	'/sincerity/classes/',
+	'/sincerity/objects/',
+	'/sincerity/jvm/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 

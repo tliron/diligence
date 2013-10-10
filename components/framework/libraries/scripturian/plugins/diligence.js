@@ -11,10 +11,10 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/sincerity/jvm/')
+document.require('/sincerity/jvm/')
 
 try {
-document.executeOnce('/mongo-db/')
+document.require('/mongo-db/')
 } catch(x) { /* the dependency may not have been installed yet! */ }
 
 importClass(

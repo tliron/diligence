@@ -11,16 +11,17 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/prudence/lazy/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/prudence/tasks/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/iterators/')
-document.executeOnce('/sincerity/files/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/xml/')
-document.executeOnce('/sincerity/localization/')
+document.require(
+	'/prudence/lazy/',
+	'/prudence/logging/',
+	'/prudence/tasks/',
+	'/prudence/resources/',
+	'/sincerity/classes/',
+	'/sincerity/iterators/',
+	'/sincerity/files/',
+	'/sincerity/objects/',
+	'/sincerity/xml/',
+	'/sincerity/localization/')
 
 var Diligence = Diligence || {}
 
@@ -585,7 +586,7 @@ Diligence.SEO = Diligence.SEO || function() {
 
 					futures.push(Diligence.Tasks.task({
 						fn: function(context) {
-							document.execute('/diligence/feature/seo/')
+							document.require('/diligence/feature/seo/')
 							var domain = Diligence.SEO.getDomain(context.rootUri)
 							if (domain) {
 								domain.generateUrlSet(context.workDir, context.set)
@@ -607,7 +608,7 @@ Diligence.SEO = Diligence.SEO || function() {
 					futures.push(Diligence.Tasks.task({
 						application: app.name,
 						fn: function(context) {
-							document.execute('/diligence/feature/seo/')
+							document.require('/diligence/feature/seo/')
 							var domain = Diligence.SEO.getDomain(context.rootUri)
 							if (domain) {
 								domain.generateUrlSets(context.workDir)
@@ -684,7 +685,7 @@ Diligence.SEO = Diligence.SEO || function() {
 
 				futures.push(Diligence.Tasks.task({
 					fn: function(context) {
-						document.execute('/diligence/feature/seo/')
+						document.require('/diligence/feature/seo/')
 						var domain = Diligence.SEO.getDomain(context.rootUri)
 						if (domain) {
 							domain.generateUrlSet(context.workDir, context.set)

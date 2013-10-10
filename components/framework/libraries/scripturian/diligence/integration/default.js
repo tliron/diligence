@@ -11,5 +11,6 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/integration/backend/')
-document.executeOnce('/diligence/integration/frontend/')
+document.require(
+	'/diligence/integration/backend/',
+	'/diligence/integration/frontend/')

@@ -11,15 +11,16 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/rest/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/json/')
-document.executeOnce('/sincerity/files/')
-document.executeOnce('/sincerity/objects/')
+document.require(
+	'/diligence/service/rest/',
+	'/prudence/resources/',
+	'/prudence/logging/',
+	'/sincerity/classes/',
+	'/sincerity/json/',
+	'/sincerity/files/',
+	'/sincerity/objects/')
 
-document.executeOnce('/diligence/')
+document.require('/diligence/')
 // Yes, we added just about everything in Diligence to
 // make it easily available to the console
 

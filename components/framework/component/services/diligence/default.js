@@ -1,4 +1,4 @@
 
-document.execute('/sincerity/container/')
+document.require('/sincerity/container/')
 
 Sincerity.Container.executeAll('.', ['default.js'])

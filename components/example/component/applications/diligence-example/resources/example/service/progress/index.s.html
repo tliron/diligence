@@ -3,7 +3,7 @@
 
 <%
 
-document.executeOnce('/diligence/service/progress/')
+document.require('/diligence/service/progress/')
 
 if (conversation.request.method.name == 'POST') {
 	var process = Diligence.Progress.startProcess({
@@ -13,7 +13,7 @@ if (conversation.request.method.name == 'POST') {
 		task: {
 			delay: 10000,
 			fn: function(context) {
-				document.executeOnce('/diligence/service/progress/')
+				document.require('/diligence/service/progress/')
 				var process = Diligence.Progress.getProcess()
 				process.addMilestone({
 					name: 'stage2',

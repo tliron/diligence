@@ -11,7 +11,7 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/prudence/resources/')
+document.require('/prudence/resources/')
 
 var Diligence = Diligence || {}
 

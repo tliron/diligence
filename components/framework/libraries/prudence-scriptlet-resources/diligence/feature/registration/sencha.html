@@ -12,9 +12,10 @@ limitations, transferable or non-transferable, directly from Three Crickets
 at http://threecrickets.com/
 
 %><%
-document.executeOnce('/diligence/feature/registration/')
-document.executeOnce('/diligence/service/internationalization/')
-document.executeOnce('/diligence/integration/frontend/sencha/')
+document.require(
+	'/diligence/feature/registration/',
+	'/diligence/service/internationalization/',
+	'/diligence/integration/frontend/sencha/')
 
 var textPack = Diligence.Internationalization.getCurrentPack(conversation)
 var siteName = Diligence.Registration.getSiteName()
@@ -25,7 +26,7 @@ var form = form || new Diligence.Registration.Form({conversation: conversation})
 </p>
 <%{{ 'page.scripts' %>
 <%
-document.executeOnce('/diligence/integration/frontend/sencha/')
+document.require('/diligence/integration/frontend/sencha/')
 %>
 <script>
 var fields = <%= Diligence.JSON.to(Diligence.Sencha.getFormFields(conversation, form), true, true) %>;

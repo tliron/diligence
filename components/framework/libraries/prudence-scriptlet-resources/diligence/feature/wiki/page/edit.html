@@ -1,7 +1,8 @@
 <%
 
-document.executeOnce('/diligence/feature/wiki/')
-document.executeOnce('/diligence/service/html/')
+document.require(
+	'/diligence/feature/wiki/',
+	'/diligence/service/html/')
 
 var permissions = conversation.locals.get('diligence.service.authorization.permissions')
 var page = Diligence.Wiki.getPage(conversation)

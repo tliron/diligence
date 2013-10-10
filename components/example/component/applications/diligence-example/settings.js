@@ -11,7 +11,7 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/prudence/lazy/')
+document.require('/prudence/lazy/')
 
 app.settings = {
 	description: {
@@ -79,7 +79,7 @@ app.globals = {
 			
 			events: {
 				defaultStores: [function() {
-					document.executeOnce('/diligence/service/events/')
+					document.require('/diligence/service/events/')
 					return new Diligence.Events.MongoDbCollectionStore() 				
 				}]
 			},

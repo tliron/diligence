@@ -11,18 +11,19 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/service/forms/')
-document.executeOnce('/diligence/service/authentication/')
-document.executeOnce('/diligence/service/notification/')
-document.executeOnce('/diligence/service/internationalization/')
-document.executeOnce('/diligence/integration/backend/re-captcha/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/mail/')
-document.executeOnce('/sincerity/templates/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/diligence/service/forms/',
+	'/diligence/service/authentication/',
+	'/diligence/service/notification/',
+	'/diligence/service/internationalization/',
+	'/diligence/integration/backend/re-captcha/',
+	'/sincerity/objects/',
+	'/sincerity/classes/',
+	'/sincerity/mail/',
+	'/sincerity/templates/',
+	'/prudence/resources/',
+	'/prudence/logging/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 

@@ -17,7 +17,7 @@
 <%& '/site/header/' %>
 <%
 
-document.executeOnce('/diligence/service/forms/')
+document.require('/diligence/service/forms/')
 
 var form = Diligence.Forms.getCapturedForm(conversation)
 var results = Diligence.Forms.getCapturedResults(conversation)

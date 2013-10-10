@@ -1,6 +1,6 @@
 <%{{ head %>
 <%
-document.executeOnce('/diligence/integration/frontend/sencha/')
+document.require('/diligence/integration/frontend/sencha/')
 Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 %>
 <%}}%>
@@ -9,8 +9,9 @@ Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 
 <%
 
-document.executeOnce('/diligence/service/forms/')
-document.executeOnce('/sincerity/xml/')
+document.require(
+	'/diligence/service/forms/',
+	'/sincerity/xml/')
 
 var form = Diligence.Forms.getForm('/form/multiply/')
 

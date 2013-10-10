@@ -1,6 +1,7 @@
 
-document.executeOnce('/diligence/feature/console/')
-document.executeOnce('/manual-resources/sample/')
+document.require(
+	'/diligence/feature/console/',
+	'/manual-resources/sample/')
 
 resources = {
 	// Console feature

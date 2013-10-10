@@ -19,8 +19,9 @@
 
 <%
 
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/diligence/service/forms/')
+document.require(
+	'/prudence/resources/',
+	'/diligence/service/forms/')
 
 var form = Diligence.Forms.getForm('/form/multiply/')
 var results = form.handle(conversation) // will only return a result when posting to this page (manual mode)

@@ -1,6 +1,6 @@
 <%
 
-document.executeOnce('/prudence/resources/')
+document.require('/prudence/resources/')
 
 var data = Prudence.Resources.getEntity(conversation, 'object')
 if (!data) {

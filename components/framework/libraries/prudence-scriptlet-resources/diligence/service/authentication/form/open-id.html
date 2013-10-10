@@ -1,8 +1,9 @@
 <%
 
-document.executeOnce('/diligence/service/authentication/')
-document.executeOnce('/diligence/service/html/')
-document.executeOnce('/prudence/resources/')
+document.require(
+	'/diligence/service/authentication/',
+	'/diligence/service/html/',
+	'/prudence/resources/')
 
 var form = Diligence.Resources.getCurrentForm(conversation)
 var results = Diligence.Resources.getCurrentFormResults(conversation)

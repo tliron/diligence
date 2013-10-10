@@ -19,16 +19,17 @@
 //   /handlers/module/authentication/cache-key-pattern/
 //
 
-document.executeOnce('/diligence/service/internationalization/')
-document.executeOnce('/diligence/service/forms/')
-document.executeOnce('/prudence/lazy/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/templates/')
-document.executeOnce('/sincerity/cryptography/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/diligence/service/internationalization/',
+	'/diligence/service/forms/',
+	'/prudence/lazy/',
+	'/prudence/resources/',
+	'/prudence/logging/',
+	'/sincerity/classes/',
+	'/sincerity/templates/',
+	'/sincerity/cryptography/',
+	'/sincerity/objects/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 

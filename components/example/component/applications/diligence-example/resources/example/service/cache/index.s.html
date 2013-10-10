@@ -3,11 +3,12 @@
 
 <%
 
-document.executeOnce('/diligence/service/cache/')
-document.executeOnce('/sincerity/json/')
-document.executeOnce('/sincerity/localization/')
-document.executeOnce('/sincerity/jvm/')
-document.executeOnce('/sincerity/xml/')
+document.require(
+	'/diligence/service/cache/',
+	'/sincerity/json/',
+	'/sincerity/localization/',
+	'/sincerity/jvm/',
+	'/sincerity/xml/')
 
 var cache = new Diligence.Cache({name: 'result', logLevel: 'info'})
 

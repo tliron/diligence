@@ -13,8 +13,9 @@ at http://threecrickets.com/
 
 %><%& '/site/header/' %>
 <%
-document.executeOnce('/diligence/service/authentication/')
-document.executeOnce('/diligence/service/authentication/provider/open-id/')
+document.require(
+	'/diligence/service/authentication/',
+	'/diligence/service/authentication/provider/open-id/')
 
 var provider = Diligence.Authentication.getProviderBySlug(conversation)
 if (provider) {

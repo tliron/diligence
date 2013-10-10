@@ -28,11 +28,12 @@
 
 // can create a process (REST) on an external server
 
-document.executeOnce('/diligence/service/events/')
-document.executeOnce('/prudence/tasks/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/diligence/service/events/',
+	'/prudence/tasks/',
+	'/prudence/logging/',
+	'/sincerity/classes/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 

@@ -3,10 +3,11 @@
 
 <%
 
-document.executeOnce('/diligence/service/events/')
-document.executeOnce('/prudence/resources/')
-document.executeOnce('/prudence/logging/')
-document.executeOnce('/sincerity/templates/')
+document.require(
+	'/diligence/service/events/',
+	'/prudence/resources/',
+	'/prudence/logging/',
+	'/sincerity/templates/')
 
 Diligence.Events.subscribe({
 	name: 'payments.successful',

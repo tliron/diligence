@@ -11,12 +11,13 @@
 // at http://threecrickets.com/
 //
 
-document.executeOnce('/diligence/feature/console/')
-document.executeOnce('/diligence/service/rest/')
-document.executeOnce('/diligence/service/rpc/')
-document.executeOnce('/diligence/service/forms/')
-document.executeOnce('/diligence/integration/frontend/sencha/')
-document.executeOnce('/sincerity/jvm/')
+document.require(
+	'/diligence/feature/console/',
+	'/diligence/service/rest/',
+	'/diligence/service/rpc/',
+	'/diligence/service/forms/',
+	'/diligence/integration/frontend/sencha/',
+	'/sincerity/jvm/')
 
 // For the REST Service example
 

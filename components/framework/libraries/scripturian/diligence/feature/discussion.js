@@ -22,9 +22,10 @@
 //   responses: [post, post, ...]
 // }
 
-document.executeOnce('/sincerity/classes/')
-document.executeOnce('/sincerity/objects/')
-document.executeOnce('/mongo-db/')
+document.require(
+	'/sincerity/classes/',
+	'/sincerity/objects/',
+	'/mongo-db/')
 
 var Diligence = Diligence || {}
 

@@ -19,6 +19,7 @@
  */
 var Diligence = Diligence || {}
 
-document.executeOnce('/diligence/feature/')
-document.executeOnce('/diligence/integration/')
-document.executeOnce('/diligence/service/')
+document.require(
+	'/diligence/feature/',
+	'/diligence/integration/',
+	'/diligence/service/')
