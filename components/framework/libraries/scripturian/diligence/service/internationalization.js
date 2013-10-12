@@ -298,7 +298,7 @@ Diligence.Internationalization = Diligence.Internationalization || function() {
 	}
 	var basePath = application.globals.get('diligence.service.internationalization.path')
 	if (Sincerity.Objects.exists(basePath)) {
-		basePath = new java.io.File(basePath)
+		basePath = basePath instanceof java.io.File ? basePath : new java.io.File(basePath)
 	}
 	
 	var cache
