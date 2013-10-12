@@ -17,7 +17,7 @@ document.require(
 	'/prudence/resources/',
 	'/sincerity/classes/',
 	'/sincerity/objects/',
-	'/sincerity/rhino/')
+	'/sincerity/platform/')
 
 var Diligence = Diligence || {}
 
@@ -203,7 +203,7 @@ Diligence.Forms = Diligence.Forms || function() {
 					processed = this.process(results, conversation)
 				}
 				catch (x) {
-					var details = Sincerity.Rhino.getExceptionDetails(x)
+					var details = Sincerity.Platform.getExceptionDetails(x)
 					results = {
 						success: false,
 						msg: details.message
@@ -233,7 +233,7 @@ Diligence.Forms = Diligence.Forms || function() {
 				processed = this.process(results, conversation)
 			}
 			catch (x) {
-				var details = Sincerity.Rhino.getExceptionDetails(x)
+				var details = Sincerity.Platform.getExceptionDetails(x)
 				results = {
 					success: false,
 					msg: details.message

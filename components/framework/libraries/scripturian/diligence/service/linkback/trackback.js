@@ -14,7 +14,7 @@
 document.require(
 	'/diligence/service/linkback/',
 	'/sincerity/xml/',
-	'/sincerity/rhino/',
+	'/sincerity/platform/',
 	'/sincerity/templates/',
 	'/prudence/resources/')
 
@@ -72,7 +72,7 @@ function handlePost(conversation) {
 		return trackbackSuccessResponse
 	}
 	catch (x) {
-		var details = Sincerity.Rhino.getExceptionDetails(x)
+		var details = Sincerity.Platform.getExceptionDetails(x)
 		return trackbackErrorResponse.cast({message: details.message.escapeElements()})
 	}
 }

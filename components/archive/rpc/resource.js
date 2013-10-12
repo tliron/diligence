@@ -15,7 +15,7 @@ document.executeOnce('/diligence/service/rpc/')
 document.executeOnce('/sincerity/objects/')
 document.executeOnce('/sincerity/json/')
 document.executeOnce('/sincerity/xml/')
-document.executeOnce('/sincerity/rhino/')
+document.executeOnce('/sincerity/platform/')
 document.executeOnce('/prudence/resources/')
 
 // Makes sure that lazy modules are reset at the same time as this document is reset
@@ -266,7 +266,7 @@ function handlePost(conversation) {
 									value = x.message || 'Error'
 								}
 								else {
-									var details = Sincerity.Rhino.getExceptionDetails(x)
+									var details = Sincerity.Platform.getExceptionDetails(x)
 									faultCode = Diligence.RPC.Fault.ServerError
 									value = details.message
 								}

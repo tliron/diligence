@@ -12,7 +12,7 @@
 //
 
 document.executeOnce('/diligence/service/rpc/')
-document.executeOnce('/sincerity/rhino/')
+document.executeOnce('/sincerity/platform/')
 document.executeOnce('/sincerity/json/')
 document.executeOnce('/prudence/resources/')
 
@@ -157,7 +157,7 @@ function handlePost(conversation) {
 									}
 								}
 								catch (x) {
-									var details = Sincerity.Rhino.getExceptionDetails(x)
+									var details = Sincerity.Platform.getExceptionDetails(x)
 									result = {
 										type: 'exception',
 										tid: call.tid,
