@@ -91,7 +91,7 @@ Diligence.ReCAPTCHA = Diligence.ReCAPTCHA || Sincerity.Classes.define(function()
     // Initialization
     //
 
-	var verifyUri = Sincerity.Objects.ensure(application.globals.get('diligence.integration.backend.reCaptcha.verifyUri', 'https://www.google.com/recaptcha/api/verify'))
+	var verifyUri = application.getGlobal('diligence.integration.backend.reCaptcha.verifyUri', 'https://www.google.com/recaptcha/api/verify')
 		
 	return Public
 }())

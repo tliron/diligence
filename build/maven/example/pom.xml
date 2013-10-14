@@ -54,6 +54,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.threecrickets.prudence</groupId>
+			<artifactId>prudence-distributed</artifactId>
+			<version>@PRUDENCE.VERSION@</version>
+		</dependency>
+		<dependency>
 			<groupId>com.threecrickets.style</groupId>
 			<artifactId>three-crickets-style</artifactId>
 			<version>@PRUDENCE.VERSION@</version>

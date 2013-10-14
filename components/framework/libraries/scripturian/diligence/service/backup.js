@@ -36,7 +36,7 @@ var Diligence = Diligence || {}
  */
 Diligence.Backup = Diligence.Backup || function() {
 	/** @exports Public as Diligence.Backup */
-    var Public = {}
+	var Public = {}
 
 	/**
 	 * The library's logger.
@@ -55,13 +55,13 @@ Diligence.Backup = Diligence.Backup || function() {
 	 * @param {String|com.mongodb.DB} [params.db=MongoDB.defaultDb] The MongoDB database to use
 	 * @param {Number} [params.threads=5] How many threads (and thus MongoDB connections) to use at once
 	 * @param {Number} [params.timeout=5*60*1000] Maximum time allowed for exporting per collection in milliseconds (the default is 5 minutes)
-     * @param {Boolean} [gzip=false] True to gzip the output
+	 * @param {Boolean} [gzip=false] True to gzip the output
 	 * @param {String|java.io.File} params.directory The directory or its path (will be created if it doesn't exist)
 	 */
 	Public.exportMongoDb = function(params) {
-    	params = Sincerity.Objects.clone(params)
-    	
-    	params.threads = params.threads || 5
+		params = Sincerity.Objects.clone(params)
+		
+		params.threads = params.threads || 5
 		params.directory = (Sincerity.Objects.isString(params.directory) ? new java.io.File(params.directory) : params.directory).canonicalFile
 		params.timeout = params.timeout || (5*60*1000)
 		
@@ -70,11 +70,11 @@ Diligence.Backup = Diligence.Backup || function() {
 				Module.logger.severe('Failed to delete output directory "{directory}"', params)
 				return false
 			}
-	    	
-	    	if (!params.directory.mkdirs()) {
+			
+			if (!params.directory.mkdirs()) {
 				Public.logger.severe('Failed to create output directory "{directory}"', params)
 				return false
-	    	}
+			}
 
 			var collections = params.collections
 			if (!collections || !collections.length) {
@@ -124,27 +124,27 @@ Diligence.Backup = Diligence.Backup || function() {
 				futures[f].get(params.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
 			}
 		})
-    }
+	}
 
-    /**
-     * Exports a MongoDB collection to a file, optional gzip-compressing it. The file will have
-     * the same name as the collection, with the '.json' extension (or '.json.gz' for gzip mode).
-     * 
-     * @param params
-     * @param {String} params.collection The MongoDB collection name
-     * @param {String|com.mongodb.DB} [params.db=MongoDB.defaultDb] The MongoDB database to use
-     * @param [params.query] The MongoDB query to use (otherwise exports all documents)
-     * @param {Boolean} [gzip=false] True to gzip the output
+	/**
+	 * Exports a MongoDB collection to a file, optional gzip-compressing it. The file will have
+	 * the same name as the collection, with the '.json' extension (or '.json.gz' for gzip mode).
+	 * 
+	 * @param params
+	 * @param {String} params.collection The MongoDB collection name
+	 * @param {String|com.mongodb.DB} [params.db=MongoDB.defaultDb] The MongoDB database to use
+	 * @param [params.query] The MongoDB query to use (otherwise exports all documents)
+	 * @param {Boolean} [gzip=false] True to gzip the output
 	 * @param {String|java.io.File} params.directory The base directory (or its path) in which to put the file
-     */
+	 */
 	Public.exportMongoDbCollection = function(params) {
-    	params = Sincerity.Objects.clone(params)
+		params = Sincerity.Objects.clone(params)
 
-    	params.directory = (Sincerity.Objects.isString(params.directory) ? new java.io.File(params.directory) : params.directory).canonicalFile
+		params.directory = (Sincerity.Objects.isString(params.directory) ? new java.io.File(params.directory) : params.directory).canonicalFile
 		params.file = new java.io.File(params.directory, params.collection + (params.gzip ? '.json.gz' : '.json'))
-    	
-    	var collection = new MongoDB.Collection(params.collection, {db: params.db})
-    	params.iterator = collection.find(params.query || {})
+		
+		var collection = new MongoDB.Collection(params.collection, {db: params.db})
+		params.iterator = collection.find(params.query || {})
 		
 		Public.logger.info('Exporting collection "{0}"...', params.collection)
 		
@@ -158,116 +158,118 @@ Diligence.Backup = Diligence.Backup || function() {
 	 * @param {Boolean} [params.gzip=false] True to gzip the output
 	 * @param {Boolean} [params.human=false] True to output indented, human-readable JSON
 	 */
-    Public.exportIterator = function(params) {
-    	var writer = Sincerity.Files.openForTextWriting(params.file, params.gzip || false)
-    	var count = 0
+	Public.exportIterator = function(params) {
+		var writer = Sincerity.Files.openForTextWriting(params.file, params.gzip || false)
+		var count = 0
 		Public.logger.info('Exporting iterator to "{file}"...', params)
-    	try {
+		try {
 			writer.println('[')
-    		while (params.iterator.hasNext()) {
-    			var entry = params.iterator.next()
-    			var text = Sincerity.JSON.to(entry, params.human || false)
-    			if (params.iterator.hasNext()) {
-    				text += ','
-    			}
-    			writer.println(text)
-    			count++
-    		}
+			while (params.iterator.hasNext()) {
+				var entry = params.iterator.next()
+				var text = Sincerity.JSON.to(entry, params.human || false)
+				if (params.iterator.hasNext()) {
+					text += ','
+				}
+				writer.println(text)
+				count++
+			}
 			writer.println(']')
-    	}
-    	finally {
-    		try {
-    			params.iterator.close()
-    		}
-    		catch (x) {}
-    		writer.close()
-    		Public.logger.info('{0} document{1} written to "{2}"', Sincerity.Localization.formatNumber(count), count == 1 ? '' : 's', params.file)
-    	}
-    }
-    
-    /**
-     * @param params
+		}
+		finally {
+			try {
+				params.iterator.close()
+			}
+			catch (x) {}
+			writer.close()
+			Public.logger.info('{0} document{1} written to "{2}"', Sincerity.Localization.formatNumber(count), count == 1 ? '' : 's', params.file)
+		}
+	}
+	
+	/**
+	 * @param params
 	 * @param {String|java.io.File} params.file The file or its path
 	 * @param {String} [params.name] The collection name (if not provided, will be parsed from the filename)
 	 * @param {Boolean} [gzip] True to gzip-uncompress the file first (if not provided, will be parsed from the filename)
 	 * @param {String|com.mongodb.DB} [params.db=MongoDB.defaultDb] The MongoDB database to use
 	 * @param {Boolean} [params.drop] True to drop the collection before importing
-     */
-    Public.importMongoDbCollection = function(params) {
-    	params = Sincerity.Objects.clone(params)
-    	
-    	if (!Sincerity.Objects.exists(params.name) || !Sincerity.Objects.exists(params.gzip)) {
-	    	var name = String(new java.io.File(params.file).name)
-	    	if (name.endsWith('.json.gz')) {
-	    		if (!Sincerity.Objects.exists(params.gzip)) { 
-	    			params.gzip = true
-	    		}
-	    		name = name.substring(0, name.length - 3)
-	    	}
-	    	if (name.endsWith('.json')) {
-	    		name = name.substring(0, name.length - 5)
-	    		if (!Sincerity.Objects.exists(params.name)) {
-	    			params.name = name
-	    		}
-	    	}
-    	}
-    	
-    	var collection = new MongoDB.Collection(params.name, {db: params.db})
-    	if (params.drop) {
-    		collection.drop()
-    	}
-    	
-    	Public.logger.info('Importing collection from "{file}"...', params)
+	 */
+	Public.importMongoDbCollection = function(params) {
+		params = Sincerity.Objects.clone(params)
+		
+		if (!Sincerity.Objects.exists(params.name) || !Sincerity.Objects.exists(params.gzip)) {
+			var file = params.file
+			var file = Sincerity.Objects.isString(file) ? new java.io.File(file) : file
+			var name = String(file.name)
+			if (name.endsWith('.json.gz')) {
+				if (!Sincerity.Objects.exists(params.gzip)) { 
+					params.gzip = true
+				}
+				name = name.substring(0, name.length - 3)
+			}
+			if (name.endsWith('.json')) {
+				name = name.substring(0, name.length - 5)
+				if (!Sincerity.Objects.exists(params.name)) {
+					params.name = name
+				}
+			}
+		}
+		
+		var collection = new MongoDB.Collection(params.name, {db: params.db})
+		if (params.drop) {
+			collection.drop()
+		}
+		
+		Public.logger.info('Importing collection from "{file}"...', params)
 
-    	var iterator = new Sincerity.Iterators.JsonArray({file: params.file, gzip: params.gzip})
-    	var count = 0
-    	try {
-    		while (iterator.hasNext()) {
-    			var doc = iterator.next()
-    			try {
-    				collection.insert(doc)
-    			}
-    			catch (e) {
-    				if (e.code != MongoDB.Error.DuplicateKey) {
-    					throw e
-    				}
-    			}
-    			count++
-    		}
-    	}
-    	finally {
-    		iterator.close()
-    	}
-    	
-    	Public.logger.info('{0} document{1} imported to collection "{2}"', Sincerity.Localization.formatNumber(count), count == 1 ? '' : 's', params.name)
-    }
+		var iterator = new Sincerity.Iterators.JsonArray({file: params.file, gzip: params.gzip})
+		var count = 0
+		try {
+			while (iterator.hasNext()) {
+				var doc = iterator.next()
+				try {
+					collection.insert(doc)
+				}
+				catch (e) {
+					if (e.code != MongoDB.Error.DuplicateKey) {
+						throw e
+					}
+				}
+				count++
+			}
+		}
+		finally {
+			iterator.close()
+		}
+		
+		Public.logger.info('{0} document{1} imported to collection "{2}"', Sincerity.Localization.formatNumber(count), count == 1 ? '' : 's', params.name)
+	}
 
-    /**
-     * Imports a whole directory.
-     * 
-     * @param [params] Params to send to importMongoDbCollection
-     * @param {String|File} [params.directory=fixtures] Directory; defaults to "fixtures" directory in current application
+	/**
+	 * Imports a whole directory.
+	 * 
+	 * @param [params] Params to send to importMongoDbCollection
+	 * @param {String|File} [params.directory=fixtures] Directory; defaults to "fixtures" directory in current application
 	 * @param {Number} [params.threads=5] How many threads (and thus MongoDB connections) to use at once
 	 * @param {Number} [params.timeout=5*60*1000] Maximum time allowed for exporting per collection in milliseconds (the default is 5 minutes)
-     */
-    Public.importMongoDbCollections = function(params) {
+	 */
+	Public.importMongoDbCollections = function(params) {
 		params = Sincerity.Objects.exists(params) ? Sincerity.Objects.clone(params) : {}
 
-    	params.directory = Sincerity.Objects.ensure(params.directory, new java.io.File(application.root, 'fixtures'))
+		params.directory = Sincerity.Objects.ensure(params.directory, new java.io.File(application.root, 'fixtures'))
 		params.directory = (Sincerity.Objects.isString(params.directory) ? new java.io.File(params.directory) : params.directory).canonicalFile
-    	params.threads = params.threads || 5
+		params.threads = params.threads || 5
 		params.timeout = params.timeout || (5*60*1000)
 		
 		Public.logger.time('import from directory "{directory}" ({threads} threads)'.cast(params), function() {
 			var futures = []
 
 			var files = params.directory.listFiles()
-	    	for (var f in files) {
-	    		var file = files[f]
-	    		var name = String(file.name)
-	    		if (name.endsWith('.json') || name.endsWith('.json.gz')) {
-	    			params.file = file
-	    			
+			for (var f in files) {
+				var file = files[f]
+				var name = String(file.name)
+				if (name.endsWith('.json') || name.endsWith('.json.gz')) {
+					params.file = file
+					
 					futures.push(Prudence.Tasks.task({
 						fn: function(params) {
 							document.require('/diligence/service/backup/')
@@ -283,15 +285,15 @@ Diligence.Backup = Diligence.Backup || function() {
 						}
 						futures = []
 					}
-	    		}
-	    	}
+				}
+			}
 			
 			// Wait for tasks to finish
 			for (var f in futures) {
 				futures[f].get(params.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
 			}
 		})
-    }
+	}
 
 	return Public
 }()
