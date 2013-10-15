@@ -11,28 +11,105 @@
 // at http://threecrickets.com/
 //
 
-document.require('/sincerity/jvm/')
+document.require(
+	'/sincerity/cryptography/',
+	'/sincerity/jvm/')
 
 try {
 document.require('/mongo-db/')
 } catch(x) { /* the dependency may not have been installed yet! */ }
 
 importClass(
-	com.threecrickets.sincerity.exception.BadArgumentsCommandException)
+	com.threecrickets.sincerity.exception.BadArgumentsCommandException,
+	java.io.File,
+	java.io.FileWriter,
+	java.util.Properties)
 
 function getInterfaceVersion() {
 	return 1
 }
 
 function getCommands() {
-	return ['worker']
+	return ['diligence']
 }
 
 function run(command) {
 	switch (String(command.name)) {
+		case 'diligence':
+			diligence(command)
+			break
+	}
+}
+
+function diligence(command) {
+	command.parse = true
+
+	var diligenceCommand
+	if (command.arguments.length > 0) {
+		diligenceCommand = String(command.arguments[0])
+	}
+	else {
+		diligenceCommand = 'help'
+	}
+	
+	switch (diligenceCommand) {
+		case 'help':
+			help(command)
+			break
+		case 'digests':
+			digests(command)
+			break
 		case 'worker':
 			worker(command)
 			break
+	}
+}
+
+function help(command) {
+	println('diligence digests [name] [[algorithm]] Create digests for all files in the [name]/resources/ application directory')
+	println('diligence worker')
+}
+
+function digests(command) {
+	if (command.arguments.length < 2) {
+		throw new BadArgumentsCommandException(command, 'name', '[algorithm=SHA-1]')
+	}
+	var name = command.arguments[1]
+	var algorithm = 'SHA-1'
+	if (command.arguments.length > 2) {
+		algorithm = command.arguments[2]
+	}
+
+	var resourcesDir = new File(sincerity.container.getFile('component', 'applications', name, 'resources'))
+	println('Calculating ' + algorithm + ' digests for all files under: ' + resourcesDir)
+
+	var properties = new Properties()
+	addDigests(resourcesDir, properties, algorithm, String(resourcesDir))
+
+	var digestsFile = new File(sincerity.container.getFile('component', 'applications', name, 'digests.conf'))
+	var output = new FileWriter(digestsFile)
+	try {
+		properties.store(output, 'Created by Prudence')
+	}
+	finally {
+		output.close()
+	}
+
+	println('Saved digests to: ' + digestsFile)
+}
+
+function addDigests(file, properties, algorithm, prefix) {
+	if (file.directory) {
+		var files = file.listFiles()
+		for (var f in files) {
+			file = files[f]
+			addDigests(file, properties, algorithm, prefix)
+		}
+	}
+	else {
+		var digest = Sincerity.Cryptography.fileDigest(file, algorithm)
+		var path = String(file).substring(prefix.length + 1)
+		properties.put(path, digest)
 	}
 }
 
