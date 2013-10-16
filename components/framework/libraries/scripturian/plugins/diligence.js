@@ -80,13 +80,13 @@ function digests(command) {
 		algorithm = command.arguments[2]
 	}
 
-	var resourcesDir = new File(sincerity.container.getFile('component', 'applications', name, 'resources'))
+	var resourcesDir = sincerity.container.getFile('component', 'applications', name, 'resources')
 	println('Calculating ' + algorithm + ' digests for all files under: ' + resourcesDir)
 
 	var properties = new Properties()
 	addDigests(resourcesDir, properties, algorithm, String(resourcesDir))
 
-	var digestsFile = new File(sincerity.container.getFile('component', 'applications', name, 'digests.conf'))
+	var digestsFile = sincerity.container.getFile('component', 'applications', name, 'digests.conf')
 	var output = new FileWriter(digestsFile)
 	try {
 		properties.store(output, 'Created by Prudence')

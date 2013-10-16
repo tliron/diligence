@@ -11,7 +11,9 @@
 // at http://threecrickets.com/
 //
 
-document.require('/sincerity/templates/')
+document.require(
+	'/prudence/logging/',
+	'/sincerity/templates/')
 
 var Diligence = Diligence || {}
 
@@ -25,7 +27,15 @@ Diligence.Assets = Diligence.Assets || function() {
 	/** @exports Public as Diligence.Assets */
 	var Public = {}
     
-    Public.template = String(application.getGlobal('diligence.service.assets.template', '{base}/{name}?_={digest}'))
+	/**
+	 * The library's logger.
+	 *
+	 * @field
+	 * @returns {Prudence.Logging.Logger}
+	 */
+	Public.logger = Prudence.Logging.getLogger('assets')
+
+	Public.template = String(application.getGlobal('diligence.service.assets.template', '{base}/{name}?_={digest}'))
     
     Public.getDigest = function(name) {
         Public.initialize()
@@ -36,7 +46,7 @@ Diligence.Assets = Diligence.Assets || function() {
     	return Sincerity.Templates.cast(Public.template, {
     		base: conversation.base,
     		name: name,
-    		digest: Public.getDigest(name)
+    		digest: Public.getDigest(name) || ''
     	})
     }
     
@@ -46,12 +56,15 @@ Diligence.Assets = Diligence.Assets || function() {
         	if (!Sincerity.Objects.exists(digests)) {
 	        	digests = new java.util.Properties()
 	    	    var file = new java.io.File(application.root, 'digests.conf')
-	    	    var reader = new java.io.FileReader(file)
-	    	    try {
-	    	    	digests.load(reader)
-	    	    }
-	    	    finally {
-	    	    	reader.close()
+	    	    if (file.exists()) {
+		    	    var reader = new java.io.FileReader(file)
+		    	    try {
+		    	    	digests.load(reader)
+		    	    }
+		    	    finally {
+		    	    	reader.close()
+		    	    }
+		        	Public.logger.info('Loaded from: {0}', file)
 	    	    }
 	    	    digests = application.getGlobal('diligence.service.assets.cache', digests)
         	}
