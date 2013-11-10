@@ -1,10 +1,6 @@
 
 document.require('/diligence/service/rest/')
 
-app.hosts = {
-	'default': '/diligence-example/'
-}
-
 app.routes = {
 	'/*': [
 		'manual',
@@ -54,3 +50,7 @@ app.routes = {
 }
 
 //Sincerity.Objects.merge(app.routes, Diligence.REST.createMongoDbRoutes({prefix: '/mongo/'}))
+
+app.hosts = {
+	'default': '/diligence-example/'
+}
