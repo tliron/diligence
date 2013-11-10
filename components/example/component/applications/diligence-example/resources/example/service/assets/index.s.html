@@ -1,0 +1,20 @@
+<%& '/site/header/' %>
+<% exampleHeader('Assets', 'Service'); %>
+
+<%
+document.require('/diligence/service/assets/')
+var url = Diligence.Assets.getURL('media/asset.png', conversation)
+%>
+<p>
+	The asset's URL:
+	<a href="<%= url %>"><%= url %></a>
+</p>
+<p>
+	The URL in use:
+</p>
+<p>
+	<img src="<%= url %>" />
+<p>
+
+<% exampleFooter('Assets', 'Service'); %>
+<%& '/site/footer/' %>

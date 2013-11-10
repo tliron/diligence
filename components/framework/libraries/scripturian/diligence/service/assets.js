@@ -13,11 +13,37 @@
 
 document.require(
 	'/prudence/logging/',
+	'/sincerity/objects/',
 	'/sincerity/templates/')
 
 var Diligence = Diligence || {}
 
 /**
+ * Generates asset URLs, commonly used in dynamically generated HTML. URLs
+ * are based on a user-defined template, although the default should suffice
+ * for most use cases.
+ * <p>
+ * An "asset" is a common term for statically served files, such as images.
+ * Because assets use a lot of bandwidth to download, they are often cached on
+ * web browser clients (configured via a 'cacheControl' route type in
+ * routing.js).
+ * <p>
+ * The important feature added by this service is the ability to use the
+ * asset's base64-encoded cached content digest (usually a SHA-1) in the asset's
+ * generated URL. By specifically using this digest as a query param to the URL,
+ * two things are accomplished: 1) the URL will still be routed to the resources
+ * normally, because query params are not use by the 'static' route type, and
+ * 2) because the URL is different, web browsers will use a different cache for
+ * the asset per client content.
+ * <p>
+ * The end result is that you could cache assets in clients for as long as you
+ * want (using 'farFuture' for 'cacheControl') while maintaining the ability to
+ * effectively bypass the cache for an asset whenever its content changes.
+ * <p>
+ * The asset digests are stored in a 'digests.conf' file in the application's
+ * root subdirectory. It is a JVM properties file matching asset names to their
+ * digests. You can generate this file automatically using the "diligence:digests"
+ * Sincerity command. 
  * 
  * @namespace
  * 
@@ -35,7 +61,7 @@ Diligence.Assets = Diligence.Assets || function() {
 	 */
 	Public.logger = Prudence.Logging.getLogger('assets')
 
-	Public.template = String(application.getGlobal('diligence.service.assets.template', '{base}/{name}?_={digest}'))
+	Public.template = application.getGlobal('diligence.service.assets.template', '{base}/{name}?_={digest}')
     
     Public.getDigest = function(name) {
         Public.initialize()
@@ -43,11 +69,20 @@ Diligence.Assets = Diligence.Assets || function() {
     }
     
     Public.getURL = function(name, conversation) {
-    	return Sincerity.Templates.cast(Public.template, {
+    	var filling = {
     		base: conversation.base,
-    		name: name,
-    		digest: Public.getDigest(name) || ''
-    	})
+    		name: name
+    	}
+    	
+    	filling.digest = Public.getDigest(name)
+    	if (Sincerity.Objects.exists(filling.digest)) {
+    		filling.digest = encodeURIComponent(filling.digest)
+    	}
+    	else {
+    		filling.digest = ''
+    	}
+    	
+    	return Sincerity.Templates.cast(Public.template, filling)
     }
     
     Public.initialize = function() {
@@ -70,12 +105,17 @@ Diligence.Assets = Diligence.Assets || function() {
         	}
         }
     }
+    
+    Public.reset = function() {
+    	application.globals.remove('diligence.service.assets.cache')
+    	digests = null
+    }
 
 	//
 	// Private
 	//
     
-    var digests
+    var digests = null
     
 	return Public
 }()

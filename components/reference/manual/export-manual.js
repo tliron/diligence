@@ -138,6 +138,7 @@ var diligenceBase = 'component/applications/diligence-example/libraries/scriptle
 var manual = new Manual(application.arguments[1])
 manual.generate('diligence', {
 	// Services
+	'Assets Service': [diligenceBase + 'manual/service/assets.s.html'],
 	'Authentication Service': [diligenceBase + 'manual/service/authentication.s.html'],
 	'Authorization Service': [diligenceBase + 'manual/service/authorization.s.html'],
 	'Backup Service': [diligenceBase + 'manual/service/backup.s.html'],

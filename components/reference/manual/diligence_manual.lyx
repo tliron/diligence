@@ -121,6 +121,118 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Section
+Assets Service
+\begin_inset CommandInset label
+LatexCommand label
+name "assets"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An 
+\begin_inset Quotes eld
+\end_inset
+
+asset
+\begin_inset Quotes erd
+\end_inset
+
+ is a common term for statically served files, such as images.
+ Because assets use a lot of bandwidth to download, they are often cached
+ on web browser clients (configured via a 
+\begin_inset Quotes eld
+\end_inset
+
+cacheControl
+\begin_inset Quotes erd
+\end_inset
+
+ route type in routing.js).
+\end_layout
+
+\begin_layout Standard
+This service generates asset URLs, commonly used in dynamically generated
+ HTML.
+ The URLs are based on a user-defined template, although the default should
+ suffice for most use cases.
+\end_layout
+
+\begin_layout Standard
+The important feature added by this service is the ability to use the asset's
+ base64-encoded cached content digest (usually a SHA-1) in the asset's generated
+ URL.
+ By specifically using this digest as a query param to the URL, two things
+ are accomplished: 1) the URL will still be routed to the resources normally,
+ because query params are not use by the 
+\begin_inset Quotes eld
+\end_inset
+
+static
+\begin_inset Quotes erd
+\end_inset
+
+ route type, and 2) because the URL is different, web browsers will use
+ a different cache for the asset per client content.
+\end_layout
+
+\begin_layout Standard
+The end result is that you could cache assets in clients for as long as
+ you want (using 
+\begin_inset Quotes eld
+\end_inset
+
+farFuture
+\begin_inset Quotes erd
+\end_inset
+
+ for 
+\begin_inset Quotes eld
+\end_inset
+
+cacheControl
+\begin_inset Quotes erd
+\end_inset
+
+) while maintaining the ability to effectively bypass the cache for an asset
+ whenever its content changes.
+\end_layout
+
+\begin_layout Standard
+The asset digests are stored in a 
+\begin_inset Quotes eld
+\end_inset
+
+digests.conf
+\begin_inset Quotes erd
+\end_inset
+
+ file in the application's root subdirectory.
+ It is a JVM properties file matching asset names to their digests.
+ You can generate this file automatically using the "diligence:digests"
+ Sincerity command.
+ 
+\end_layout
+
+\begin_layout Subsection
+Usage
+\end_layout
+
+\begin_layout Standard
+Make sure to check out the 
+\begin_inset CommandInset href
+LatexCommand href
+name "API documentation for Diligence.Assets"
+target "http://threecrickets.com/api/javascript/?namespace=Diligence.Assets"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
 Authentication Service
 \begin_inset CommandInset label
 LatexCommand label
@@ -633,8 +745,8 @@ status open
 
 \begin_layout Plain Layout
 
-* 6 * * * <% document.executeOnce('/diligence/service/backup/'); Diligence.Backup.e
-xportMongoDb({directory: '/tmp/diligence-backup/', gzip: true}); %>
+ 6  <% document.executeOnce('/diligence/service/backup/'); Diligence.Backup.exportM
+ongoDb({directory: '/tmp/diligence-backup/', gzip: true}); %>
 \end_layout
 
 \end_inset
@@ -2581,8 +2693,7 @@ var multiplyForm = {
 
 \begin_layout Plain Layout
 
-			results.values.result = Number(results.values.first) * Number(results.values.second
-)
+			results.values.result = Number(results.values.first) Number(results.values.second)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3438,7 +3549,7 @@ process: function(results) {
 
 \begin_layout Plain Layout
 
-		results.values.result = Number(results.values.first) * Number(results.values.second)
+		results.values.result = Number(results.values.first) Number(results.values.second)
 \end_layout
 
 \begin_layout Plain Layout
@@ -4742,7 +4853,7 @@ nd)) {
 
 \begin_layout Plain Layout
 
-	form.result = Number(form.first) * Number(form.second)
+	form.result = Number(form.first) Number(form.second)
 \end_layout
 
 \begin_layout Plain Layout
@@ -6203,8 +6314,8 @@ status open
 
 \begin_layout Plain Layout
 
-*/15 * * * * <% document.executeOnce('/diligence/service/cache/'); new Diligence.C
-ache('result').prune(); %>
+/15   <% document.executeOnce('/diligence/service/cache/'); new Diligence.Cache('r
+esult').prune(); %>
 \end_layout
 
 \end_inset
@@ -6723,7 +6834,7 @@ document.executeOnce('/diligence/service/nonces/')
 
 \begin_layout Plain Layout
 
-var nonce = Diligence.Nonces.create(60 * 1000)
+var nonce = Diligence.Nonces.create(60 1000)
 \end_layout
 
 \end_inset
@@ -6820,8 +6931,8 @@ status open
 
 \begin_layout Plain Layout
 
-*/15 * * * * <% document.executeOnce('/diligence/service/nonces/'); Diligence.Nonc
-es.prune(); %>
+/15   <% document.executeOnce('/diligence/service/nonces/'); Diligence.Nonces.prune
+(); %>
 \end_layout
 
 \end_inset
@@ -7331,20 +7442,20 @@ status open
 
 \begin_layout Plain Layout
 
-* * * * * <% document.executeOnce('/diligence/service/notification/'); Diligence.N
-otification.sendQueuedNotices(); %>
+   <% document.executeOnce('/diligence/service/notification/'); Diligence.Notifica
+tion.sendQueuedNotices(); %>
 \end_layout
 
 \begin_layout Plain Layout
 
-* 4 * * * <% document.executeOnce('/diligence/service/notification/'); Diligence.N
-otification.sendQueuedDigests('daily'); %>
+ 4  <% document.executeOnce('/diligence/service/notification/'); Diligence.Notific
+ation.sendQueuedDigests('daily'); %>
 \end_layout
 
 \begin_layout Plain Layout
 
-* 5 * * 0 <% document.executeOnce('/diligence/service/notification/'); Diligence.N
-otification.sendQueuedDigests('weekly'); %> 
+ 5  0 <% document.executeOnce('/diligence/service/notification/'); Diligence.Notif
+ication.sendQueuedDigests('weekly'); %> 
 \end_layout
 
 \end_inset
@@ -7517,7 +7628,7 @@ var process = Diligence.Progress.startProcess({
 
 \begin_layout Plain Layout
 
-	maxDuration: 20 * 1000,
+	maxDuration: 20 1000,
 \end_layout
 
 \begin_layout Plain Layout
@@ -7646,7 +7757,7 @@ var process = Diligence.Progress.startProcess({
 
 \begin_layout Plain Layout
 
-	maxDuration: 60 * 1000,
+	maxDuration: 60 1000,
 \end_layout
 
 \begin_layout Plain Layout
@@ -7984,7 +8095,7 @@ emoteLocation),
 
 \begin_layout Plain Layout
 
-	maxDuration: 5 * 60 * 1000,
+	maxDuration: 5 60 1000,
 \end_layout
 
 \begin_layout Plain Layout
@@ -8314,7 +8425,7 @@ app.routes = {
 
 \begin_layout Plain Layout
 
-	'/data/users/':      '@users.plural'
+	'/data/users/':   '@users.plural'
 \end_layout
 
 \begin_layout Plain Layout
@@ -8389,7 +8500,7 @@ resources = {
 
 \begin_layout Plain Layout
 
-	users:          new Diligence.REST.MongoDbResource({name: 'users'}),
+	users:     new Diligence.REST.MongoDbResource({name: 'users'}),
 \end_layout
 
 \begin_layout Plain Layout
@@ -8886,7 +8997,7 @@ app.routes = {
 
 \begin_layout Plain Layout
 
-	'/data/admins/':        {type: 'implicit', id: 'admins.plural'}
+	'/data/admins/':    {type: 'implicit', id: 'admins.plural'}
 \end_layout
 
 \begin_layout Plain Layout
@@ -9611,7 +9722,7 @@ resources = {
 
 \begin_layout Plain Layout
 
-	users:          new Diligence.REST.InMemoryResource({name: 'users', documents:
+	users:     new Diligence.REST.InMemoryResource({name: 'users', documents:
  usersMap}),
 \end_layout
 
@@ -9688,7 +9799,7 @@ resources = {
 
 \begin_layout Plain Layout
 
-	users:          new Diligence.REST.DistributedResource({name: 'users', documents:
+	users:     new Diligence.REST.DistributedResource({name: 'users', documents:
  users}),
 \end_layout
 
@@ -10953,7 +11064,7 @@ The RPC (Remote Procedure Call) Service provides robust, elegant support
 \begin_inset CommandInset href
 LatexCommand href
 name "JSON-RPC"
-target "http://groups.google.com/group/json-rpc/web/json-rpc-2-0"
+target "http://json-rpc.org/"
 
 \end_inset
 
@@ -10961,7 +11072,7 @@ target "http://groups.google.com/group/json-rpc/web/json-rpc-2-0"
 \begin_inset CommandInset href
 LatexCommand href
 name "XML-RPC"
-target "http://www.xmlrpc.com/spec"
+target "http://xmlrpc.scripting.com/"
 
 \end_inset
 
@@ -11121,7 +11232,7 @@ var Calc = {
 
 \begin_layout Plain Layout
 
-		return x * y
+		return x y
 \end_layout
 
 \begin_layout Plain Layout
@@ -11315,7 +11426,7 @@ var Calc = {
 
 \begin_layout Plain Layout
 
-			return x * y
+			return x y
 \end_layout
 
 \begin_layout Plain Layout
@@ -11509,7 +11620,7 @@ var Calc = {
 
 \begin_layout Plain Layout
 
-			return x * y * this.definition.multiplyAll
+			return x y this.definition.multiplyAll
 \end_layout
 
 \begin_layout Plain Layout
@@ -11580,7 +11691,7 @@ var Calc = {
 
 \begin_layout Plain Layout
 
-			return x * y * this
+			return x y this
 \end_layout
 
 \begin_layout Plain Layout
@@ -11671,7 +11782,7 @@ var Calc = function(multiplyAll) {
 
 \begin_layout Plain Layout
 
-		return x * y * this.multiplyAll
+		return x y this.multiplyAll
 \end_layout
 
 \begin_layout Plain Layout
@@ -15394,7 +15505,7 @@ var Calc = {
 
 \begin_layout Plain Layout
 
-				msg: '{0} times {1} is {2}'.cast(x, y, x * y)
+				msg: '{0} times {1} is {2}'.cast(x, y, x y)
 \end_layout
 
 \begin_layout Plain Layout
@@ -15705,7 +15816,7 @@ Ext Direct's functionality is practically identical to that
 \begin_inset CommandInset href
 LatexCommand href
 name "JSON-RPC"
-target "http://groups.google.com/group/json-rpc/web/json-rpc-2-0"
+target "http://json-rpc.org/"
 
 \end_inset
 
@@ -15809,7 +15920,7 @@ var Calc = {
 
 \begin_layout Plain Layout
 
-		return x * y
+		return x y
 \end_layout
 
 \begin_layout Plain Layout
@@ -15914,7 +16025,7 @@ var Calc = {
 
 \begin_layout Plain Layout
 
-				msg: '{0} times {1} is {2}'.cast(x, y, x * y)
+				msg: '{0} times {1} is {2}'.cast(x, y, x y)
 \end_layout
 
 \begin_layout Plain Layout
@@ -17386,8 +17497,8 @@ status open
 
 \begin_layout Plain Layout
 
-0 4 * * * /diligence/eval/ document.executeOnce('/diligence/feature/seo/');
- SEO.getDomain('http://localhost:8080').generateStatic();
+0 4  /diligence/eval/ document.executeOnce('/diligence/feature/seo/'); SEO.getDoma
+in('http://localhost:8080').generateStatic();
 \end_layout
 
 \end_inset

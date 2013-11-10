@@ -10,9 +10,7 @@ app.routes = {
 		{
 			type: 'cacheControl',
 			mediaTypes: {
-				'image/png': '1m',
-				'image/gif': '1m',
-				'image/jpeg': '1m',
+				'image/*': '1m',
 				'text/css': '1m',
 				'application/x-javascript': '1m'
 			},
@@ -33,10 +31,6 @@ app.routes = {
 	'/console/programs/{id}/': '@console.programs',
 	'/console/programs/':      '@console.programs.plural',
 	
-	// A sample dispatched resource, see /libraries/manual-resources/sample.js:
+	// A sample dispatched resource, see /libraries/dispatched/sample.js:
 	'/sample/':                '@sample'
-}
-
-app.dispatchers = {
-	javascript: '/manual-resources/'
 }

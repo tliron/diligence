@@ -1,7 +1,7 @@
 
 document.require(
 	'/diligence/feature/console/',
-	'/manual-resources/sample/')
+	'/dispatched/sample/')
 
 resources = {
 	// Console feature

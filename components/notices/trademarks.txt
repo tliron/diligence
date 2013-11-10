@@ -1,0 +1,9 @@
+
+"Oracle" and "Java" are registered trademarks of Oracle and/or its affiliates:
+
+http://www.oracle.com/us/legal/third-party-trademarks/index.html
+
+
+"Restlet" is a registered trademark of Restlet S.A.S.:
+
+http://restlet.org/download/legal

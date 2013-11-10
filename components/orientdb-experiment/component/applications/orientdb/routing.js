@@ -1,23 +1,40 @@
 
-app.hosts = {
-	'default': '/orientdb/',
-	internal: '/orientdb/' // If not provided will default to the application subdirectory name
-}
-
 app.routes = {
 	'/*': [
 		'manual',
 		'scriptlet',
-		// For our static files we'll cache all images on the client for the far future, and enable on-the-fly ZUSS support and JavaScript compression:
-		{type: 'cacheControl', mediaTypes: {'image/png': 'farFuture', 'image/jpeg': 'farFuture', 'image/gif': 'farFuture'}, next:
-			{type: 'javaScriptUnifyMinify', next:
-				{type: 'zuss', next: 'static'}}}
+		{
+			type: 'cacheControl',
+			mediaTypes: {
+				'image/*': '1m',
+				'text/css': '1m',
+				'application/x-javascript': '1m'
+			},
+			next: {
+				type: 'zuss',
+				next: 'static'
+			}
+		}
 	],
-	// A sample implicit resource, see /libraries/manual-resources/sample.js:
-	'/sample/': '@sample'
+	
+	'/log/':                   '@log',
+	
+	// Console feature
+	'/console/':               '/diligence/feature/console/web/',
+	'/console/help/':          '/content/diligence/feature/console/help.html',
+	'/console/execution/':     '@console.execution',
+	'/console/log/':           '@console.log',
+	'/console/programs/{id}/': '@console.programs',
+	'/console/programs/':      '@console.programs.plural',
+	
+	// A sample dispatched resource, see /libraries/manual-resources/sample.js:
+	'/sample/':                '@sample'
 }
 
-// See /libraries/resources/default.js:
 app.dispatchers = {
 	javascript: '/manual-resources/'
+}
+
+app.hosts = {
+	'default': '/orientdb/'
 }
