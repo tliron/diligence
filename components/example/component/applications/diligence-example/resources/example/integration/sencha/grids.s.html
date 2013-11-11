@@ -44,7 +44,7 @@ Ext.onReady(function() {
 		idProperty: '_id',
 		proxy: {
 			type: 'diligence',
-			url: '<%= conversation.pathToBase %>/mongo/users/'
+			url: '<%= conversation.base %>/mongo/users/'
 		}
 	});
 	
@@ -103,7 +103,7 @@ Ext.onReady(function() {
 					'select': function(combo, records) {
 						var uri = records[0].get('uri');
 						var proxy = User.getProxy();
-						proxy.url = '<%= conversation.pathToBase %>/' + uri + '/users/';
+						proxy.url = '<%= conversation.base %>/' + uri + '/users/';
 						store.load();
 					}
 				}

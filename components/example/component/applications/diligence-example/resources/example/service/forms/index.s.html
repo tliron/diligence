@@ -36,7 +36,7 @@ var results = form.handle(conversation) // will only return a result when postin
 </p>
 
 <h3>Redirect Mode</h3>
-<form action="<%= conversation.pathToBase %>/form/multiply/?mode=redirect" method="post">
+<form action="<%= conversation.base %>/form/multiply/?mode=redirect" method="post">
 	<p>
 		First value: <input name="first" />
 	</p>
@@ -53,7 +53,7 @@ var results = form.handle(conversation) // will only return a result when postin
 	Here we'll be staying on the same URL but actually capturing a different page,
 	specifically "/example/service/forms/results.d.html".
 </p>
-<form action="<%= conversation.pathToBase %>/form/multiply/?mode=capture&from=<%= encodeURIComponent(conversation.reference) %>" method="post">
+<form action="<%= conversation.base %>/form/multiply/?mode=capture&from=<%= encodeURIComponent(conversation.reference) %>" method="post">
 	<p>
 		First value: <input name="first" />
 	</p>

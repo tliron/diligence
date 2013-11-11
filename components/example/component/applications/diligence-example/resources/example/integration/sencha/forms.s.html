@@ -161,7 +161,7 @@ function openForm(event, el) {
 		config.url = '?form=' + el.id;
 	}
 	else if (el.id.substring(0, 4) == 'ajax') {
-		config.url = '<%= conversation.pathToBase %>/form/multiply/';
+		config.url = '<%= conversation.base %>/form/multiply/';
 	}
 	else if (el.id.substring(0, 6) == 'direct') {
 		config.api = {
@@ -180,7 +180,7 @@ Ext.onReady(function() {
 	Ext.select('.open-form').on('click', openForm);
 
 	Ext.Ajax.request({
-		url: '<%= conversation.pathToBase %>/direct/calc/',
+		url: '<%= conversation.base %>/direct/calc/',
 		method: 'GET',
 		disableCaching: false,
 		success: function(response) {

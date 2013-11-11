@@ -30,7 +30,7 @@ var siteName = Diligence.Registration.getSiteName()
 
 	<form>
 		<%= Diligence.HTML.build({_key: 'diligence.service.authentication.form.login.alternative.title', _tag: 'h2', _cast: {siteName: siteName}}) %>
-		<div class="status"><%= Diligence.HTML.a({_key: 'diligence.service.authentication.form.login.alternative.register', href: conversation.pathToBase + '/registration/'}) %></div>
+		<div class="status"><%= Diligence.HTML.a({_key: 'diligence.service.authentication.form.login.alternative.register', href: conversation.base + '/registration/'}) %></div>
 <%
 if (!Diligence.Objects.isEmpty(providers)) {
 %>		

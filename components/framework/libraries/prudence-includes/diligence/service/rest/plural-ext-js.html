@@ -6,7 +6,7 @@ document.require(
 <html>
 <head>
 	<%= Diligence.HTML.build({_content: 'Diligence REST Service - ' + data.resource.plural, _tag: 'title'}) %>
-	<%= Diligence.Sencha.extJsHead(conversation, {pathToBase: data.pathToBase}) %>
+	<%= Diligence.Sencha.extJsHead(conversation, {base: data.base}) %>
 </head>
 <body>
 <%= Diligence.HTML.build({_content: 'Resource: ' + data.resource.plural, _tag: 'h3'}) %>

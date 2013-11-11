@@ -19,7 +19,7 @@ var pages = Diligence.Wiki.getPages()
 for (var p in pages) {
 	var page = pages[p]
 	var name = page.getName()
-	var link = conversation.pathToBase + (name == 'home' ? '' : '/page/' + encodeURIComponent(name) + '/')
+	var link = conversation.base + (name == 'home' ? '' : '/page/' + encodeURIComponent(name) + '/')
 %>
 <div><a href="<%= link %>"><%= name %></a></div>
 <%

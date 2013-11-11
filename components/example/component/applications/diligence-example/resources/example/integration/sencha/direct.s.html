@@ -77,7 +77,7 @@ function init() {
 
 Ext.onReady(function() {
 	Ext.Ajax.request({
-		url: '<%= conversation.pathToBase %>/direct/shoppingcart/',
+		url: '<%= conversation.base %>/direct/shoppingcart/',
 		method: 'GET',
 		disableCaching: false,
 		success: function(response) {
