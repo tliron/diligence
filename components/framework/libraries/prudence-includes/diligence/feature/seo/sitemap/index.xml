@@ -2,8 +2,8 @@
 <%
 document.executeOnce('/diligence/feature/seo/')
 
-document.cacheDuration = Diligence.SEO.getCacheDuration()
-document.cacheTags.add('sitemap')
+caching.duration = Diligence.SEO.getCacheDuration()
+caching.tags.add('sitemap')
 
 var sitemap = conversation.locals.get('sitemap')
 if (sitemap) {
