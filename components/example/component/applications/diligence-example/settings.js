@@ -23,18 +23,26 @@ app.settings = {
 
 	errors: {
 		debug: true,
-		homeUrl: 'http://threecrickets.com/diligence/', // Only used when debug=false
-		contactEmail: 'info@threecrickets.com' // Only used when debug=false
+		homeUrl: 'http://threecrickets.com/diligence/',
+		contactEmail: 'info@threecrickets.com'
 	},
 	
 	code: {
-		libraries: ['libraries'], // Handlers and tasks will be found here
+		libraries: ['libraries'],
 		defrost: true,
 		minimumTimeBetweenValidityChecks: '1s',
 		defaultDocumentName: 'default',
 		defaultExtension: 'js',
 		defaultLanguageTag: 'javascript',
 		sourceViewable: true
+	},
+	
+	scriptlet: {
+		debug: true
+	},
+
+	caching: {
+		debug: true
 	},
 	
 	compression: {

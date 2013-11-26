@@ -1,9 +1,9 @@
 
 document.require(
 	'/sincerity/container/',
-	'/prudence/routing/')
+	'/prudence/setup/')
 
-var app = new Prudence.Routing.Application()
+var app = new Prudence.Setup.Application()
 
 Sincerity.Container.execute('settings')
 Sincerity.Container.execute('routing')
