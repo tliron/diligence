@@ -1,9 +1,9 @@
-<%{{ head %>
+<%{ head %>
 <%
 document.require('/diligence/integration/frontend/sencha/')
 Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 %>
-<%}}%>
+<%}%>
 <%& '/site/header/' %>
 <% exampleHeader('Sencha', 'Integration', 'Ext Direct'); %>
 
@@ -29,7 +29,7 @@ Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 	<button id="add-item" disabled="true">Add to shopping cart</button>
 	<button id="get-items" disabled="true">Refresh shopping cart</button>
 </p>
-<%{{ foot %>
+<%{ foot %>
 <script type="text/javascript">
 function refresh() {
 	Diligence.ShoppingCart.getItems(function(provider, response) {
@@ -91,7 +91,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
 <% exampleFooter('Sencha', 'Integration', 'Ext Direct'); %>
 <%& '/site/footer/' %>

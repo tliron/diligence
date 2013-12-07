@@ -1,9 +1,9 @@
-<%{{ head %>
+<%{ head %>
 <%
 document.require('/diligence/integration/frontend/sencha/')
 Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 %>
-<%}}%>
+<%}%>
 <%& '/site/header/' %>
 <% exampleHeader('Sencha', 'Integration', 'Forms'); %>
 
@@ -76,17 +76,17 @@ var results = form.handle(conversation)
 	</ul>
 <% } %>
 </div>
-<%{{ foot %>
+<%{ foot %>
 <script type="text/javascript">
 Ext.onReady(function() {
 	//openForm(null, Ext.get('<%= conversation.query.get("form") %>'));
 	Ext.Msg.alert('<%= results.success ? "Success!" : "Failure!" %>', '<%= results.msg.escapeSingleQuotes() %>');
 });
 </script>
-<%}}%>
+<%}%>
 <% } %>
 
-<%{{ foot %>
+<%{ foot %>
 <script type="text/javascript">
 var fieldsWithValues = <%= form.toExtJs(conversation, {results: results}) %>;	
 
@@ -194,7 +194,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
 <% exampleFooter('Sencha', 'Integration', 'Forms'); %>
 <%& '/site/footer/' %>

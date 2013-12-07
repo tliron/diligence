@@ -23,7 +23,7 @@ else {
 conversation.locals.put('reCaptcha', true)
 conversation.locals.put('extJs', true)
 %>
-<%{{ 'page.main' %>
+<%{ 'page.main' %>
 <h1>Diligence's Registration Feature</h1>
 <p>
 	This complement to the <a href="../../service/authentication/">authentication service</a> uses a two-step
@@ -56,6 +56,6 @@ form.handle({conversation: conversation, mode: 'include'})
 	And here is an <a href="../../integration/sencha/forms/">Ext JS</a> version of it:
 </p>
 <%& '/diligence/feature/registration/sencha/' %>
-<%}}%>
+<%}%>
 <%& '/site/page-template/' %>
 <% } %>

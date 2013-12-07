@@ -82,15 +82,15 @@ if (String(conversation.request.method) == 'POST') {
 	}
 }
 %>
-<%{{ 'page.head' %>
+<%{ 'page.head' %>
 	<!-- Pingback -->
 	<%= Diligence.Linkback.pingbackHead(conversation) %>
 	
 	<!-- Trackback
 <%= Diligence.Linkback.trackbackHead({uri: conversation.reference, title: 'Diligence Demo Application', indent: '\t'}) %>
 	-->
-<%}}%>
-<%{{ 'page.main' %>
+<%}%>
+<%{ 'page.main' %>
 <h1>Diligence's Linkback Service</h1>
 <p>
 	"Linkbacks" are a way to add crossreferening to hyperlinks: if I link to another page on another site, I can let that other site
@@ -227,5 +227,5 @@ if (linkbacks && linkbacks.length) {
 }
 %>
 </ul>
-<%}}%>
+<%}%>
 <%& '/site/page-template/' %>

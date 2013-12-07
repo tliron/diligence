@@ -23,7 +23,7 @@ app.settings = {
 		sourceViewable: true
 	},
 	
-	scriptlet: {
+	scriptlets: {
 		debug: true
 	},
 

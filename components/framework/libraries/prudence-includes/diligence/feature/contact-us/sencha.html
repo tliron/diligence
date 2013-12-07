@@ -23,7 +23,7 @@ var form = form || new Diligence.ContactUs.Form({conversation: conversation})
 <p>
 	<button id="extjs-form">Contact Us</button>
 </p>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 var fields = <%= Diligence.JSON.to(Diligence.Sencha.getFormFields(conversation, form), true, true) %>;
 
@@ -69,4 +69,4 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>

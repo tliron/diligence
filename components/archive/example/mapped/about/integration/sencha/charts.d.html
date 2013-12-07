@@ -16,7 +16,7 @@ conversation.locals.put('extJs', true)
 
 document.executeOnce('/prudence/blocks/')
 %>
-<%{{ 'page.main' %>
+<%{ 'page.main' %>
 <h1>Diligence's Sencha Integration Library</h1>
 <h2>Ext JS Charts</h2>
 
@@ -26,7 +26,7 @@ document.executeOnce('/prudence/blocks/')
 </p>
 
 <div id="chart-self-contained"></div>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	var pageSize = 20;
@@ -86,7 +86,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
 <p>
 	With Diligence, you just need to define a data source to back your store, the same way you would with
@@ -104,7 +104,7 @@ Ext.onReady(function() {
 	Refer to the <a href="<%= conversation.pathToBase %>/api/?namespace=Diligence.Sencha">Diligence.Sencha API documentation</a>
 	for more details.
 </p>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	var pageSize = 20;
@@ -131,7 +131,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
-<%}}%>
+<%}%>
 <%& '/site/page-template/' %>

@@ -16,7 +16,7 @@ conversation.locals.put('extJs', true)
 
 document.executeOnce('/prudence/blocks/')
 %>
-<%{{ 'page.main' %>
+<%{ 'page.main' %>
 <h1>Diligence's Sencha Integration Library</h1>
 <h3>Ext JS Trees</h3>
 
@@ -46,7 +46,7 @@ var tree = new ExtJS.SimpleMongoDbTree({
 Pretty easy, no? And here's the result:
 </p>
 <div id="tree-mongo-db"></div>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	Ext.create('Ext.tree.Panel', {
@@ -68,7 +68,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 <p>
 One cool extra is that Diligence's SimpleMongoDbTree can recognize DBRefs anywhere in the
 document, and allow Ext JS's tree loader to lazy-load them when the user clicks. This lets
@@ -96,7 +96,7 @@ tree = new ExtJS.SelfContainedTree({
 And the widget:
 </p>
 <div id="tree-self-contained"></div>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	Ext.create('Ext.tree.Panel', {
@@ -117,7 +117,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
-<%}}%>
+<%}%>
 <%& '/site/page-template/' %>

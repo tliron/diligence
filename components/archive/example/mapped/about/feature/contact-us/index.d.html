@@ -23,7 +23,7 @@ else {
 conversation.locals.put('reCaptcha', true)
 conversation.locals.put('extJs', true)
 %>
-<%{{ 'page.main' %>
+<%{ 'page.main' %>
 <h1>Diligence's "Contact Us" Feature</h1>
 <p>
 	This simple feature contains a /web/fragment/ that displays
@@ -50,6 +50,6 @@ form.handle({conversation: conversation, mode: 'include'})
 	And here is an <a href="../../integration/sencha/forms/">Ext JS</a> version of it:
 </p>
 <%& '/diligence/feature/contact-us/sencha/' %>
-<%}}%>
+<%}%>
 <%& '/site/page-template/' %>
 <% } %>

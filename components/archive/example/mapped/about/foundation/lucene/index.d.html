@@ -30,7 +30,7 @@ if (null !== query) {
 	}
 }
 %>
-<%{{ 'page.main' %>
+<%{ 'page.main' %>
 <h1>Diligence's Lucene Library</h1>
 <p class="note">
 	Still working on documenting this feature, though it's otherwise pretty complete!
@@ -62,7 +62,7 @@ if (results) {
 <%
 }
 %>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	Ext.select('li.search-result').on('click', function(event, el) {
@@ -82,8 +82,8 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
-<%{{ 'page.head' %>
+<%}%>
+<%{ 'page.head' %>
 	<style>
 		li.search-result {
 			list-style: disc inside;
@@ -95,7 +95,7 @@ Ext.onReady(function() {
 			font-weight: bold;
 		}
 	</style>
-<%}}%>
+<%}%>
 
-<%}}%>
+<%}%>
 <%& '/site/page-template/' %>

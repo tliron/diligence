@@ -1,9 +1,9 @@
-<%{{ head %>
+<%{ head %>
 <%
 document.require('/diligence/integration/frontend/sencha/')
 Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 %>
-<%}}%>
+<%}%>
 <%& '/site/header/' %>
 <% exampleHeader('Sencha', 'Integration', 'Trees'); %>
 
@@ -22,7 +22,7 @@ Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 </p>
 <div id="tree"></div>
 
-<%{{ foot %>
+<%{ foot %>
 <script type="text/javascript">
 Ext.onReady(function() {
 	var store = Ext.create('Ext.data.TreeStore', {
@@ -79,7 +79,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
 <% exampleFooter('Sencha', 'Integration', 'Trees'); %>
 <%& '/site/footer/' %>

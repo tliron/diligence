@@ -1,9 +1,9 @@
-<%{{ head %>
+<%{ head %>
 <%
 document.require('/diligence/integration/frontend/sencha/')
 Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 %>
-<%}}%>
+<%}%>
 <%& '/site/header/' %>
 <% exampleHeader('Sencha', 'Integration', 'Grids'); %>
 
@@ -29,7 +29,7 @@ Diligence.Sencha.extJsHead(conversation, 'ext-theme-gray')
 </p>
 <div id="grid"></div>
 
-<%{{ foot %>
+<%{ foot %>
 <script type="text/javascript">
 Ext.onReady(function() {
 	var pageSize = 15;
@@ -118,7 +118,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
 <% exampleFooter('Sencha', 'Integration', 'Grids'); %>
 <%& '/site/footer/' %>

@@ -21,7 +21,7 @@ if (!results || (results.mode != 'json')) {
 
 conversation.locals.put('extJs', true)
 %>
-<%{{ 'page.main' %>
+<%{ 'page.main' %>
 <h1>Diligence's Sencha Integration Library</h1>
 <h2>Ext JS Forms</h2>
 
@@ -51,7 +51,7 @@ conversation.locals.put('extJs', true)
 </p>
 
 
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 var fieldsWithValues = <%= Sincerity.JSON.to(Diligence.Sencha.getFormFields(conversation, multiplierForm, (results && !results.success) ? results : null), true, true) %>;
 
@@ -152,7 +152,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
 <h3>Standard Forms</h3>
 <p>
@@ -182,14 +182,14 @@ Ext.onReady(function() {
 	</ul>
 <% } %>
 </div>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	openForm(null, Ext.get('<%= conversation.query.get("form") %>'));
 	Ext.Msg.alert('<%= results.success ? "Success!" : "Failure!" %>', '<%= results.msg.escapeSingleQuotes() %>');
 });
 </script>
-<%}}%>
+<%}%>
 <% } %>
 
 
@@ -232,7 +232,7 @@ Ext.onReady(function() {
 	TODO
 </p>
 
-<%}}%>
+<%}%>
 <%& '/site/page-template/' %>
 <%
 }

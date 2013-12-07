@@ -16,7 +16,7 @@ conversation.locals.put('extJs', true)
 
 document.executeOnce('/prudence/blocks/')
 %>
-<%{{ 'page.main' %>
+<%{ 'page.main' %>
 <h1>Diligence's Sencha Integration Library</h1>
 <h2>Ext JS Grids</h2>
 
@@ -49,7 +49,7 @@ var store = new ExtJS.SimpleMongoDbSource({
 And the impressive result, with paging, editing:
 </p>
 <div id="grid-mongo-db"></div>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	var pageSize = 20;
@@ -90,7 +90,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 <p>
 We've extended Ext JS's GridPanel to make it a bit easier to work with, but the
 changes are slight, and you can definitely use regular Ext JS components, or your
@@ -139,7 +139,7 @@ var store = new ExtJS.ResourceSource({
 Try it:
 </p>
 <div id="grid-resource"></div>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	var pageSize = 20;
@@ -181,7 +181,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
 
 <h3>Self-Contained Grids</h3>
@@ -220,7 +220,7 @@ var store = new ExtJS.SelfContainedSource({
 Try it:
 </p>
 <div id="grid-self-contained"></div>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	var pageSize = 20;
@@ -262,7 +262,7 @@ Ext.onReady(function() {
 	});
 });
 </script>
-<%}}%>
+<%}%>
 
 
 <h3>Data Views</h3>
@@ -286,7 +286,7 @@ var tpl = new Ext.XTemplate(
 Try it:
 </p>
 <div id="dataview"></div>
-<%{{ 'page.scripts' %>
+<%{ 'page.scripts' %>
 <script>
 Ext.onReady(function() {
 	var pageSize = 20;
@@ -322,8 +322,8 @@ Ext.onReady(function() {
 	});*/
 });
 </script>
-<%}}%>
-<%{{ 'page.head' %>
+<%}%>
+<%{ 'page.head' %>
 	<style>
 		div.x-view-item {
 			line-height: 180%;
@@ -339,7 +339,7 @@ Ext.onReady(function() {
 			background-color: #D0DEF0;
 		}
 	</style>
-<%}}%>
+<%}%>
 
-<%}}%>
+<%}%>
 <%& '/site/page-template/' %>

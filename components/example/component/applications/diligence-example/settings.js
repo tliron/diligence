@@ -37,7 +37,7 @@ app.settings = {
 		sourceViewable: true
 	},
 	
-	scriptlet: {
+	scriptlets: {
 		debug: true
 	},
 
@@ -77,7 +77,7 @@ app.globals = {
 			
 			notification: {
 				services: {
-					'.': Prudence.Lazy.build({
+					'...': {
 						Email: {
 							dependencies: '/diligence/service/notification/service/email/',
 							name: 'Diligence.Notification.EmailService',
@@ -86,7 +86,7 @@ app.globals = {
 								site: 'Diligence Example'
 							}
 						}
-					})
+					}
 				}
 			},
 			
