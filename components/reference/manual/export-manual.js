@@ -133,50 +133,50 @@ var Manual = function(file) {
 }
 
 var diligenceVersion = '@VERSION@'
-var diligenceBase = 'component/applications/diligence-example/libraries/scriptlet-resources/'
+var diligenceBase = 'component/applications/diligence-example/libraries/includes/'
 
 var manual = new Manual(application.arguments[1])
 manual.generate('diligence', {
 	// Services
-	'Assets Service': [diligenceBase + 'manual/service/assets.s.html'],
-	'Authentication Service': [diligenceBase + 'manual/service/authentication.s.html'],
-	'Authorization Service': [diligenceBase + 'manual/service/authorization.s.html'],
-	'Backup Service': [diligenceBase + 'manual/service/backup.s.html'],
-	'Cache Service': [diligenceBase + 'manual/service/cache.s.html'],
-	'Documents Service': [diligenceBase + 'manual/service/documents.s.html'],
-	'Events Service': [diligenceBase + 'manual/service/events.s.html'],
-	'Forms Service': [diligenceBase + 'manual/service/forms.s.html'],
-	'HTML Service': [diligenceBase + 'manual/service/html.s.html'],
-	'Internationalization Service': [diligenceBase + 'manual/service/internationalization.s.html'],
-	'Linkback Service': [diligenceBase + 'manual/service/linkback.s.html'],
-	'Nonces Service': [diligenceBase + 'manual/service/nonces.s.html'],
-	'Notification Service': [diligenceBase + 'manual/service/notification.s.html'],
-	'Progress Service': [diligenceBase + 'manual/service/progress.s.html'],
-	'REST Service': [diligenceBase + 'manual/service/rest.s.html'],
-	'RPC Service': [diligenceBase + 'manual/service/rpc.s.html'],
-	'Search Service': [diligenceBase + 'manual/service/search.s.html'],
-	'Serials Service': [diligenceBase + 'manual/service/serials.s.html'],
-	'Syndication Service': [diligenceBase + 'manual/service/syndication.s.html'],
+	'Assets Service': [diligenceBase + 'manual/service/assets.t.html'],
+	'Authentication Service': [diligenceBase + 'manual/service/authentication.t.html'],
+	'Authorization Service': [diligenceBase + 'manual/service/authorization.t.html'],
+	'Backup Service': [diligenceBase + 'manual/service/backup.t.html'],
+	'Cache Service': [diligenceBase + 'manual/service/cache.t.html'],
+	'Documents Service': [diligenceBase + 'manual/service/documents.t.html'],
+	'Events Service': [diligenceBase + 'manual/service/events.t.html'],
+	'Forms Service': [diligenceBase + 'manual/service/forms.t.html'],
+	'HTML Service': [diligenceBase + 'manual/service/html.t.html'],
+	'Internationalization Service': [diligenceBase + 'manual/service/internationalization.t.html'],
+	'Linkback Service': [diligenceBase + 'manual/service/linkback.t.html'],
+	'Nonces Service': [diligenceBase + 'manual/service/nonces.t.html'],
+	'Notification Service': [diligenceBase + 'manual/service/notification.t.html'],
+	'Progress Service': [diligenceBase + 'manual/service/progress.t.html'],
+	'REST Service': [diligenceBase + 'manual/service/rest.t.html'],
+	'RPC Service': [diligenceBase + 'manual/service/rpc.t.html'],
+	'Search Service': [diligenceBase + 'manual/service/search.t.html'],
+	'Serials Service': [diligenceBase + 'manual/service/serials.t.html'],
+	'Syndication Service': [diligenceBase + 'manual/service/syndication.t.html'],
 	
 	// Integrations
-	'Gravatar Integration': [diligenceBase + 'manual/integration/gravatar.s.html'],
-	'PayPal Integration': [diligenceBase + 'manual/integration/paypal.s.html'],
-	'Sencha Integration': [diligenceBase + 'manual/integration/sencha.s.html'],
-	'Sencha Integration: Grids': [diligenceBase + 'manual/integration/sencha-grids.s.html'],
-	'Sencha Integration: Trees': [diligenceBase + 'manual/integration/sencha-trees.s.html'],
-	'Sencha Integration: Charts': [diligenceBase + 'manual/integration/sencha-charts.s.html'],
-	'Sencha Integration: Forms': [diligenceBase + 'manual/integration/sencha-forms.s.html'],
-	'Sencha Integration: Ext Direct': [diligenceBase + 'manual/integration/sencha-ext-direct.s.html'],
+	'Gravatar Integration': [diligenceBase + 'manual/integration/gravatar.t.html'],
+	'PayPal Integration': [diligenceBase + 'manual/integration/paypal.t.html'],
+	'Sencha Integration': [diligenceBase + 'manual/integration/sencha.t.html'],
+	'Sencha Integration: Grids': [diligenceBase + 'manual/integration/sencha-grids.t.html'],
+	'Sencha Integration: Trees': [diligenceBase + 'manual/integration/sencha-trees.t.html'],
+	'Sencha Integration: Charts': [diligenceBase + 'manual/integration/sencha-charts.t.html'],
+	'Sencha Integration: Forms': [diligenceBase + 'manual/integration/sencha-forms.t.html'],
+	'Sencha Integration: Ext Direct': [diligenceBase + 'manual/integration/sencha-ext-direct.t.html'],
 	
 	// Features
-	'Blog Feature': [diligenceBase + 'manual/feature/blog.s.html'],
-	'Console Feature': [diligenceBase + 'manual/feature/console.s.html'],
-	'Contact Us Feature': [diligenceBase + 'manual/feature/contact-us.s.html'],
-	'Discussion Feature': [diligenceBase + 'manual/feature/discussion.s.html'],
-	'Registration Feature': [diligenceBase + 'manual/feature/registration.s.html'],
-	'SEO Feature': [diligenceBase + 'manual/feature/seo.s.html'],
-	'Shopping Cart Feature': [diligenceBase + 'manual/feature/shopping-cart.s.html'],
-	'Wiki Feature': [diligenceBase + 'manual/feature/wiki.s.html']
+	'Blog Feature': [diligenceBase + 'manual/feature/blog.t.html'],
+	'Console Feature': [diligenceBase + 'manual/feature/console.t.html'],
+	'Contact Us Feature': [diligenceBase + 'manual/feature/contact-us.t.html'],
+	'Discussion Feature': [diligenceBase + 'manual/feature/discussion.t.html'],
+	'Registration Feature': [diligenceBase + 'manual/feature/registration.t.html'],
+	'SEO Feature': [diligenceBase + 'manual/feature/seo.t.html'],
+	'Shopping Cart Feature': [diligenceBase + 'manual/feature/shopping-cart.t.html'],
+	'Wiki Feature': [diligenceBase + 'manual/feature/wiki.t.html']
 })
 
 	
@@ -274,21 +274,21 @@ var manual = new Manual(application.arguments[1])
 manual.generate({
 	'Backup Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/backup.html'],
 	'Cache Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/cache.html'],
-	'Forms Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/forms.html'],
+	'Forms Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/formt.html'],
 	'Internationalization Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/internationalization.html'],
-	'Nonces Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/nonces.html'],
+	'Nonces Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/noncet.html'],
 	'Notification Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/notification.html'],
-	'Serials Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/serials.html'],
-	'Events Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/events.html'],
-	'Progress Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/progress.html'],
-	'Documents Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/documents.html'],
+	'Serials Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/serialt.html'],
+	'Events Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/eventt.html'],
+	'Progress Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/progrest.html'],
+	'Documents Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/documentt.html'],
 	'REST Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/rest.html'],
 	'RPC Service': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/service/rpc.html'],
 	'Sencha Integration': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha.html'],
-	'Sencha Integration: Grids': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-grids.html'],
-	'Sencha Integration: Trees': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-trees.html'],
-	'Sencha Integration: Charts': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-charts.html'],
-	'Sencha Integration: Forms': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-forms.html'],
+	'Sencha Integration: Grids': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-gridt.html'],
+	'Sencha Integration: Trees': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-treet.html'],
+	'Sencha Integration: Charts': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-chartt.html'],
+	'Sencha Integration: Forms': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-formt.html'],
 	'Sencha Integration: Ext Direct': ['component/applications/diligence-example/libraries/scriptlet-resources/manual/integration/sencha-ext-direct.html']
 })
 */

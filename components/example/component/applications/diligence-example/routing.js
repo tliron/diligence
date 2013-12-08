@@ -4,7 +4,7 @@ document.require('/diligence/service/rest/')
 app.routes = {
 	'/*': [
 		'manual',
-		'scriptlet',
+		'templates',
 		{
 			type: 'cacheControl',
 			mediaTypes: {
