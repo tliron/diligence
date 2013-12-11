@@ -28,7 +28,7 @@ Ext.onReady(function() {
 	var store = Ext.create('Ext.data.TreeStore', {
 		proxy: {
 			type: 'diligence',
-			url: '<%= conversation.base %>/mongo/textpack/'
+			url: '<%.%>/mongo/textpack/'
 		},
 		defaultRootId: '/',
 		autoLoad: true
@@ -64,7 +64,7 @@ Ext.onReady(function() {
 					'select': function(combo, records) {
 						var uri = records[0].get('uri');
 						var proxy = store.getProxy();
-						proxy.url = '<%= conversation.base %>/' + uri + '/textpack/';
+						proxy.url = '<%.%>/' + uri + '/textpack/';
 						store.load();
 					}
 				}

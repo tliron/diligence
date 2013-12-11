@@ -29,13 +29,13 @@ var theme = application.globals.get('diligence.feature.console.theme') || null
 	<link href="http://fonts.googleapis.com/css?family=Ubuntu:bolditalic" rel="stylesheet" type="text/css" />
 
 	<!-- CodeMirror -->
-	<link rel="stylesheet" href="<%= conversation.base %>/style/codemirror/codemirror.css" />
-	<script src="<%= conversation.base %>/scripts/codemirror/codemirror.js"></script>
-	<script src="<%= conversation.base %>/scripts/codemirror/mode/javascript.js"></script>
+	<link rel="stylesheet" href="<%.%>/style/codemirror/codemirror.css" />
+	<script src="<%.%>/scripts/codemirror/codemirror.js"></script>
+	<script src="<%.%>/scripts/codemirror/mode/javascript.js"></script>
 
 	<!-- Diligence Console -->
-	<link rel="stylesheet" href="<%= conversation.base %>/style/diligence/feature/console.css" />
-	<script src="<%= conversation.base %>/scripts/diligence/feature/console.js"></script>
+	<link rel="stylesheet" href="<%.%>/style/diligence/feature/console.css" />
+	<script src="<%.%>/scripts/diligence/feature/console.js"></script>
 
 <% if (theme == 'access') { %>
 	<style>
@@ -54,7 +54,7 @@ var theme = application.globals.get('diligence.feature.console.theme') || null
 				The Diligence Console<br/>
 				<span style="font-size: 12px; font-style: italic;">Palatable debugging since 2011</span>
 			</td><td style="padding-left: 15px;">
-				<a href="http://threecrickets.com/diligence/"><img src="<%= conversation.base %>/media/diligence/diligence-tiny.png" /></a>
+				<a href="http://threecrickets.com/diligence/"><img src="<%.%>/media/diligence/diligence-tiny.png" /></a>
 			</td></tr></table>
 		</div>
 	</div>
