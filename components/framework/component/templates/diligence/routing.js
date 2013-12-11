@@ -11,7 +11,7 @@ app.routes = {
 				'application/x-javascript': '1m'
 			},
 			next: {
-				type: 'zuss',
+				type: 'less',
 				next: 'static'
 			}
 		}
