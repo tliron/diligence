@@ -19,6 +19,7 @@ document.require(
 	'/sincerity/classes/',
 	'/sincerity/objects/',
 	'/sincerity/jvm/',
+	'/sincerity/platform/',
 	'/mongo-db/')
 
 var Diligence = Diligence || {}
@@ -198,7 +199,7 @@ Diligence.Events = Diligence.Events || function() {
 			fn.call(listener.scope, name, context)
 		}
 		catch (x) {
-			var details = Sincerity.Rhino.getExceptionDetails(x)
+			var details = Sincerity.Platform.getExceptionDetails(x)
 			Public.logger.warning('Exception in event "' + name + '", listener "' + listener.id + '": ' + details.message + '\n' + details.stackTrace)
 		}
 	}
@@ -234,10 +235,13 @@ Diligence.Events = Diligence.Events || function() {
 	    
 	    /** @ignore */
 	    Public._inherit = Module.Store
+
+	    /** @ignore */
+	    Public._configure = ['events']
 	    
 	    /** @ignore */
-	    Public._construct = function(events) {
-			this.events = events || {}
+	    Public._construct = function(config) {
+			this.events = this.events || {}
 	    }
 
 	    Public.subscribe = function(name, listener) {
@@ -297,11 +301,13 @@ Diligence.Events = Diligence.Events || function() {
 	    
 	    /** @ignore */
 	    Public._inherit = Module.Store
+
+	    /** @ignore */
+	    Public._configure = ['map', 'prefix']
 	    
 	    /** @ignore */
-	    Public._construct = function(map, prefix) {
-	    	this.map = map
-	    	this.prefix = prefix || 'diligence.service.events.mapStore.'
+	    Public._construct = function(config) {
+	    	this.prefix = this.prefix || 'diligence.service.events.mapStore.'
 	    }
 
 	    Public.subscribe = function(name, listener) {
@@ -353,12 +359,15 @@ Diligence.Events = Diligence.Events || function() {
 	    
 	    /** @ignore */
 	    Public._inherit = Module.Store
+
+	    /** @ignore */
+	    Public._configure = ['name', 'events']
 	    
 	    /** @ignore */
-	    Public._construct = function(name) {
-	    	name = name || 'diligence.service.events.distributedStore'
-			this.events = application.hazelcast.getMultiMap(name)
-			this.listeners = application.hazelcast.getMap(name + '.listeners')
+	    Public._construct = function(config) {
+	    	this.name = this.name || 'diligence.service.events.distributedStore'
+			this.events = application.hazelcast.getMultiMap(this.name)
+			this.listeners = application.hazelcast.getMap(this.name + '.listeners')
 	    }
 
 	    Public.subscribe = function(name, listener) {
@@ -412,10 +421,13 @@ Diligence.Events = Diligence.Events || function() {
 	    
 	    /** @ignore */
 	    Public._inherit = Module.Store
+
+	    /** @ignore */
+	    Public._configure = ['collection']
 	    
 	    /** @ignore */
-	    Public._construct = function(collection) {
-			this.collection = collection || 'events'
+	    Public._construct = function(config) {
+			this.collection = this.collection || 'events'
 			this.collection = Sincerity.Objects.isString(this.collection) ? new MongoDB.Collection(this.collection) : this.collection
 			this.collection.ensureIndex({name: 1}, {unique: true})
 	    }
@@ -426,7 +438,7 @@ Diligence.Events = Diligence.Events || function() {
 
 			if (listener.id) {
 				// Remove old one
-				this.collection.upsert({
+				this.collection.update({
 					name: name
 				}, {
 					$pull: {
@@ -434,9 +446,9 @@ Diligence.Events = Diligence.Events || function() {
 							id: listener.id
 						}
 					}
-				}, false, true)
+				})
 				
-				this.collection.update({
+				this.collection.upsert({
 					name: name,
 					listeners: {
 						$not: {$elemMatch: {id: listener.id}}
@@ -489,20 +501,16 @@ Diligence.Events = Diligence.Events || function() {
 	    
 	    /** @ignore */
 	    Public._inherit = Module.Store
-	    
-	    /** @ignore */
-	    Public._construct = function(collection, documentId, theDocument) {
-	    	this.collection = collection
-	    	this.documentId = documentId
-	    	this.document = theDocument
-	    }
 
+	    /** @ignore */
+	    Public._configure = ['collection', 'documentId', 'document']
+	    
 	    Public.subscribe = function(name, listener) {
 			listener = Sincerity.Objects.clone(listener)
 			listener.fn = String(listener.fn)
 
 			// Make sure event exists
-			this.collection.update({
+			this.collection.upsert({
 				_id: this.documentId,
 				events: {
 					$not: {
@@ -518,7 +526,7 @@ Diligence.Events = Diligence.Events || function() {
 						listeners: []
 					}
 				}
-			}, false, true)
+			})
 
 			// Add listener
 			if (listener.id) {
@@ -536,7 +544,7 @@ Diligence.Events = Diligence.Events || function() {
 							id: listener.id
 						}
 					}
-				}, false, true)
+				})
 
 				this.collection.update({
 					_id: this.documentId,
@@ -649,7 +657,6 @@ Diligence.Events = Diligence.Events || function() {
 	
 	function getDefaultStores() {
 		return Prudence.Lazy.getGlobalList('diligence.service.events.defaultStores', Public.logger, function(constructor) {
-			//logger.info(constructor)
 			return eval(constructor)()
 		})
 	}

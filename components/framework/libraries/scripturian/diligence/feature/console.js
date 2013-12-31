@@ -18,7 +18,8 @@ document.require(
 	'/sincerity/classes/',
 	'/sincerity/json/',
 	'/sincerity/files/',
-	'/sincerity/objects/')
+	'/sincerity/objects/',
+	'/sincerity/jvm/')
 
 document.require('/diligence/')
 // Yes, we added just about everything in Diligence to
@@ -221,7 +222,7 @@ Diligence.Console = Diligence.Console || function() {
 
 				return Sincerity.JSON.to(Sincerity.Files.tail(file, query.position, query.forward, query.lines), query.human)
 			}
-			catch (x if x.javaException instanceof java.io.FileNotFoundException) {
+			catch (x if Sincerity.JVM.isException(x, java.io.FileNotFoundException)) {
 				return Prudence.Resources.Status.ClientError.NotFound
 			}
 			finally {

@@ -21,7 +21,7 @@ document.require(
 			<%= Sincerity.Localization.formatDuration(process.getDuration(), true) %> so far
 		</p>
 		<p align="center">
-			<%= lastMilestone.description || lastMilestone.event %>
+			<%= lastMilestone.description || lastMilestone.event || '' %>
 		</p>
 		<form id="form" method="post" action="/diligence/wait/">
 			<input type="hidden" name="process" value="<%= key %>" />

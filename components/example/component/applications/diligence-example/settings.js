@@ -91,10 +91,12 @@ app.globals = {
 			},
 			
 			events: {
-				defaultStores: [function() {
-					document.require('/diligence/service/events/')
-					return new Diligence.Events.MongoDbCollectionStore() 				
-				}]
+				defaultStores: {
+					'...': [{
+						dependencies: '/diligence/service/events/',
+						name: 'Diligence.Events.MongoDbCollectionStore'
+					}]
+				}
 			},
 			
 			backup: {

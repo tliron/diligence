@@ -262,7 +262,7 @@ Diligence.Internationalization = Diligence.Internationalization || function() {
 			try {
 				textPack = Sincerity.JSON.from(Sincerity.Files.loadText(new java.io.File(basePath, getCacheKey(locale) + '.json')))
 			}
-			catch (x if x.javaException instanceof java.io.FileNotFoundException) {
+			catch (x if Sincerity.JVM.isException(x, java.io.FileNotFoundException)) {
 			}
 			
 			/*textPack = Prudence.Resources.request({

@@ -49,7 +49,7 @@ app.settings = {
 
 app.globals = {
 	mongoDb: {
-		defaultServers: '127.0.0.1',
+		defaultUris: 'localhost:27017',
 		defaultSwallow: true,
 		defaultDb: '${APPLICATION}'
 	},

@@ -61,7 +61,7 @@ Diligence.Progress = Diligence.Progress || function() {
 	Public.getProcess = function(key) {
 		var context
 		if (!key) {
-			context = Prudence.Tasks.getContext()
+			context = Prudence.Tasks.getContext(document)
 			if (context) {
 				var processContext = context['diligence.process']
 				if (processContext) {
@@ -148,7 +148,11 @@ Diligence.Progress = Diligence.Progress || function() {
 	    Public._construct = function(process, context) {
 			this.milestones = null
 			this.process = process
-			this.events = new Diligence.Events.MongoDbDocumentStore(getProcessesCollection(), process._id, process)
+			this.events = new Diligence.Events.MongoDbDocumentStore({
+				collection: getProcessesCollection(),
+				documentId: process._id,
+				document: process
+			})
 	    }
 
 	    Public.getKey = function() {
@@ -286,7 +290,7 @@ Diligence.Progress = Diligence.Progress || function() {
 				application.application.inboundRoot.captureAndHide('/wait/{process}/', '/diligence/service/progress/wait/')
 				document.passThroughDocuments.add('/diligence/service/progress/wait/')
 			}
-			
+
 			redirect(conversation, '/wait/' + this.getKey() + '/')
 		}
 
