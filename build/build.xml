@@ -120,6 +120,7 @@
 					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
 					<token key="DOCUMENTATION.VERSION" value="${documentation.version}" />
 					<token key="MONGOVISION.VERSION" value="${mongovision.version}" />
+					<token key="RESTLET.VERSION" value="${restlet.version}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -210,6 +211,7 @@
 					<token key="DEPENDENCIES" value="${dependencies.repo}" />
 					<token key="SINCERITY.MONGODB.VERSION" value="${sincerity.mongodb.version}" />
 					<token key="PRUDENCE.VERSION" value="${prudence.version}" />
+					<token key="RESTLET.VERSION" value="${restlet.version}" />
 					<token key="ROOT" value="${root}" />
 					<token key="CACHE" value="${cache.maven.build}" />
 				</replacetokens>
