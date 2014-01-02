@@ -182,7 +182,7 @@ Diligence.Forms = Diligence.Forms || function() {
 
 		Public.mediaTypes = [
  			'application/json',
- 			'application/java'
+ 			'application/internal'
  		]
 		
 		Public.doGet = function(conversation) {
@@ -244,7 +244,11 @@ Diligence.Forms = Diligence.Forms || function() {
 					case 'json':
 						delete results.redirect
 						delete results.capture
-						if (conversation.internal && (conversation.mediaTypeName == 'application/java')) {
+						if (conversation.mediaTypeName == 'application/internal') {
+							if (!conversation.internal) {
+								// Only internal clients should be requesting this media type!
+								return Prudence.Resources.Status.ClientError.BadRequest
+							}
 							return results
 						}
 						conversation.mediaTypeName = 'application/json'
@@ -331,7 +335,7 @@ Diligence.Forms = Diligence.Forms || function() {
 				input.value = params.results.values[params.name]
 			}
 			
-			r = ''
+			var r = ''
 			if (Sincerity.Objects.exists(params.results) && Sincerity.Objects.exists(params.results.errors) && Sincerity.Objects.exists(params.results.errors[params.name])) {
 				input['class'] = 'error'
 				label['class'] = 'error'

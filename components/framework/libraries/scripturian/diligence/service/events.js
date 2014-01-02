@@ -366,8 +366,8 @@ Diligence.Events = Diligence.Events || function() {
 	    /** @ignore */
 	    Public._construct = function(config) {
 	    	this.name = this.name || 'diligence.service.events.distributedStore'
-			this.events = application.hazelcast.getMultiMap(this.name)
-			this.listeners = application.hazelcast.getMap(this.name + '.listeners')
+			this.events = application.hazelcastApplicationInstance.getMultiMap(this.name)
+			this.listeners = application.hazelcastApplicationInstance.getMap(this.name + '.listeners')
 	    }
 
 	    Public.subscribe = function(name, listener) {

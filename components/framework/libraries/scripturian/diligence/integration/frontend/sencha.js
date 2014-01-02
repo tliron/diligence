@@ -249,7 +249,7 @@ Diligence.Sencha = Diligence.Sencha || function() {
 		
 		Public.mediaTypes = [
 			'application/json',
-			'application/java',
+			'application/internal',
 			'text/plain',
 			'text/html'
 		]
@@ -287,7 +287,11 @@ Diligence.Sencha = Diligence.Sencha || function() {
 				return Prudence.Resources.Status.ClientError.NotFound
 			}
 			
-			if (conversation.mediaTypeName == 'application/java' && conversation.internal) {
+			if (conversation.mediaTypeName == 'application/internal') {
+				if (!conversation.internal) {
+					// Only internal clients should be requesting this media type!
+					return Prudence.Resources.Status.ClientError.BadRequest
+				}
 				return node
 			}
 			else if (conversation.mediaTypeName == 'text/html') {
@@ -337,12 +341,20 @@ Diligence.Sencha = Diligence.Sencha || function() {
 			}
 			else {
 				n.leaf = true
+				delete n.expanded
 			}
 		}
 
 		return Public
 	}(Public))
 
+	/**
+	 * @class
+	 * @name Diligence.Sencha.InMemoryTreeResource
+	 * @augments Diligence.Sencha.TreeResource
+	 * 
+	 * @param config
+	 */
 	Public.InMemoryTreeResource = Sincerity.Classes.define(function(Module) {
 		/** @exports Public as Diligence.Sencha.InMemoryTreeResource */
 		var Public = {}
@@ -362,7 +374,7 @@ Diligence.Sencha = Diligence.Sencha || function() {
 				return this.tree
 			}
 			else {
-				var node
+				var node = this.tree
 				var paths = id.split(this.separator)
 				for (var p in paths) {
 					var path = paths[p]

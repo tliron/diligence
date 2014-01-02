@@ -19,7 +19,9 @@ document.require(
 /** @ignore */
 function handleInit(conversation) {
     conversation.addMediaTypeByName('application/json')
-    conversation.addMediaTypeByName('application/java')
+    if (conversation.internal) {
+    	conversation.addMediaTypeByName('application/internal')
+    }
 }
 
 /** @ignore */
@@ -27,7 +29,7 @@ function handleGet(conversation) {
 	var domain = Diligence.SEO.getCurrentDomain(conversation)
 	if (domain) {
 		var setNames = domain.getSetNames()
-		return conversation.mediaType == 'application/java' ? setNames : Sincerity.JSON.to(setNames)
+		return conversation.mediaTypeName == 'application/internal' ? setNames : Sincerity.JSON.to(setNames)
 	}
 	else {
 		return Prudence.Resources.Status.ClientError.NotFound

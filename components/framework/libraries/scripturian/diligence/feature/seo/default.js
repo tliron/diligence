@@ -436,7 +436,7 @@ Diligence.SEO = Diligence.SEO || function() {
 
 				var robots = Prudence.Resources.request({
 					uri: 'riap://component/' + app.internalName + '/diligence/feature/seo/robots/',
-					mediaType: 'application/java',
+					mediaType: 'application/internal',
 					query: {
 						domain: this.getRootUri()
 					}
@@ -473,7 +473,7 @@ Diligence.SEO = Diligence.SEO || function() {
 
 				var sets = Prudence.Resources.request({
 					uri: 'riap://component/' + app.internalName + '/diligence/feature/seo/sets/',
-					mediaType: 'application/java',
+					mediaType: 'application/internal',
 					query: {
 						domain: this.getRootUri()
 					}
@@ -510,7 +510,7 @@ Diligence.SEO = Diligence.SEO || function() {
 
 				var setNames = Prudence.Resources.request({
 					uri: 'riap://component/' + app.internalName + '/diligence/feature/seo/sets/',
-					mediaType: 'application/java',
+					mediaType: 'application/internal',
 					query: {
 						domain: this.getRootUri()
 					}
@@ -521,7 +521,7 @@ Diligence.SEO = Diligence.SEO || function() {
 						if (setNames[s] == setName) {
 							return Prudence.Resources.request({
 								uri: 'riap://component/' + app.internalName + '/diligence/feature/seo/locations/',
-								mediaType: 'application/java',
+								mediaType: 'application/internal',
 								query: {
 									domain: this.getRootUri(),
 									set: setName

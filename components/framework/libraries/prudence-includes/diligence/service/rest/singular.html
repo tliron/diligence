@@ -5,7 +5,7 @@ document.require(
 	'/prudence/resources/',
 	'/sincerity/json/')
 
-var data = Prudence.Resources.getEntity(conversation, 'object')
+var data = Prudence.Resources.getEntity(conversation, 'internal')
 if (!data) {
 	conversation.stop()
 }

@@ -276,7 +276,7 @@ Diligence.REST = Diligence.REST || function() {
  			'application/javascript',
  			'application/xml',
  			'text/html',
- 			'application/java',
+ 			'application/internal',
  		]
 
 		Public.doGet = function(conversation) {
@@ -308,7 +308,7 @@ Diligence.REST = Diligence.REST || function() {
 			}
 			
 			switch (String(conversation.mediaTypeName)) {
-				case 'application/java':
+				case 'application/internal':
 					if (!conversation.internal) {
 						// Only internal clients should be requesting this media type!
 						return Prudence.Resources.Status.ClientError.BadRequest
@@ -401,7 +401,7 @@ Diligence.REST = Diligence.REST || function() {
  			'application/javascript',
  			'application/xml',
  			'text/html',
- 			'application/java'
+ 			'application/internal'
 		]
 
 		Public.doGet = function(conversation) {
@@ -625,11 +625,12 @@ Diligence.REST = Diligence.REST || function() {
 
 		function represent(conversation, query, value, htmlUri) {
 			switch (String(conversation.mediaTypeName)) {
-				case 'application/java':
-					if (conversation.internal) {
-						return value
+				case 'application/internal':
+					if (!conversation.internal) {
+						// Only internal clients should be requesting this media type!
+						return Prudence.Resources.Status.ClientError.BadRequest
 					}
-					return Prudence.Resources.Status.ClientError.BadRequest
+					return value
 
 				case 'application/json':
 				case 'text/plain':
@@ -856,7 +857,7 @@ Diligence.REST = Diligence.REST || function() {
 		/** @ignore */
 		Public._construct = function(config) {
 			if (!Sincerity.Objects.exists(this.map)) {
-				this.map = application.hazelcast.getMap(this.name)
+				this.map = application.hazelcastApplicationInstance.getMap(this.name)
 				if (this.map.empty && Sincerity.Objects.exists(this.documents)) {
 					for (var k in this.documents) {
 						this.map.put(k, Sincerity.JSON.to(this.documents[k]))

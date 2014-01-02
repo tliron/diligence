@@ -1040,8 +1040,7 @@ Diligence.Sencha = Diligence.Sencha || function() {
 			
 			var n = {
 				id: id,
-				text: Sincerity.XML.escapeElements(this.getNodeText(nodeId, node)),
-				expanded: true
+				text: Sincerity.XML.escapeElements(this.getNodeText(nodeId, node))
 			}
 			array.push(n)
 

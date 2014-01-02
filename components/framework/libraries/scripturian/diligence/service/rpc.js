@@ -421,7 +421,7 @@ Diligence.RPC = Diligence.RPC || function() {
 		Public.mediaTypes = [
 			'application/json',
 			'application/xml',
-			'application/java',
+			'application/internal',
 			'text/xml',
 			'text/plain',
 			'text/html'
@@ -710,7 +710,7 @@ Diligence.RPC = Diligence.RPC || function() {
 					// XML-RPC does not have a batch mode
 					var xml = Sincerity.XML.to({methodResponse: results[0]})
 					if (conversation.internal) {
-						conversation.mediaTypeName = 'application/java'
+						conversation.mediaTypeName = 'application/internal'
 						return Sincerity.XML.from(xml)
 					}
 					else {
@@ -727,7 +727,7 @@ Diligence.RPC = Diligence.RPC || function() {
 						results = results[0]
 					}
 					if (conversation.internal) {
-						conversation.mediaTypeName = 'application/java'
+						conversation.mediaTypeName = 'application/internal'
 						return results
 					}
 					else {

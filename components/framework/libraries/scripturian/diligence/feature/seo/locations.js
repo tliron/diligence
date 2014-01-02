@@ -20,7 +20,9 @@ document.require(
 /** @ignore */
 function handleInit(conversation) {
     conversation.addMediaTypeByName('application/json')
-    conversation.addMediaTypeByName('application/java')
+    if (conversation.internal) {
+    	conversation.addMediaTypeByName('application/internal')
+    }
 }
 
 /** @ignore */
@@ -35,7 +37,7 @@ function handleGet(conversation) {
 		var locations = domain.getLocations(set)
 		if (locations) {
 			locations = Sincerity.Iterators.toArray(locations, 0, 50000)
-			return conversation.mediaType == 'application/java' ? locations : Sincerity.JSON.to(locations)
+			return (conversation.mediaTypeName == 'application/internal') ? locations : Sincerity.JSON.to(locations)
 		}
 	}
 

@@ -2,7 +2,7 @@
 
 document.require('/prudence/resources/')
 
-var data = Prudence.Resources.getEntity(conversation, 'object')
+var data = Prudence.Resources.getEntity(conversation, 'internal')
 if (!data) {
 	conversation.stop()
 }

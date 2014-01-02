@@ -28,7 +28,7 @@ var httpUri = conversation.reference.baseRef + params.uri
 
 if (params.internal) {
 	params.uri = '/' + params.uri
-	params.mediaType = 'application/java'
+	params.mediaType = 'application/internal'
 }
 else {
 	params.uri = httpUri

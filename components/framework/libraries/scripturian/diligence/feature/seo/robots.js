@@ -21,7 +21,9 @@ document.require(
 function handleInit(conversation) {
     conversation.addMediaTypeByName('text/plain')
     conversation.addMediaTypeByName('application/json')
-    conversation.addMediaTypeByName('application/java')
+    if (conversation.internal) {
+    	conversation.addMediaTypeByName('application/internal')
+    }
 }
 
 /** @ignore */
@@ -30,10 +32,10 @@ function handleGet(conversation) {
 	if (domain) {
 		var robots = domain.getAllRobots()
 
-		if (conversation.mediaType == 'application/java') {
+		if (conversation.mediaTypeName == 'application/internal') {
 			return robots
 		}
-		else if (conversation.mediaType == 'application/json') {
+		else if (conversation.mediaTypeName == 'application/json') {
 			return Sincerity.JSON.to(robots, conversation.query.get('human') == true)
 		}
 		else {

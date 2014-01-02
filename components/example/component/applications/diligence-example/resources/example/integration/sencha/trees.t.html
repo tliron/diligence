@@ -30,8 +30,7 @@ Ext.onReady(function() {
 			type: 'diligence',
 			url: '<%.%>/mongo/textpack/'
 		},
-		defaultRootId: '/',
-		autoLoad: true
+		defaultRootId: '/'
 	});
 
 	var uris = Ext.create('Ext.data.Store', {
@@ -42,7 +41,7 @@ Ext.onReady(function() {
 		]
 	});
 	
-	Ext.create('Ext.tree.Panel', {
+	var panel = Ext.create('Ext.tree.Panel', {
 		store: store,
 		autoScroll: true,
 		useArrows: true,
@@ -65,7 +64,7 @@ Ext.onReady(function() {
 						var uri = records[0].get('uri');
 						var proxy = store.getProxy();
 						proxy.url = '<%.%>/' + uri + '/textpack/';
-						store.load();
+						store.setRootNode(null); // will trigger a safe reload: load() has bugs with auto-expansion
 					}
 				}
 			}]
