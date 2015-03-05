@@ -1,7 +1,7 @@
 //
 // This file is part of Diligence
 //
-// Copyright 2011-2014 Three Crickets LLC.
+// Copyright 2011-2015 Three Crickets LLC.
 //
 // The contents of this file are subject to the terms of the LGPL version 3.0:
 // http://www.gnu.org/copyleft/lesser.html
@@ -48,28 +48,12 @@ Diligence.OAuth = Diligence.OAuth || function() {
 	Public.logger = Prudence.Logging.getLogger('oauth')
 	
 	/**
-	 * Installs the HTTP_OAUTH challenge scheme helper (not available by default in Restlet).
+	 * Installs the HTTP_OAUTH authenticator helper (not available by default in Restlet).
 	 * <p>
 	 * Can only be called from Prudence configuration scripts!
 	 */
-	Public.registerHelper = function() {
-		// Make sure we have an OAuth authenticator helper (Restlet does not have one by default)
-		var engine = org.restlet.engine.Engine.instance
-		var oauthScheme = org.restlet.data.ChallengeScheme.HTTP_OAUTH
-		var oauthHelper = engine.findHelper(oauthScheme, true, false)
-		if (null === oauthHelper) {
-			oauthHelper = new JavaAdapter(org.restlet.engine.security.SmtpPlainHelper, {
-				// Rhino won't let us implement AuthenticatorHelper directly, because it doesn't have
-				// an argumentless constructor. So, we'll jerry-rig SmtpPlainHelper, which is close
-				// enough. We'll just make sure to disable its formatRawResponse implementation. 
-				
-				formatRawResponse: function(cw, challenge, request, httpHeaders) {
-					application.logger.warning('HTTP_OAUTH helper formatRawResponse should never be called!')
-				}
-			})
-			oauthHelper.challengeScheme = oauthScheme
-			engine.registeredAuthenticators.add(oauthHelper)
-		}
+	Public.registerAuthenticationScheme = function() {
+    	com.threecrickets.prudence.util.CustomAuthenticatorHelper.ensureRegistered('HTTP_OAuth', true, false)
 	}
 
 	/**
