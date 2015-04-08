@@ -14,8 +14,8 @@
 	<inceptionYear>2011</inceptionYear>
 
 	<scm>
-		<connection>scm:git:https://code.google.com/p/diligence/</connection>
-		<url>http://code.google.com/p/diligence/source/browse/</url>
+		<connection>scm:git:git://github.com/tliron/diligence.git</connection>
+		<url>https://github.com/tliron/diligence</url>
 	</scm>
 
 	<organization>
