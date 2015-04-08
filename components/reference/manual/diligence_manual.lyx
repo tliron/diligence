@@ -8313,7 +8313,7 @@ Automatic content negotiation with support for JSON and XML formats, as
 \begin_inset CommandInset href
 LatexCommand href
 name "MongoVision"
-target "http://code.google.com/p/mongo-vision/"
+target "https://github.com/tliron/mongovision"
 
 \end_inset
 
