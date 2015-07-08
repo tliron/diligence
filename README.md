@@ -13,6 +13,8 @@ third party technologies and services, from Ext JS and Sencha Touch to Facebook.
 Please see the [Diligence web site](http://threecrickets.com/diligence/) for comprehensive
 documentation.
 
+[![Download](http://threecrickets.com/media/download.png "Download")](http://threecrickets.com/diligence/download/)
+
 
 Building Diligence
 ------------------
@@ -45,7 +47,7 @@ git.
 
 
 Building the Diligence Manual
-----------------------------
+-----------------------------
 
 To build the manual, as part of the standard build process, you will need to install
 [LyX](http://www.lyx.org/) and [eLyXer](http://elyxer.nongnu.org/), and configure their
@@ -61,9 +63,9 @@ You can create distribution packages (zip, deb, rpm, IzPack) using the appropria
 If you wish to sign the deb and rpm packages, you need to install the "dpkg-sig" and
 "rpm" tools, and configure their paths and your keys in "private.properties". 
 
-In order to build the platform installers (for Windows and OS X), you will need to
-install [InstallBuilder](http://installbuilder.bitrock.com/) and configure its path
-in "private.properties".
+In order to build the platform installers (for Windows and OS X), you will need
+to install [InstallBuilder] (http://installbuilder.bitrock.com/) and configure
+its path in "private.properties".
 
 BitRock has generously provided the Diligence project with a free license, available
 under "/build/installbuilder/license.xml". It will automatically be used by the build
@@ -73,5 +75,6 @@ process.
 Still Having Trouble?
 ---------------------
 
-Join the [Prudence Community](http://groups.google.com/group/prudence-community), and
-tell us where you're stuck! We're very happy to help newcomers get up and running.
+Join the [Prudence Community]
+(http://groups.google.com/group/prudence-community), and tell us where you're
+stuck! We're very happy to help newcomers get up and running.
