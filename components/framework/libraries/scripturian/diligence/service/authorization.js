@@ -22,7 +22,7 @@ document.require(
 	'/sincerity/classes/',
 	'/sincerity/objects/',
 	'/sincerity/jvm/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -263,8 +263,8 @@ Diligence.Authorization = Diligence.Authorization || function() {
 
 	function getGroupsCollection() {
 		if (!Sincerity.Objects.exists(groupsCollection)) {
-			groupsCollection = new MongoDB.Collection('groups')
-			groupsCollection.ensureIndex({name: 1}, {unique: true})
+			groupsCollection = MongoClient.global().collection('groups')
+			groupsCollection.createIndex('name', {unique: true})
 		}
 		return groupsCollection
 	}

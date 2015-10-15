@@ -33,7 +33,7 @@ document.require(
 	'/prudence/tasks/',
 	'/prudence/logging/',
 	'/sincerity/classes/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -70,7 +70,7 @@ Diligence.Progress = Diligence.Progress || function() {
 			}
 		}
 
-		key = MongoDB.id(key)
+		key = MongoUtil.id(key)
 		var process = Sincerity.Objects.exists(key) ? getProcessesCollection().findOne({_id: key}) : null
 		return process ? new Public.Process(process, context) : null
 	}
@@ -82,7 +82,7 @@ Diligence.Progress = Diligence.Progress || function() {
 		now = now || new Date()
 
 		var process = {
-			_id: MongoDB.newId(),
+			_id: MongoUtil.id(),
 			description: params.description,
 			started: now,
 			milestones: [{
@@ -111,7 +111,7 @@ Diligence.Progress = Diligence.Progress || function() {
 			process.expiration = new Date(now.getTime()).setMilliseconds(now.getMilliseconds() + params.maxDuration)
 		}
 
-		getProcessesCollection().insert(process, 1)
+		getProcessesCollection().withWriteConcern({w: 1}).insertOne(process)
 		
 		var context
 		if (params.task) {
@@ -253,7 +253,7 @@ Diligence.Progress = Diligence.Progress || function() {
 		
 		Public.addMilestone = function(milestone) {
 			milestone.timestamp = milestone.timestamp || new Date()
-			getProcessesCollection().update({_id: this.process._id}, {
+			getProcessesCollection().updateOne({_id: this.process._id}, {
 				$addToSet: {
 					milestones: milestone
 				}
@@ -269,7 +269,7 @@ Diligence.Progress = Diligence.Progress || function() {
 		}
 		
 		Public.remove = function() {
-			getProcessesCollection().remove({_id: this.process._id})
+			getProcessesCollection().deleteOne({_id: this.process._id})
 		}
 
 		Public.redirectWait = function(conversation, application) {
@@ -383,7 +383,7 @@ Diligence.Progress = Diligence.Progress || function() {
 	
 	function getProcessesCollection() {
 		if (!Sincerity.Objects.exists(processesCollection)) {
-			var processesCollection = new MongoDB.Collection('processes')
+			var processesCollection = MongoClient.global().collection('processes')
 		}
 		return processesCollection
 	}

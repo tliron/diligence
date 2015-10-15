@@ -17,7 +17,7 @@ document.require(
 	'/sincerity/templates/',
 	'/sincerity/json/',
 	'/sincerity/jvm/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 

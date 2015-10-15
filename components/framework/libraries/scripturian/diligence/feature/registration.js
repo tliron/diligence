@@ -23,7 +23,7 @@ document.require(
 	'/sincerity/templates/',
 	'/prudence/resources/',
 	'/prudence/logging/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -138,7 +138,7 @@ Diligence.Registration = Diligence.Registration || function() {
 		var salt = Diligence.Authentication.createPasswordSalt()
 		
 		var user = {
-			_id: MongoDB.newId(),
+			_id: MongoUtil.id(),
 			name: name,
 			password: Diligence.Authentication.encryptPassword(password, salt),
 			passwordSalt: salt,
@@ -147,7 +147,7 @@ Diligence.Registration = Diligence.Registration || function() {
 		}
 		
 		try {
-			getUsersCollection().insert(user, 1)
+			getUsersCollection().withWriteConcern({w: 1}).insertOne(user)
 			
 			var textPack = Diligence.Internationalization.getCurrentPack(conversation)
 			var registrationMessageTemplate = new Sincerity.Mail.MessageTemplate(textPack, 'diligence.feature.registration.message.registration')
@@ -161,7 +161,7 @@ Diligence.Registration = Diligence.Registration || function() {
 			Public.logger.info('Queued registration email to {0}', email)
 			return true
 		}
-		catch (x if x.code == MongoDB.Error.DuplicateKey) {
+		catch (x if x.hasCode(MongoError.DUPLICATE_KEY) {
 			return false
 		}
 	}
@@ -173,18 +173,18 @@ Diligence.Registration = Diligence.Registration || function() {
      * @param conversation The Prudence conversation
      */
     Public.confirm = function(id, conversation) {
-		var result = getUsersCollection().update({
+		var result = getUsersCollection().withWriteConcern({w: 1}).updateOne({
 			_id: id,
 			confirmed: {$exists: false}
 		}, {
 			$set: {
 				confirmed: new Date()
 			}
-		}, false, 1)
+		})
 		
 		//Public.logger.dump(result)
 		
-		if (result && (result.n == 1)) {
+		if (result && (result.modifiedCount == 1)) {
 			var user = Diligence.Authentication.getUserById(id)
 
 			var textPack = Diligence.Internationalization.getCurrentPack(conversation)
@@ -211,7 +211,7 @@ Diligence.Registration = Diligence.Registration || function() {
     Public.handleConfirmation = function(conversation) {
 		var confirmRegistration = conversation.query.get('confirm-registration')
 		if (confirmRegistration) {
-			var userId = MongoDB.id(confirmRegistration)
+			var userId = MongoUtil.id(confirmRegistration)
 			var textPack = Diligence.Internationalization.getCurrentPack(conversation)
 			if (Public.confirm(userId, conversation)) {
 				conversation.locals.put('diligence.feature.registration.confirmation', textPack.get('diligence.feature.registration.confirmation.success', {loginUri: Diligence.Authentication.getUri()}))
@@ -327,8 +327,8 @@ Diligence.Registration = Diligence.Registration || function() {
 
 	function getUsersCollection() {
 		if (!Sincerity.Objects.exists(usersCollection)) {
-			usersCollection = new MongoDB.Collection('users')
-			usersCollection.ensureIndex({name: 1}, {unique: true})
+			usersCollection = MongoClient.global().collection('users')
+			usersCollection.createIndex('name', {unique: true})
 		}
 		return usersCollection
 	}

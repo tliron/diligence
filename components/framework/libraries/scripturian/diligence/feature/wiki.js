@@ -17,7 +17,7 @@ document.require(
 	'/sincerity/objects/',
 	'/prudence/resources/',
 	'/prudence/logging/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -250,7 +250,7 @@ Diligence.Wiki = Diligence.Wiki || function() {
 
 	function getPagesCollection() {
 		if (!Sincerity.Objects.exists(pagesCollection)) {
-			pagesCollection = new MongoDB.Collection('pages')
+			pagesCollection = MongoClient.global().collection('pages')
 		}
 		return pagesCollection
 	}

@@ -36,7 +36,7 @@ document.require(
 	'/prudence/logging/',
 	'/sincerity/objects/',
 	'/sincerity/classes/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -71,7 +71,7 @@ Diligence.Notification = Diligence.Notification || function() {
 		if (origin) {
 			notice.origin = origin
 		}
-		getNoticesCollection().insert(notice)
+		getNoticesCollection().insertOne(notice)
 	}
 
 	Public.queueForReference = function(service, reference, notice, origin) {
@@ -79,7 +79,7 @@ Diligence.Notification = Diligence.Notification || function() {
 		if (origin) {
 			notice.origin = origin
 		}
-		getNoticesCollection().insert(notice)
+		getNoticesCollection().insertOne(notice)
 	}
 	
 	Public.queueForChannel = function(channel, notice, origin) {
@@ -87,16 +87,16 @@ Diligence.Notification = Diligence.Notification || function() {
 		if (origin) {
 			notice.origin = origin
 		}
-		getNoticesCollection().insert(notice)
+		getNoticesCollection().insertOne(notice)
 	}
 	
 	Public.subscribe = function(channel, subscription) {
-		getChannelsCollection().upsert({name: channel}, {$addToSet: {subscriptions: subscription}})
+		getChannelsCollection().updateOne({name: channel}, {$addToSet: {subscriptions: subscription}}, {upsert: true})
 	}
 	
 	Public.unsubscribe = function(channel, subscription) {
 		// TODO
-		//getChannelsCollection().insert({name: channel}, {$addToSet: {subscriptions: subscription}})
+		//getChannelsCollection().insertOne({name: channel}, {$addToSet: {subscriptions: subscription}})
 	}
 	
 	Public.getChannel = function(name) {
@@ -105,30 +105,42 @@ Diligence.Notification = Diligence.Notification || function() {
 	
 	Public.getSubscriptionsForAddress = function(service, address) {
 		var subscriptions = []
-		for (var cursor = getChannelsCollection().find({name: channel, subscriptions: {$elemMatch: {service: service, address: address}}}); cursor.hasNext(); ) {
-			var channel = cursor.next()
-			for (var s in channel.subscriptions) {
-				var subscription = channel.subscriptions[s]
-				if ((service == subscription.service) && (address == subscription.address)) {
-					subscriptions.push({channel: channel.name, subscription: subscription})
-					break
+		var cursor = getChannelsCollection().find({name: channel, subscriptions: {$elemMatch: {service: service, address: address}}})
+		try {
+			while (cursor.hasNext()) {
+				var channel = cursor.next()
+				for (var s in channel.subscriptions) {
+					var subscription = channel.subscriptions[s]
+					if ((service == subscription.service) && (address == subscription.address)) {
+						subscriptions.push({channel: channel.name, subscription: subscription})
+						break
+					}
 				}
 			}
+		}
+		finally {
+			cursor.close()
 		}
 		return subscriptions
 	}
 	
 	Public.getSubscriptionsForReference = function(reference) {
 		var subscriptions = []
-		for (var cursor = getChannelsCollection().find({name: channel, 'subscriptions.reference': reference}); cursor.hasNext(); ) {
-			var channel = cursor.next()
-			for (var s in channel.subscriptions) {
-				var subscription = channel.subscriptions[s]
-				if (reference.equals(subscription.reference)) {
-					subscriptions.push({channel: channel.name, subscription: subscription})
-					break
+		var cursor = getChannelsCollection().find({name: channel, 'subscriptions.reference': reference})
+		try {
+			while (cursor.hasNext()) {
+				var channel = cursor.next()
+				for (var s in channel.subscriptions) {
+					var subscription = channel.subscriptions[s]
+					if (reference.equals(subscription.reference)) {
+						subscriptions.push({channel: channel.name, subscription: subscription})
+						break
+					}
 				}
 			}
+		}
+		finally {
+			cursor.close()
 		}
 		return subscriptions
 	}
@@ -188,7 +200,7 @@ Diligence.Notification = Diligence.Notification || function() {
 		var update = {$set: {sentImmediate: new Date()}}
 		
 		var count = 0
-		var notice = getNoticesCollection().findAndModify(query, update)
+		var notice = getNoticesCollection().findOneAndUpdate(query, update)
 		while (notice) {
 			if (notice.direct) {
 				Public.send(notice.direct, notice.notice, notice.origin)
@@ -207,7 +219,7 @@ Diligence.Notification = Diligence.Notification || function() {
 			}
 
 			update.$set.sentImmediate = new Date()
-			notice = getNoticesCollection().findAndModify(query, update)
+			notice = getNoticesCollection().findOneAndUpdate(query, update)
 
 			if (maxCount && (count > maxCount)) {
 				break
@@ -229,7 +241,7 @@ Diligence.Notification = Diligence.Notification || function() {
 		var update = {$set: {}}
 		update.$set[sentProperty] = new Date()
 
-		var notice = getNoticesCollection().findAndModify(query, update)
+		var notice = getNoticesCollection().findOneAndUpdate(query, update)
 		while (notice) {
 			if (notice.channel) {
 				var channel = Public.getChannel(notice.channel)
@@ -237,25 +249,25 @@ Diligence.Notification = Diligence.Notification || function() {
 					for (var s in channel.subscriptions) {
 						var subscription = channel.subscriptions[s]
 						if (subscription.mode == mode) {
-							getDigestsCollection().upsert({subscription: subscription}, {$push: {entries: {channel: channel.name, notice: notice.notice, origin: notice.origin, timestamp: notice.timestamp}}})
+							getDigestsCollection().insertOne({subscription: subscription}, {$push: {entries: {channel: channel.name, notice: notice.notice, origin: notice.origin, timestamp: notice.timestamp}}}, {upsert: true})
 						}
 					}
 				}
 			}
 
 			update.$set[sentProperty] = new Date()
-			notice = getNoticesCollection().findAndModify(query, update)
+			notice = getNoticesCollection().findOneAndUpdate(query, update)
 		}
 		
 		query = {'subscription.mode': mode}
 
 		var count = 0
-		var digest = getDigestsCollection().findAndRemove(query)
+		var digest = getDigestsCollection().findOneAndDelete(query)
 		while (digest) {
 			Public.sendDigest(digest.subscription, digest.entries, mode, digest.origin)
 			count++
 			
-			digest = getDigestsCollection().findAndRemove(query)
+			digest = getDigestsCollection().findOneAndDelete(query)
 		}
 
 		if (count > 0) {
@@ -325,24 +337,24 @@ Diligence.Notification = Diligence.Notification || function() {
 
 	function getChannelsCollection() {
 		if (!Sincerity.Objects.exists(channelsCollection)) {
-			channelsCollection = new MongoDB.Collection('channels')
-			channelsCollection.ensureIndex({name: 1}, {unique: true})
+			channelsCollection = MongoClient.global().collection('channels')
+			channelsCollection.createIndex('name', {unique: true})
 		}
 		return channelsCollection
 	}
 
 	function getNoticesCollection() {
 		if (!Sincerity.Objects.exists(noticesCollection)) {
-			noticesCollection = new MongoDB.Collection('notices')
-			noticesCollection.ensureIndex({channel: 1})
+			noticesCollection = MongoClient.global().collection('notices')
+			noticesCollection.createIndex('channel')
 		}
 		return noticesCollection
 	}
 
 	function getDigestsCollection() {
 		if (!Sincerity.Objects.exists(digestsCollection)) {
-			digestsCollection = new MongoDB.Collection('digests')
-			digestsCollection.ensureIndex({'subscription.mode': 1})
+			digestsCollection = MongoClient.global().collection('digests')
+			digestsCollection.createIndex('subscription.mode')
 		}
 		return digestsCollection
 	}

@@ -25,7 +25,7 @@
 document.require(
 	'/sincerity/classes/',
 	'/sincerity/objects/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -59,7 +59,7 @@ Diligence.Discussion = Diligence.Discussion || function() {
      * @class
      * @name Diligence.Discussion.Forum
      * 
-     * @param {String|MongoDB.Collection} collection The MongoDB collection
+     * @param {String|MongoCollection} collection The MongoDB collection
      * @param {String} query The MongoDB query uses to find the document in the collection
      * @param {Object} [doc] The MongoDB document if you already have it, otherwise will
      *        be found in the collection using the query 
@@ -70,9 +70,9 @@ Diligence.Discussion = Diligence.Discussion || function() {
 	    
 		/** @ignore */
 		Public._construct = function(collection, query, doc) {
-			this.collection = Sincerity.Objects.isString(collection) ? new MongoDB.Collection(collection) : collection
+			this.collection = Sincerity.Objects.isString(collection) ? MongoClient.global().collection(collection) : collection
 			this.query = query
-			this.doc = doc || this.collection.findOne(this.query, {forum: 1})
+			this.doc = doc || this.collection.findOne(this.query, {projection: {forum: 1}})
 			initialize.call(this)
 		}
 		
@@ -103,14 +103,14 @@ Diligence.Discussion = Diligence.Discussion || function() {
 		 * @param {String} post.content The post's content
 		 */
 		Public.newRoot = function(post) {
-			this.doc = this.collection.findAndModify(this.query, {$inc: {'forum.nextThread': 1}}, {fields: {forum: 1}})
+			this.doc = this.collection.findOneAndUpdate(this.query, {$inc: {'forum.nextThread': 1}}, {projection: {forum: 1}})
 			initialize.call(this)
 
 			post.path = String(this.forum.nextThread || 0)
 			this.posts[post.path] = post
 			this.roots.push(post)
 			
-			this.collection.update(this.query, {$push: {'forum.posts': post}})
+			this.collection.updateOne(this.query, {$push: {'forum.posts': post}})
 		}
 		
 		/**
@@ -129,7 +129,7 @@ Diligence.Discussion = Diligence.Discussion || function() {
 			}
 			var update = {$inc: {'forum.posts.$.nextResponse': 1}}
 			
-			this.doc = this.collection.findAndModify(query, update, {fields: {forum: 1}})
+			this.doc = this.collection.findOneAndUpdate(query, update, {projection: {forum: 1}})
 			initialize.call(this)
 			
 			var parent = this.posts[parentPath]
@@ -138,7 +138,7 @@ Diligence.Discussion = Diligence.Discussion || function() {
 			this.posts[post.path] = post
 			post.path = parentPath + '.' + (parent.nextResponse || 0)
 			
-			this.collection.update(query, {$push: {'forum.posts': post}})
+			this.collection.updateOne(query, {$push: {'forum.posts': post}})
 
 			post.parent = post
 		}

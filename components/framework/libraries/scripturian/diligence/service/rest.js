@@ -20,7 +20,7 @@ document.require(
 	'/sincerity/templates/',
 	'/sincerity/iterators/',
 	'/sincerity/jvm/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -58,7 +58,7 @@ Diligence.REST = Diligence.REST || function() {
 		}
 		
 		if (Sincerity.Objects.isString(params.db)) {
-			params.db = MongoDB.getDB(MongoDB.defaultConnection, params.db)
+			params.db = MongoClient.global().database(params.db)
 		}
 
 		if (!Sincerity.Objects.exists(params.collections)) {
@@ -102,7 +102,7 @@ Diligence.REST = Diligence.REST || function() {
 		}
 		
 		if (Sincerity.Objects.isString(params.db)) {
-			params.db = MongoDB.getDB(MongoDB.defaultConnection, params.db)
+			params.db = MongoClient.global().database(params.db)
 		}
 
 		if (!Sincerity.Objects.exists(params.collections)) {
@@ -800,7 +800,7 @@ Diligence.REST = Diligence.REST || function() {
 			if (Sincerity.Objects.exists(this.documents)) {
 				if (this.plural) {
 					if (!Sincerity.Objects.exists(doc._id)) {
-						doc._id = String(MongoDB.newId())
+						doc._id = String(MongoUtil.id())
 					}
 					this.documents.put(String(doc._id), doc)
 					return doc
@@ -913,7 +913,7 @@ Diligence.REST = Diligence.REST || function() {
 		Public.doCreate = function(doc, conversation) {
 			if (this.plural) {
 				if (!Sincerity.Objects.exists(doc._id)) {
-					doc._id = String(MongoDB.newId())
+					doc._id = String(MongoUtil.id())
 				}
 				this.map.put(String(doc._id), Sincerity.JSON.to(doc))
 				return doc
@@ -941,7 +941,7 @@ Diligence.REST = Diligence.REST || function() {
 	 * @param {Object|String} config
 	 * @param {String} [config.name]
 	 * @param {Boolean} [config.plural=false] If true the RESTful resource will work in plural mode
-	 * @param {MongoDB.Collection|String} [config.collection=config.name] The MongoDB collection or
+	 * @param {MongoCollection|String} [config.collection=config.name] The MongoDB collection or
 	 *		 its name
 	 * @param {String|String[]} [config.fields] The document fields to retrieve
 	 *		 (see {@link MongoDB#find})
@@ -964,7 +964,7 @@ Diligence.REST = Diligence.REST || function() {
 			arguments.callee.overridden.call(this, this)
 			
 			this.collection = this.collection || this.name
-			this.collection = Sincerity.Objects.isString(this.collection) ? new MongoDB.Collection(this.collection) : this.collection
+			this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
 
 			// Convert fields to MongoDB's inclusion notation
 			var fields = {}
@@ -997,28 +997,26 @@ Diligence.REST = Diligence.REST || function() {
 			}
 			delete update._id
 			var q = castQuery(conversation, this.query ? Sincerity.Objects.clone(this.query) : {_id: {$oid: '{id}'}}, this.values)
-			var doc = this.collection.findAndModify(q, {$set: update}, Sincerity.Objects.isEmpty(this.fields) ? {returnNew: true} : {returnNew: true, fields: this.fields})
+			var doc = this.collection.findOneAndUpdate(q, {$set: update}, Sincerity.Objects.isEmpty(this.fields) ? {returnDocument: 'after'} : {returnDocument: 'after', projection: this.fields})
 			return doc
 		}
 
 		Public.doCreate = function(doc, conversation) {
 			if (this.plural) {
 				try {
-					var result = this.collection.insert(doc, 1)
+					var result = this.collection.withWriteConcern({w: 1}).insertOne(doc)
 					if (result && result.ok) {
 						return doc
 					}
 				}
-				catch (x) {
-					if (x.code == MongoDB.Error.DuplicateKey) {
-						return true
-					}
+				catch (x if x.hasCode(MongoError.DUPLICATE_KEY)) {
+					return true
 				}
 			}
 			else {
 				delete doc._id
 				Sincerity.Objects.merge(doc, castQuery(conversation, this.query ? Sincerity.Objects.clone(this.query) : {_id: {$oid: '{id}'}}, this.values))
-				var result = this.collection.save(doc, 1)
+				var result = this.collection.withWriteConcern({w: 1}).save(doc)
 				if (result && (result.n == 1)) {
 					return doc
 				}
@@ -1036,7 +1034,7 @@ Diligence.REST = Diligence.REST || function() {
 				q = castQuery(conversation, this.query ? Sincerity.Objects.clone(this.query) : {_id: {$oid: '{id}'}}, this.values)
 			}
 			
-			var result = this.collection.remove(q, 1)
+			var result = this.collection.withWriteConcern({w: 1}).deleteOne(q)
 			if (result) {
 				if (result.ok == 0) {
 					return Prudence.Resources.ServerError.Internal

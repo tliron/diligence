@@ -14,7 +14,7 @@
 document.require(
 	'/prudence/logging/',
 	'/sincerity/objects/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -48,13 +48,13 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	 * @return {String} The nonce
 	 */
 	Public.create = function(duration, now) {
-		var nonce = MongoDB.newId()
+		var nonce = MongoUtil.id()
 		
 		duration = Sincerity.Objects.ensure(duration, defaultDuration)
 		if (duration > 0) {
 			var expiration = now ? new Date(now.getTime()) : new Date()
 			expiration.setMilliseconds(expiration.getMilliseconds() + duration)
-			getNoncesCollection().insert({_id: nonce, expiration: expiration})
+			getNoncesCollection().insertOne({_id: nonce, expiration: expiration})
 		}
 		
 		nonce = String(nonce)
@@ -75,7 +75,7 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	 * @returns {Boolean}
 	 */
 	Public.check = function(nonce, now) {
-		var entry = nonce ? getNoncesCollection().findAndRemove({_id: MongoDB.id(nonce)}, 1) : null
+		var entry = nonce ? getNoncesCollection().withWriteConcern({w: 1}).findOneAndDelete({_id: MongoUtil.id(nonce)}) : null
 
 		if (entry) {
 			now = now || new Date()
@@ -96,10 +96,10 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	 */
 	Public.prune = function(now) {
 		now = now || new Date()
-		var result = getNoncesCollection().remove({expiration: {$lte: now}}, 1)
+		var result = getNoncesCollection().deleteMany({expiration: {$lte: now}})
 		
-		if (result && result.n) {
-			Public.logger.info('Removed {0} stale {1}', result.n, result.n > 1 ? 'nonces' : 'nonce')
+		if (result && result.deletedCount) {
+			Public.logger.info('Removed {0} stale {1}', result.deletedCount, result.deletedCount > 1 ? 'nonces' : 'nonce')
 		}
 	}
 	
@@ -109,7 +109,7 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	
 	function getNoncesCollection() {
 		if (!Sincerity.Objects.exists(noncesCollection)) {
-			noncesCollection = new MongoDB.Collection('nonces')
+			noncesCollection = MongoClient.global().collection('nonces')
 		}
 		return noncesCollection
 	}

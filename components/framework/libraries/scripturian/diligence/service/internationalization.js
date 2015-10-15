@@ -20,7 +20,7 @@ document.require(
 	'/sincerity/files/',
 	'/sincerity/json/',
 	'/sincerity/localization/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -280,8 +280,8 @@ Diligence.Internationalization = Diligence.Internationalization || function() {
 	
 	function getTextPacksCollection() {
 		if (!Sincerity.Objects.exists(textPacksCollection)) {
-			textPacksCollection = new MongoDB.Collection('textpacks')
-			textPacksCollection.ensureIndex({locale: 1}, {unique: true})
+			textPacksCollection = MongoClient.global().collection('textpacks')
+			textPacksCollection.createIndex('locale', {unique: true})
 		}
 		return textPacksCollection
 	}

@@ -13,7 +13,7 @@
 
 document.require(
 	'/sincerity/objects/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -39,13 +39,13 @@ Diligence.Serials = Diligence.Serials || function() {
 	 * @returns {Number} The next available number, or null if the series does not exist and doNotCreate=true
 	 */
 	Public.next = function(series, doNotCreate) {
-		var serial = getSerialsCollection().findAndModify({series: series}, {$inc: {nextSerial: 1}})
+		var serial = getSerialsCollection().findOneAndUpdate({series: series}, {$inc: {nextSerial: 1}})
 		if (Sincerity.Objects.exists(serial)) {
 			return serial.nextSerial
 		}
 		else {
 			if (!doNotCreate) {
-				getSerialsCollection().insert({series: series, nextSerial: 1})
+				getSerialsCollection().insertOne({series: series, nextSerial: 1})
 				return Public.next(series, true)
 			}
 		}
@@ -59,8 +59,8 @@ Diligence.Serials = Diligence.Serials || function() {
 
 	function getSerialsCollection() {
 		if (!Sincerity.Objects.exists(serialsCollection)) {
-			serialsCollection = new MongoDB.Collection('serials')
-			serialsCollection.ensureIndex({series: 1}, {unique: true})
+			serialsCollection = MongoClient.global().collection('serials')
+			serialsCollection.createIndex('series', {unique: true})
 		}
 		return serialsCollection
 	}

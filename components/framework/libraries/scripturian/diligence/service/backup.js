@@ -19,7 +19,7 @@ document.require(
 	'/sincerity/objects/',
 	'/sincerity/localization/',
 	'/sincerity/templates/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -81,7 +81,7 @@ Diligence.Backup = Diligence.Backup || function() {
 				var db = params.db || MongoDB.defaultDb
 				if (Sincerity.Objects.exists(db)) {
 					if (Sincerity.Objects.isString(db)) {
-						db = MongoDB.getDB(MongoDB.defaultConnection, db)
+						db = MongoClient.global().database(db)
 					}
 					collections = Sincerity.JVM.fromCollection(db.collectionNames)
 				}
@@ -143,7 +143,7 @@ Diligence.Backup = Diligence.Backup || function() {
 		params.directory = (Sincerity.Objects.isString(params.directory) ? new java.io.File(params.directory) : params.directory).canonicalFile
 		params.file = new java.io.File(params.directory, params.collection + (params.gzip ? '.json.gz' : '.json'))
 		
-		var collection = new MongoDB.Collection(params.collection, {db: params.db})
+		var collection = MongoClient.database(params.db).collection(params.collection)
 		params.iterator = collection.find(params.query || {})
 		
 		Public.logger.info('Exporting collection "{0}"...', params.collection)
@@ -214,7 +214,7 @@ Diligence.Backup = Diligence.Backup || function() {
 			}
 		}
 		
-		var collection = new MongoDB.Collection(params.name, {db: params.db})
+		var collection = new MongoClient.global().database(params.db).collection(params.name)
 		if (params.drop) {
 			collection.drop()
 		}
@@ -227,12 +227,10 @@ Diligence.Backup = Diligence.Backup || function() {
 			while (iterator.hasNext()) {
 				var doc = iterator.next()
 				try {
-					collection.insert(doc)
+					collection.insertOne(doc)
 				}
-				catch (e) {
-					if (e.code != MongoDB.Error.DuplicateKey) {
-						throw e
-					}
+				catch (x if !x.hasCode(MongoError.DUPLICATE_KEY)) {
+					throw x
 				}
 				count++
 			}

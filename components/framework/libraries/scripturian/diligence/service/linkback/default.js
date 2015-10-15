@@ -17,7 +17,7 @@ document.require(
 	'/prudence/logging/',
 	'/sincerity/objects/',
 	'/sincerity/templates/',
-	'/mongo-db/')
+	'/mongodb/')
 
 /**
  * @namespace
@@ -85,14 +85,14 @@ Diligence.Linkback = Diligence.Linkback || function() {
     	uri = String(uri)
     	var id = '#error#'
 
-		var linkback = getLinkbacksCollection().findOne({uri: uri}, {_id: 1})
+		var linkback = getLinkbacksCollection().findOne({uri: uri}, {projection: {_id: 1}})
 		if (linkback) {
 			id = String(linkback._id)
 		}
 		else {
-	    	var result = getLinkbacksCollection.upsert({uri: uri}, {$set: {uri: uri}}, false, true)
-	    	if (result && Sincerity.Objects.exists(result.upserted)) {
-	    		id = String(result.upserted)
+	    	var result = getLinkbacksCollection.updateOne({uri: uri}, {$set: {uri: uri}}, {upsert: true})
+	    	if (result && Sincerity.Objects.exists(result.upsertedId)) {
+	    		id = String(result.upsertedId)
 	    	}
     	}
     	
@@ -145,19 +145,19 @@ Diligence.Linkback = Diligence.Linkback || function() {
 		params = Sincerity.Objects.clone(params)
 		var query = {links: {$not: {$elemMatch: {sourceUri: params.sourceUri}}}}
 		if (params.id) {
-			query._id = MongoDB.id(params.id)
+			query._id = MongoUtil.id(params.id)
 			delete params.id
 		}
 		else {
-			getLinkbacksCollection.upsert({uri: params.uri}, {$set: {uri: params.uri}}, false, true)
+			getLinkbacksCollection.updateOne({uri: params.uri}, {$set: {uri: params.uri}}, {upsert: true})
 			query.uri = params.uri
 			delete params.uri
 		}
 		params.timestamp = new Date()
 		var update = {$addToSet: {links: params}}
 		
-		var result = getLinkbacksCollection.update(query, update, false, 1)
-		if (result && (result.n == 1)) {
+		var result = getLinkbacksCollection.withWriteConcern({w: 1}).updateOne(query, update)
+		if (result && (result.modifiedCount == 1)) {
 			Public.logger.info('{method} from {sourceUri}', params)
 		}
 		else {
@@ -394,8 +394,8 @@ Diligence.Linkback = Diligence.Linkback || function() {
 
 	function getLinkbacksCollection() {
 		if (!Sincerity.Objects.exists(linkbacksCollection)) {
-			linkbacksCollection = new MongoDB.Collection('linkbacks')
-			linkbacksCollection.ensureIndex({uri: 1}, {unique: true})
+			linkbacksCollection = MongoClient.global().collection('linkbacks')
+			linkbacksCollection.createIndex('uri', {unique: true})
 		}
 		return linkbacksCollection
 	}

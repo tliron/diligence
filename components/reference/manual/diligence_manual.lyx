@@ -8564,7 +8564,7 @@ MongoDB = null
 
 \begin_layout Plain Layout
 
-document.execute('/mongo-db/')
+document.execute('/mongodb/')
 \end_layout
 
 \begin_layout Plain Layout

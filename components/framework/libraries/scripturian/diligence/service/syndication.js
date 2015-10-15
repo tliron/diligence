@@ -15,7 +15,7 @@ document.require(
 	'/sincerity/classes/',
 	'/sincerity/objects/',
 	'/sincerity/xml/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -119,7 +119,7 @@ Diligence.Syndication = Diligence.Syndication || function() {
 	    Public._construct = function(config) {
         	Sincerity.Objects.merge(this, config, ['name', 'collection'])
 
-			this.collection = Sincerity.Objects.isString(this.collection) ? new MongoDB.Collection(this.collection) : this.collection
+			this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
 	    }
 
 		Public.getInfo = function() {

@@ -15,7 +15,7 @@ document.require(
 	'/prudence/logging/',
 	'/sincerity/classes/',
 	'/sincerity/objects/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -31,7 +31,7 @@ var Diligence = Diligence || {}
  * @param config
  * @param {String} config.name The type of a cache entry in singular
  * @param {String} [config.plural=config.name + s] The type of a cache entry in plural
- * @param {String|MongoDB.Collection} [config.collection=config.plural] The MongoDB collection or its name
+ * @param {String|MongoCollection} [config.collection=config.plural] The MongoDB collection or its name
  * @param {Logging.Logger} [config.logger=Logging.getLogger(config.plural)] The logger
  * @param {String|Number} [config.logLevel='fine'] The log level to use
  * @param {Number} [config.defaultDuration=1 minute] The default entry duration in milliseconds
@@ -58,8 +58,8 @@ Diligence.Cache = Diligence.Cache || Sincerity.Classes.define(function() {
     	this.logLevel = this.logLevel || 'fine'
     	this.defaultDuration = this.defaultDuration || (60 * 1000)
     	
-    	this.collection = Sincerity.Objects.isString(this.collection) ? new MongoDB.Collection(this.collection) : this.collection
-    	this.collection.ensureIndex({key: 1}, {unique: true})	
+    	this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
+    	this.collection.createIndex('key', {unique: true})	
     }
 
 	/**
@@ -89,7 +89,7 @@ Diligence.Cache = Diligence.Cache || Sincerity.Classes.define(function() {
 			update.$set.tags = tags
 		}
 
-		this.collection.upsert({key: key}, update)
+		this.collection.insertOne({key: key}, update, {upsert: true})
 
 		this.logger.log(this.logLevel, 'Stored {0} {1}', this.name, key)
 	}
@@ -103,7 +103,7 @@ Diligence.Cache = Diligence.Cache || Sincerity.Classes.define(function() {
 	 * @returns The entry, or null if it's not found or expired
 	 */
 	Public.fetch = function(key, invalidate, now) {
-		var entry = invalidate ? this.collection.findAndRemove({key: key}) : this.collection.findOne({key: key})
+		var entry = invalidate ? this.collection.findOneAndDelete({key: key}) : this.collection.findOne({key: key})
 
 		if (entry) {
 			now = now || new Date()
@@ -115,7 +115,7 @@ Diligence.Cache = Diligence.Cache || Sincerity.Classes.define(function() {
 			else if (!invalidate) {
 				// Remove (if it hasn't been reinserted)
 				this.logger.log(this.logLevel, 'Cache miss for {0} {1} (expired)', this.name, key)
-				this.collection.remove({key: key, expiration: entry.expiration})
+				this.collection.deleteOne({key: key, expiration: entry.expiration})
 				return null
 			}
 		}
@@ -131,7 +131,7 @@ Diligence.Cache = Diligence.Cache || Sincerity.Classes.define(function() {
 	 * @param {String} key The entry's unique key
 	 */
 	Public.invalidate = function(key) {
-		this.collection.remove({key: key})
+		this.collection.deleteOne({key: key})
 	}
 
 	/**
@@ -141,7 +141,7 @@ Diligence.Cache = Diligence.Cache || Sincerity.Classes.define(function() {
 	 * @param {String} key The entry tag
 	 */
 	Public.invalidateTag = function(tag) {
-		this.collection.remove({tags: tag})
+		this.collection.deleteMany({tags: tag})
 	}
 		
 	/**
@@ -152,10 +152,10 @@ Diligence.Cache = Diligence.Cache || Sincerity.Classes.define(function() {
 	 */
 	Public.prune = function(now) {
 		now = now || new Date()
-		var result = this.collection.remove({expiration: {$lte: now}}, 1)
+		var result = this.collection.withWriteConcern({w: 1}).deleteMany({expiration: {$lte: now}})
 
-		if (result && result.n) {
-			this.logger.info('Pruned {0} expired {1}', result.n, result.n > 1 ? this.plural : this.name)
+		if (result && result.deletedCount) {
+			this.logger.info('Pruned {0} expired {1}', result.deletedCount, result.deletedCount > 1 ? this.plural : this.name)
 		}
 	}
 

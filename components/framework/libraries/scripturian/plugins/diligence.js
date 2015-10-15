@@ -16,7 +16,7 @@ document.require(
 	'/sincerity/jvm/')
 
 try {
-document.require('/mongo-db/')
+document.require('/mongodb/')
 } catch(x) { /* the dependency may not have been installed yet! */ }
 
 importClass(
@@ -129,12 +129,12 @@ function worker(command) {
 	}
 
 	// Connect
-	var client = MongoDB.connect(uri, {username: username, password: password})
-	collection = new MongoDB.Collection(collection, {client: client, db: db})
+	var client = new MongoClient(uri, {username: username, password: password})
+	collection = client.datbase(db).collection(collection)
 	collection.ensureIndex({created: 1})
 	
 	while (true) {
-		var doc = collection.findAndModify({pending: true}, {$set: {pending: false}}, {sort: {created: 1}, returnNew: true})
+		var doc = collection.findOneAndUpdate({pending: true}, {$set: {pending: false}}, {sort: {created: 1}, returnDocument: 'after'})
 		
 		// TODO: work!
 		

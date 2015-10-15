@@ -15,7 +15,7 @@ document.require(
 	'/diligence/service/html/',
 	'/prudence/logging/',
 	'/sincerity/classes/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -79,14 +79,14 @@ Diligence.Documents = Diligence.Documents || function() {
 			var fields = {name: 1, site: 1}
 			fields['drafts.' + key] = 1
 
-			var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, fields)
+			var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, {projection: fields})
 			var draft = document && document.drafts ? document.drafts[key] : null
 			return draft ? new Public.Draft(draft, revision, document) : null
 		}
 		else {
 			var fields = {name: 1, activeDraft: 1, site: 1}
 
-			var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, fields)
+			var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, {projection: fields})
 			return document ? new Public.Draft(document.activeDraft || {source: ''}, document.activeDraft ? document.activeDraft.revision : null, document) : null
 		}
 	}
@@ -105,7 +105,7 @@ Diligence.Documents = Diligence.Documents || function() {
 			return Public.getDraft(documentId)
 		}
 		
-		var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, {revisions: 1})
+		var document = getDocumentsCollection().findOne({_id: {$oid: documentId}}, {projection: {revisions: 1}})
 
 		var latestRevision = null
 		if (document && document.revisions) {
@@ -158,7 +158,7 @@ Diligence.Documents = Diligence.Documents || function() {
 			}
 			
 			var document = {
-				_id: MongoDB.newId(),
+				_id: MongoUtil.id(),
 				created: now,
 				lastUpdated: now,
 				site: this.site._id,
@@ -175,7 +175,7 @@ Diligence.Documents = Diligence.Documents || function() {
 				source: source
 			}
 			
-			getDocumentsCollection().insert(document)
+			getDocumentsCollection().insertOne(document)
 			
 			return new Public.Draft(document.activeDraft, revision, document)
 		}
@@ -187,7 +187,7 @@ Diligence.Documents = Diligence.Documents || function() {
 		 */
 	    Public.revise = function(now) {
 			now = now || new Date()
-			this.site = getSitesCollection().findAndModify({_id: this.site._id}, {$inc: {nextRevision: 1}, $set: {lastRevised: now}})
+			this.site = getSitesCollection().findOneAndUpdate({_id: this.site._id}, {$inc: {nextRevision: 1}, $set: {lastRevised: now}})
 			return this.site.nextRevision
 		}
 		
@@ -319,7 +319,7 @@ Diligence.Documents = Diligence.Documents || function() {
 			update.$set['drafts.r' + this.revision + '.source'] = this.draft.source
 			update.$set['drafts.r' + this.revision + '.language'] = this.draft.language
 
-			getDocumentsCollection().update({_id: this.document._id}, update)
+			getDocumentsCollection().updateOne({_id: this.document._id}, update)
 		}
 		
 		/**
@@ -358,11 +358,11 @@ Diligence.Documents = Diligence.Documents || function() {
 				// Update our draft
 				var update = {$set: {}}
 				update.$set['drafts.r' + this.revision + '.rendered'] = this.draft.rendered
-				getDocumentsCollection().update({_id: this.document._id}, update)
+				getDocumentsCollection().updateOne({_id: this.document._id}, update)
 
 				// Update active draft, if we are it
 				update = {$set: {'activeDraft.rendered': this.draft.rendered}}
-				getDocumentsCollection().update({_id: this.document._id, 'activeDraft.revision': this.revision}, update)
+				getDocumentsCollection().updateOne({_id: this.document._id, 'activeDraft.revision': this.revision}, update)
 			}
 
 			return this.draft.rendered || ''
@@ -436,14 +436,14 @@ Diligence.Documents = Diligence.Documents || function() {
 
 	function getDocumentsCollection() {
 		if (!Sincerity.Objects.exists(documentsCollection)) {
-			documentsCollection = new MongoDB.Collection('documents')
+			documentsCollection = MongoClient.global().collection('documents')
 		}
 		return documentsCollection
 	}
 
 	function getSitesCollection() {
 		if (!Sincerity.Objects.exists(sitesCollection)) {
-			sitesCollection = new MongoDB.Collection('sites')
+			sitesCollection = MongoClient.global().collection('sites')
 		}
 		return sitesCollection
 	}

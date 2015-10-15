@@ -15,7 +15,7 @@ document.require(
 	'/prudence/logging/',
 	'/sincerity/lucene/',
 	'/sincerity/iterators/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 

@@ -20,7 +20,7 @@ document.require(
 	'/sincerity/objects/',
 	'/sincerity/jvm/',
 	'/sincerity/platform/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -428,8 +428,8 @@ Diligence.Events = Diligence.Events || function() {
 	    /** @ignore */
 	    Public._construct = function(config) {
 			this.collection = this.collection || 'events'
-			this.collection = Sincerity.Objects.isString(this.collection) ? new MongoDB.Collection(this.collection) : this.collection
-			this.collection.ensureIndex({name: 1}, {unique: true})
+			this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
+			this.collection.createIndex('name', {unique: true})
 	    }
 
 	    Public.subscribe = function(name, listener) {
@@ -438,7 +438,7 @@ Diligence.Events = Diligence.Events || function() {
 
 			if (listener.id) {
 				// Remove old one
-				this.collection.update({
+				this.collection.updateOne({
 					name: name
 				}, {
 					$pull: {
@@ -448,26 +448,26 @@ Diligence.Events = Diligence.Events || function() {
 					}
 				})
 				
-				this.collection.upsert({
+				this.collection.updateOne({
 					name: name,
 					listeners: {
 						$not: {$elemMatch: {id: listener.id}}
 					}
 				}, {
 					$push: {listeners: listener}
-				})
+				}, {upsert: true})
 			}
 			else {
-				this.collection.upsert({
+				this.collection.updateOne({
 					name: name
 				}, {
 					$push: {listeners: listener}
-				})
+				}, {upsert: true})
 			}
 		}
 
 	    Public.unsubscribe = function(name, id) {
-	    	this.collection.update({
+	    	this.collection.updateOne({
 				name: name
 			}, {
 				$pull: {
@@ -479,7 +479,7 @@ Diligence.Events = Diligence.Events || function() {
 		}
 		
 	    Public.reset = function(name) {
-	    	this.collection.remove({name: name})
+	    	this.collection.deleteOne({name: name})
 		}
 		
 	    Public.getListeners = function(name) {
@@ -510,7 +510,7 @@ Diligence.Events = Diligence.Events || function() {
 			listener.fn = String(listener.fn)
 
 			// Make sure event exists
-			this.collection.upsert({
+			this.collection.updateOne({
 				_id: this.documentId,
 				events: {
 					$not: {
@@ -526,12 +526,12 @@ Diligence.Events = Diligence.Events || function() {
 						listeners: []
 					}
 				}
-			})
+			}, {upsert: true})
 
 			// Add listener
 			if (listener.id) {
 				// Remove old one
-				this.collection.update({
+				this.collection.updateOne({
 					_id: this.documentId,
 					events: {
 						$elemMatch: {
@@ -546,7 +546,7 @@ Diligence.Events = Diligence.Events || function() {
 					}
 				})
 
-				this.collection.update({
+				this.collection.updateOne({
 					_id: this.documentId,
 					events: {
 						$elemMatch: {
@@ -565,7 +565,7 @@ Diligence.Events = Diligence.Events || function() {
 				})
 			}
 			else {
-				this.collection.update({
+				this.collection.updateOne({
 					_id: this.documentId,
 					events: {
 						$elemMatch: {
@@ -591,7 +591,7 @@ Diligence.Events = Diligence.Events || function() {
 		}
 		
 	    Public.unsubscribe = function(name, id) {
-	    	this.collection.update({
+	    	this.collection.updateOne({
 				_id: this.documentId,
 				events: {
 					$elemMatch: {
@@ -618,7 +618,7 @@ Diligence.Events = Diligence.Events || function() {
 		}
 
 	    Public.reset = function(name) {
-	    	this.collection.update({
+	    	this.collection.updateOne({
 				_id: this.documentId
 			}, {
 				$pull: {

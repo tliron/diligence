@@ -29,7 +29,7 @@ document.require(
 	'/sincerity/templates/',
 	'/sincerity/cryptography/',
 	'/sincerity/objects/',
-	'/mongo-db/')
+	'/mongodb/')
 
 var Diligence = Diligence || {}
 
@@ -196,7 +196,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 	
 	Public.userLastSeen = function(id, now) {
 		now = now || new Date()
-		getUsersCollection().update({
+		getUsersCollection().updateOne({
 			_id: id
 		}, {
 			$set: {
@@ -208,18 +208,18 @@ Diligence.Authentication = Diligence.Authentication || function() {
 	Public.maintenance = function() {
 		var limit = new Date()
 		limit.setMinutes(limit.getMinutes() - maxSessionIdleMinutes)
-		var result = getSessionsCollection().remove({lastSeen: {$lt: limit}}, 1)
+		var result = getSessionsCollection().withWriteConcern({w: 1}).deleteMany({lastSeen: {$lt: limit}})
 		
-		if (result && result.n) {
-			Public.logger.info('Removed {0} stale {1}', result.n, result.n > 1 ? 'sessions' : 'session')
+		if (result && result.deletedCount) {
+			Public.logger.info('Removed {0} stale {1}', result.deletedCount, result.deletedCount > 1 ? 'sessions' : 'session')
 		}
 
 		limit = new Date()
 		limit.setDate(limit.getDate() - maxUserUnconfirmedDays)
-		result = getUsersCollection().remove({confirmed: {$exists: false}, created: {$lt: limit}}, 1)
+		result = getUsersCollection().withWriteConcern({w: 1}).deleteMany({confirmed: {$exists: false}, created: {$lt: limit}})
 
-		if (result && result.n) {
-			Public.logger.info('Removed {0} abandoned user {1}', result.n, result.n > 1 ? 'registrations' : 'registration')
+		if (result && result.deletedCount) {
+			Public.logger.info('Removed {0} abandoned user {1}', result.deletedCount, result.deletedCount > 1 ? 'registrations' : 'registration')
 		}
 	}
 	
@@ -239,7 +239,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		var sessionId = null, session = null
 		
 		if (cookie && cookie.value) {
-			sessionId = MongoDB.id(cookie.value)
+			sessionId = MongoUtil.id(cookie.value)
 			if (!Sincerity.Objects.exists(sessionId)) {
 				// Invalid session ID?
 				cookie.path = cookiePath
@@ -271,13 +271,13 @@ Diligence.Authentication = Diligence.Authentication || function() {
 			
 			var now = new Date()
 			var session = {
-				_id: MongoDB.newId(),
+				_id: MongoUtil.id(),
 				user: user.getId(),
 				created: now,
 				lastSeen: now
 			}
 			
-			getSessionsCollection().insert(session)
+			getSessionsCollection().insertOne(session)
 			
 			var cookie = createCookie(session, conversation)
 			
@@ -312,9 +312,9 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		
 		var userId
 		
-		var result = getUsersCollection().upsert(query, update, false, 1)
-		if (result && (result.n == 1) && result.upserted) {
-			userId = MongoDB.id(result.upserted)
+		var result = getUsersCollection().withWriteConcern({w: 1}).updateOne(query, update, {upsert: true})
+		if (result && result.upsertedId) {
+			userId = MongoUtil.id(result.upsertedId)
 		}
 		else {
 			userId = getUsersCollection().findOne(query)._id
@@ -338,16 +338,16 @@ Diligence.Authentication = Diligence.Authentication || function() {
 				'authorization.entities': 'provider.' + provider
 			}
 		}
-		getUsersCollection().update(query, update)
+		getUsersCollection().updateOne(query, update)
 		
 		var session = {
-			_id: MongoDB.newId(),
+			_id: MongoUtil.id(),
 			user: userId,
 			created: now,
 			lastSeen: now
 		}
 		
-		getSessionsCollection().insert(session)
+		getSessionsCollection().insertOne(session)
 		
 		var cookie = createCookie(session, conversation)
 		
@@ -376,8 +376,8 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		Public.logout = function() {
 			var user = this.getUser()
 
-			var result = getSessionsCollection().remove({_id: this.session._id}, 1)
-			if (result && (result.n == 1)) {
+			var result = getSessionsCollection().withWriteConcern({w: 1}).deleteOne({_id: this.session._id})
+			if (result && (result.deletedCount == 1)) {
 				Module.logger.info('{0} logged out', user ? 'User ' + user.getName() : 'Unknown user')
 			}
 			else {
@@ -393,7 +393,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 		
 		Public.keepAlive = function() {
 			this.session.lastSeen = new Date()
-			getSessionsCollection().update({_id: this.session._id}, {$set: {lastSeen: this.session.lastSeen}})
+			getSessionsCollection().updateOne({_id: this.session._id}, {$set: {lastSeen: this.session.lastSeen}})
 			
 			var user = this.getUser()
 			if (user) {
@@ -421,7 +421,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 			var update = {$set: {}}
 			update.$set['values.' + key] = value
 
-			getSessionsCollection().update({_id: this.session._id}, update)
+			getSessionsCollection().updateOne({_id: this.session._id}, update)
 		}
 		
 		return Public
@@ -598,15 +598,15 @@ Diligence.Authentication = Diligence.Authentication || function() {
 
 	function getUsersCollection() {
 		if (!Sincerity.Objects.exists(usersCollection)) {
-			usersCollection = new MongoDB.Collection('users')
-			usersCollection.ensureIndex({name: 1}, {unique: true})
+			usersCollection = MongoClient.global().collection('users')
+			usersCollection.createIndex('name', {unique: true})
 		}
 		return usersCollection
 	}
 
 	function getSessionsCollection() {
 		if (!Sincerity.Objects.exists(sessionsCollection)) {
-			sessionsCollection = new MongoDB.Collection('sessions')
+			sessionsCollection = MongoClient.global().collection('sessions')
 		}
 		return sessionsCollection
 	}
