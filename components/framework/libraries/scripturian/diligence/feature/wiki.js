@@ -250,7 +250,7 @@ Diligence.Wiki = Diligence.Wiki || function() {
 
 	function getPagesCollection() {
 		if (!Sincerity.Objects.exists(pagesCollection)) {
-			pagesCollection = MongoClient.global().collection('pages')
+			pagesCollection = MongoDatabase.global().collection('pages')
 		}
 		return pagesCollection
 	}

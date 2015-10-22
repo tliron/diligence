@@ -109,7 +109,7 @@ Diligence.Nonces = Diligence.Nonces || function() {
 	
 	function getNoncesCollection() {
 		if (!Sincerity.Objects.exists(noncesCollection)) {
-			noncesCollection = MongoClient.global().collection('nonces')
+			noncesCollection = MongoDatabase.global().collection('nonces')
 		}
 		return noncesCollection
 	}

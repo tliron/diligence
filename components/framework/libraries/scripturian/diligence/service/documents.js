@@ -436,14 +436,14 @@ Diligence.Documents = Diligence.Documents || function() {
 
 	function getDocumentsCollection() {
 		if (!Sincerity.Objects.exists(documentsCollection)) {
-			documentsCollection = MongoClient.global().collection('documents')
+			documentsCollection = MongoDatabase.global().collection('documents')
 		}
 		return documentsCollection
 	}
 
 	function getSitesCollection() {
 		if (!Sincerity.Objects.exists(sitesCollection)) {
-			sitesCollection = MongoClient.global().collection('sites')
+			sitesCollection = MongoDatabase.global().collection('sites')
 		}
 		return sitesCollection
 	}

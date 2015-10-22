@@ -70,7 +70,7 @@ Diligence.Discussion = Diligence.Discussion || function() {
 	    
 		/** @ignore */
 		Public._construct = function(collection, query, doc) {
-			this.collection = Sincerity.Objects.isString(collection) ? MongoClient.global().collection(collection) : collection
+			this.collection = Sincerity.Objects.isString(collection) ? MongoDatabase.global().collection(collection) : collection
 			this.query = query
 			this.doc = doc || this.collection.findOne(this.query, {projection: {forum: 1}})
 			initialize.call(this)

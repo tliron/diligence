@@ -327,7 +327,7 @@ Diligence.Registration = Diligence.Registration || function() {
 
 	function getUsersCollection() {
 		if (!Sincerity.Objects.exists(usersCollection)) {
-			usersCollection = MongoClient.global().collection('users')
+			usersCollection = MongoDatabase.global().collection('users')
 			usersCollection.createIndex('name', {unique: true})
 		}
 		return usersCollection

@@ -58,7 +58,7 @@ Diligence.Cache = Diligence.Cache || Sincerity.Classes.define(function() {
     	this.logLevel = this.logLevel || 'fine'
     	this.defaultDuration = this.defaultDuration || (60 * 1000)
     	
-    	this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
+    	this.collection = Sincerity.Objects.isString(this.collection) ? MongoDatabase.global().collection(this.collection) : this.collection
     	this.collection.createIndex('key', {unique: true})	
     }
 

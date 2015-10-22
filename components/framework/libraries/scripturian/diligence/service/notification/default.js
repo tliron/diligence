@@ -337,7 +337,7 @@ Diligence.Notification = Diligence.Notification || function() {
 
 	function getChannelsCollection() {
 		if (!Sincerity.Objects.exists(channelsCollection)) {
-			channelsCollection = MongoClient.global().collection('channels')
+			channelsCollection = MongoDatabase.global().collection('channels')
 			channelsCollection.createIndex('name', {unique: true})
 		}
 		return channelsCollection
@@ -345,7 +345,7 @@ Diligence.Notification = Diligence.Notification || function() {
 
 	function getNoticesCollection() {
 		if (!Sincerity.Objects.exists(noticesCollection)) {
-			noticesCollection = MongoClient.global().collection('notices')
+			noticesCollection = MongoDatabase.global().collection('notices')
 			noticesCollection.createIndex('channel')
 		}
 		return noticesCollection
@@ -353,7 +353,7 @@ Diligence.Notification = Diligence.Notification || function() {
 
 	function getDigestsCollection() {
 		if (!Sincerity.Objects.exists(digestsCollection)) {
-			digestsCollection = MongoClient.global().collection('digests')
+			digestsCollection = MongoDatabase.global().collection('digests')
 			digestsCollection.createIndex('subscription.mode')
 		}
 		return digestsCollection

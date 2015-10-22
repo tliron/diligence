@@ -964,7 +964,7 @@ Diligence.REST = Diligence.REST || function() {
 			arguments.callee.overridden.call(this, this)
 			
 			this.collection = this.collection || this.name
-			this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
+			this.collection = Sincerity.Objects.isString(this.collection) ? MongoDatabase.global().collection(this.collection) : this.collection
 
 			// Convert fields to MongoDB's inclusion notation
 			var fields = {}

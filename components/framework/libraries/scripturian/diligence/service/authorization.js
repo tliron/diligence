@@ -263,7 +263,7 @@ Diligence.Authorization = Diligence.Authorization || function() {
 
 	function getGroupsCollection() {
 		if (!Sincerity.Objects.exists(groupsCollection)) {
-			groupsCollection = MongoClient.global().collection('groups')
+			groupsCollection = MongoDatabase.global().collection('groups')
 			groupsCollection.createIndex('name', {unique: true})
 		}
 		return groupsCollection

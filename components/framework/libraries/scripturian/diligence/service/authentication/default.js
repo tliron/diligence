@@ -598,7 +598,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 
 	function getUsersCollection() {
 		if (!Sincerity.Objects.exists(usersCollection)) {
-			usersCollection = MongoClient.global().collection('users')
+			usersCollection = MongoDatabase.global().collection('users')
 			usersCollection.createIndex('name', {unique: true})
 		}
 		return usersCollection
@@ -606,7 +606,7 @@ Diligence.Authentication = Diligence.Authentication || function() {
 
 	function getSessionsCollection() {
 		if (!Sincerity.Objects.exists(sessionsCollection)) {
-			sessionsCollection = MongoClient.global().collection('sessions')
+			sessionsCollection = MongoDatabase.global().collection('sessions')
 		}
 		return sessionsCollection
 	}

@@ -410,7 +410,7 @@ Diligence.Sencha = Diligence.Sencha || function() {
 
 		/** @ignore */
 		Public._construct = function(config) {
-			this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
+			this.collection = Sincerity.Objects.isString(this.collection) ? MongoDatabase.global().collection(this.collection) : this.collection
 			this.separator = this.separator || '/'
 			this.rootId = this.rootId || this.separator
 			this.childrenProperty = this.childrenProperty || 'documents'
@@ -444,7 +444,7 @@ Diligence.Sencha = Diligence.Sencha || function() {
 							break
 						}
 						else if (Sincerity.JVM.instanceOf(node, com.mongodb.DBRef)) {
-							var collection = MongoClient.global().database(node.getDB()).collection(node.ref)
+							var collection = this.collection.database.collection(node.collectionName)
 							node = collection.findOne({_id: {$oid: node.id}})
 							if (Sincerity.Objects.exists(node)) {
 								if (Sincerity.Objects.exists(this.field)) {

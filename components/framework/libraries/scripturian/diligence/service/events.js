@@ -428,7 +428,7 @@ Diligence.Events = Diligence.Events || function() {
 	    /** @ignore */
 	    Public._construct = function(config) {
 			this.collection = this.collection || 'events'
-			this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
+			this.collection = Sincerity.Objects.isString(this.collection) ? MongoDatabase.global().collection(this.collection) : this.collection
 			this.collection.createIndex('name', {unique: true})
 	    }
 

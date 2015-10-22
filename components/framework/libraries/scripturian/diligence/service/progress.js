@@ -383,7 +383,7 @@ Diligence.Progress = Diligence.Progress || function() {
 	
 	function getProcessesCollection() {
 		if (!Sincerity.Objects.exists(processesCollection)) {
-			var processesCollection = MongoClient.global().collection('processes')
+			var processesCollection = MongoDatabase.global().collection('processes')
 		}
 		return processesCollection
 	}

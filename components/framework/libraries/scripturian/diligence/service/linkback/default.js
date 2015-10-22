@@ -394,7 +394,7 @@ Diligence.Linkback = Diligence.Linkback || function() {
 
 	function getLinkbacksCollection() {
 		if (!Sincerity.Objects.exists(linkbacksCollection)) {
-			linkbacksCollection = MongoClient.global().collection('linkbacks')
+			linkbacksCollection = MongoDatabase.global().collection('linkbacks')
 			linkbacksCollection.createIndex('uri', {unique: true})
 		}
 		return linkbacksCollection

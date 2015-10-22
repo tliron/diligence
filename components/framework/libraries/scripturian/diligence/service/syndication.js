@@ -119,7 +119,7 @@ Diligence.Syndication = Diligence.Syndication || function() {
 	    Public._construct = function(config) {
         	Sincerity.Objects.merge(this, config, ['name', 'collection'])
 
-			this.collection = Sincerity.Objects.isString(this.collection) ? MongoClient.global().collection(this.collection) : this.collection
+			this.collection = Sincerity.Objects.isString(this.collection) ? MongoDatabase.global().collection(this.collection) : this.collection
 	    }
 
 		Public.getInfo = function() {

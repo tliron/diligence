@@ -59,7 +59,7 @@ Diligence.Serials = Diligence.Serials || function() {
 
 	function getSerialsCollection() {
 		if (!Sincerity.Objects.exists(serialsCollection)) {
-			serialsCollection = MongoClient.global().collection('serials')
+			serialsCollection = MongoDatabase.global().collection('serials')
 			serialsCollection.createIndex('series', {unique: true})
 		}
 		return serialsCollection
