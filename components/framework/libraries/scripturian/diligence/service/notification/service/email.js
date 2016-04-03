@@ -41,8 +41,8 @@ Diligence.Notification.EmailService = Diligence.Notification.EmailService || Sin
     }
 
     Public.send = function(from, to, notice) {
-		Diligence.Notification.logger.info('Sending email from {0} to {1}', this.from || from, to)
-		this.smtp.send({from: this.from || from, to: to, replyTo: from}, notice)
+		Diligence.Notification.logger.info('Sending email from {0} to {1}', from || this.from, to)
+		this.smtp.send({from: from || this.from, to: to, replyTo: from}, notice)
 	}
 	
     Public.sendDigest = function(from, to, entries, mode) {
@@ -62,8 +62,8 @@ Diligence.Notification.EmailService = Diligence.Notification.EmailService || Sin
 			text: text.join('\n\n+++\n\n')
 		}
 		
-		Diligence.Notification.logger.info('Sending {0} digest email from {1} to {2}', mode, this.from || from, to)
-		this.smtp.send({from: this.from || from, to: to, replyTo: from}, notice)
+		Diligence.Notification.logger.info('Sending {0} digest email from {1} to {2}', mode, from || this.from, to)
+		this.smtp.send({from: from || this.from, to: to, replyTo: from}, notice)
 	}
 	
     Public.getAddress = function(reference, type) {
